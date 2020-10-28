@@ -19,7 +19,7 @@ TODO(@jamesfulford): fill in
 
 - Must define:
   - Title
-  - User story opening sentence
+  - User story opening sentence (As a _____, I want _____ so that _____)
   - Additional Details
   - Acceptance criteria
   - Estimate
