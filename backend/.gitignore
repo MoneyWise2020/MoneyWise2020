@@ -1,16 +1,6 @@
-CONTROL.xlsx
-OUTPUT.xlsx
-OUTPUT.csv
-*.png
-~$*.xlsx
 .mypy_cache
 __pycache__
-logs
 .DS_Store
-
-rules.json
-
-node_modules
 
 # Distribution / packaging
 .Python
@@ -29,8 +19,3 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-
-# Serverless directories
-.serverless
-serverless_sdk
-s_*.py
