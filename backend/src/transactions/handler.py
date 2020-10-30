@@ -3,8 +3,8 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from dateutil.rrule import rrulestr
 
-from src.generate_instances import get_instances_up_to
-from src.context import ExecutionContext, ExecutionParameters, ExecutionRules
+from src.transactions.generate_instances import get_instances_up_to
+from src.transactions.context import ExecutionContext, ExecutionParameters, ExecutionRules
 
 
 # same as date.isoformat(), it seems
@@ -146,38 +146,3 @@ def _get_instances_from_rules(event, context):
         round_floats(all_instances),
         cls=DateTimeEncoder
     ))
-
-if __name__ == "__main__":
-    from dateutil.relativedelta import relativedelta
-
-    from script.control import CONTROL
-    from script.get_rules import get_rules_by_type
-
-
-    start = CONTROL["NOW"].to_pydatetime().date()
-    end = start + relativedelta(
-        months=int(CONTROL["GENERATE_MONTHS"])
-    )
-    current = CONTROL["CURRENT"]
-    set_aside = CONTROL["SET_ASIDE"]
-    biweekly_start = CONTROL["BIWEEKLY_START"].to_pydatetime().date()
-
-    event = {
-        "queryStringParameters": {
-            "start": start.strftime(DATE_FORMAT),
-            "end": end.strftime(DATE_FORMAT),
-            "current": str(current),
-            "set_aside": str(set_aside),
-            "biweekly_start": biweekly_start.strftime(DATE_FORMAT)
-        }
-    }
-
-    event['queryStringParameters'] = None
-
-    event["body"] = json.dumps(get_rules_by_type(), cls=DateTimeEncoder)
-
-    response = get_instances_from_rules(event, None)
-    if response["statusCode"] != 200:
-        print(response["body"])
-    else:
-        print(json.dumps(json.loads(response["body"]), indent=4, sort_keys=True))
