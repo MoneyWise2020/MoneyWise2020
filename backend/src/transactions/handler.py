@@ -3,8 +3,8 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from dateutil.rrule import rrulestr
 
-from src.generate_instances import get_instances_up_to
-from src.context import ExecutionContext, ExecutionParameters, ExecutionRules
+from src.transactions.generate_instances import get_instances_up_to
+from src.transactions.context import ExecutionContext, ExecutionParameters, ExecutionRules
 
 
 # same as date.isoformat(), it seems
