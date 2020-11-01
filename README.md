@@ -1,6 +1,8 @@
-# Money Wise
+# Product Name: Money Wise
 
-## Take back your future.
+## Far Vision: Take back your future.
+
+## Near Vision: API First web app for cash flow predictions.
 
 Your business - personal or otherwise - is hard, but money is something you can nail. You, with wise guidance, can shape your financial future for the better. We have the steps, wisdom, and tools to put you back in charge.
 
@@ -30,7 +32,7 @@ Money Wise helps developers solve their specific problems by solving some common
 
 Predicting the cashflow of your business can be tedious, but the results are important for decision-making. You don't get much time to consider possible futures of your restaurant, because it takes too long (and, honestly, it's not as fun - unless you like paperwork).
 
-Alex's brother, Javier, runs a restaurant. He is 33 years old, married with 2 kids and 1 more on the way. To calculate expenses, he uses some Excel, but it's still very manual and does not account much for holidays/seasonality or bigger irregular expenses. He needs results of finances to go about his business, but it's quite bothersome, and even then he can't simulate situations without lots of tedious recalculation.
+Alex's brother, Javier, runs a restaurant. He is 33 years old, married with 2 kids and 1 more on the way. He works in the service industry as a General Manager for a resturant. To calculate expenses, he uses some Excel, but it's still very manual and does not account much for holidays/seasonality or bigger irregular expenses. He needs results of finances to go about his business, but it's quite bothersome, and even then he can't simulate situations without lots of tedious recalculation.
 
 ## Concepts
 
