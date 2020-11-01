@@ -1,6 +1,6 @@
 # Product Name: Money Wise
 
-## Far Vision: Take back your future.
+## Far Vision: Take back your financial future.
 
 ## Near Vision: API First web app for cash flow predictions.
 
