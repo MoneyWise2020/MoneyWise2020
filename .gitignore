@@ -129,6 +129,5 @@ dmypy.json
 .pyre/
 .idea/
 
-.vscode/
 .dockerignore
 docker-compose.debug.yml
