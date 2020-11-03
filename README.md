@@ -54,9 +54,9 @@ Full disclosure: this project starts off from a personal project James started (
 
 First, focusing on exposing 3 main resources:
 
-- Users #2
 - Rules #3
 - Transactions #4
+- Users #2
 
 At this point, we can at least see our future. However, we want to be able to shape our future. If we can simulate what a decision would look like financially, we can make more informed decisions about our future. #5 (pure vision story)
 
