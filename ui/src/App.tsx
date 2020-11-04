@@ -9,6 +9,7 @@ import {
   Route
 } from "react-router-dom";
 import { Home } from './pages/home/Home';
+import { PlanContainer } from './pages/plan/PlanContainer';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
       <Container>
         <Switch>
           <Route path="/plan">
-            Plan
+            <PlanContainer />
           </Route>
           <Route path="/">
             <Home />
