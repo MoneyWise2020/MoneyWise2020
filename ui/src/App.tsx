@@ -1,35 +1,37 @@
 import React from 'react';
-import './App.css';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import { Header } from './components/Header';
 
-import { useAuth0 } from "@auth0/auth0-react";
-import { Token } from './Token';
-import { Results } from './Results';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+import { Home } from './pages/home/Home';
 
 function App() {
-  const { isAuthenticated, isLoading, user, loginWithRedirect, logout } = useAuth0();
   return (
-    <>
-    <header style={{ backgroundColor: 'red' }}>Hello World</header>
-    
-    <div className="App">
-      <header className="App-header">
-        {isLoading && <p>Loading...</p>}
-        {isAuthenticated ? <button
-          className="App-link"
-          onClick={() => logout()}
-        >
-          Logout {user.email}
-        </button> : <button
-          className="App-link"
-          onClick={() => loginWithRedirect()}
-        >
-          Login
-        </button>}
-        {isAuthenticated && <Token></Token>}
-        {isAuthenticated && <Results></Results>}
-      </header>
-    </div>
-    </>
+    <Router>
+      <Header />
+      <Container>
+        <Switch>
+          <Route path="/plan">
+            Plan
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Container>
+      <Container fluid style={{ background: 'black' }}>
+        <Container>
+          <Row>
+            Footer
+          </Row>
+        </Container>
+      </Container>
+    </Router>
   );
 }
 
