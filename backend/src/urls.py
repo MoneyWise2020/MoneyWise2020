@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/ping', hello_world),
     path('api/transactions', process_transactions),
-    path('/createrule', createrule),
+    path('createrule', createrule),
 ]
