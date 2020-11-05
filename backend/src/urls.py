@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import hello_world, process_transactions
+from .views import hello_world, process_transactions, createrule
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/ping', hello_world),
     path('api/transactions', process_transactions),
+    path('/createrule', createrule),
 ]
