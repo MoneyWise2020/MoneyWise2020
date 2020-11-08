@@ -4,7 +4,6 @@ import Row from 'react-bootstrap/Row';
 import { Header } from './components/Header';
 
 import {
-  BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
@@ -13,7 +12,7 @@ import { PlanContainer } from './pages/plan/PlanContainer';
 
 function App() {
   return (
-    <Router>
+    <>
       <Header />
       <Container>
         <Switch>
@@ -32,7 +31,7 @@ function App() {
           </Row>
         </Container>
       </Container>
-    </Router>
+    </>
   );
 }
 

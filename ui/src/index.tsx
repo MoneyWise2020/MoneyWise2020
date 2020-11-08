@@ -4,6 +4,7 @@ import App from './App';
 import { Auth0Provider } from "@auth0/auth0-react";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter } from 'react-router-dom';
 
 const domain: string = process.env.REACT_APP_AUTH0_DOMAIN as string;
 const clientId: string = process.env.REACT_APP_AUTH0_CLIENT_ID as string;
@@ -17,7 +18,9 @@ ReactDOM.render(
       cacheLocation="localstorage"
       useRefreshTokens
     >
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Auth0Provider>
   </React.StrictMode>,
   document.getElementById('root')
