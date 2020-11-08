@@ -80,14 +80,20 @@ export const CreateForm = ({ onSubmit }: { onSubmit: (rule: IApiRuleMutate) => v
         setName('');
         setValue(0);
     }}>
-        <label htmlFor="Name">Name:</label><input className="form-control" id="Name" type="string" placeholder="name" value={name} onChange={e => setName(e.target.value)}></input><br />
-        <label htmlFor="Value">Value:</label><input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => setValue(Number(e.target.value))}></input><br />
-        <label htmlFor="Frequency">Frequency:</label><select className="form-control" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)}>
-            <option value="WEEKLY" selected={frequency === "WEEKLY"}>Weekly</option>
-            {/* <option value="BIWEEKLY" selected={frequency === "BIWEEKLY"}>Bi-Weekly</option> */}
-            <option value="MONTHLY" selected={frequency === "MONTHLY"}>Monthly</option>
-            <option value="YEARLY" selected={frequency === "YEARLY"}>Yearly</option>
+        <label htmlFor="Name">Name:</label>
+        <input className="form-control" id="Name" type="string" placeholder="name" value={name} onChange={e => setName(e.target.value)}></input><br />
+
+        <label htmlFor="Value">Value:</label>
+        <input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => setValue(Number(e.target.value))}></input><br />
+
+        <label htmlFor="Frequency">Frequency:</label>
+        <select className="form-control" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)} value={frequency} >
+            <option value="WEEKLY">Weekly</option>
+            {/* <option value="BIWEEKLY">Bi-Weekly</option> */}
+            <option value="MONTHLY">Monthly</option>
+            <option value="YEARLY">Yearly</option>
         </select>
+
         {(frequency === "MONTHLY" || frequency === "YEARLY") && <>
             <input className="form-control" type="number" min="1" max="31" placeholder="Day of month" value={bymonthday} onChange={e => setbymonthday(Number(e.target.value))} />
         </>}
