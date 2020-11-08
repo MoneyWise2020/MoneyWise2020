@@ -4,14 +4,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { IApiRule, IApiRuleMutate } from './IRule';
 import { RRule } from 'rrule';
 import './Rule.css';
-
-
-const Currency = ({ value }: { value: number }) => {
-    if (value < 0) {
-        return <span className="currency-negative">-${value*-1}</span>
-    }
-    return <span className="currency-positive">${value}</span>
-}
+import { Currency } from '../../../components/currency/Currency';
 
 export const Rule = ({
     rule,
