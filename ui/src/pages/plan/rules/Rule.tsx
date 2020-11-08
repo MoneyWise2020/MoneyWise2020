@@ -21,7 +21,7 @@ export const Rule = ({
     onDelete?: (id: string) => void,
     onUpdate?: (id: string, ruleUpdate: IApiRuleMutate) => void,
 }) => {
-    const deleteButtonHandler = useCallback(() => onDelete(rule.id), [rule.id]);
+    const deleteButtonHandler = useCallback(() => onDelete(rule.id), [rule.id, onDelete]);
 
     // rule.name
     // rule.rrule
