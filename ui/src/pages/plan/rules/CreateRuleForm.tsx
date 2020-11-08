@@ -80,13 +80,22 @@ export const CreateForm = ({ onSubmit }: { onSubmit: (rule: IApiRuleMutate) => v
         setName('');
         setValue(0);
     }}>
-        <label htmlFor="Name">Name:</label>
-        <input className="form-control" id="Name" type="string" placeholder="name" value={name} onChange={e => setName(e.target.value)}></input><br />
+        <div className="form-group row">
+            <label htmlFor="Name" className="col-sm-2 col-form-label">Name</label>
+        <div className="col-sm-10">
+            <input className="form-control" id="Name" type="string" placeholder="name" value={name} onChange={e => setName(e.target.value)}></input><br />
+        </div>
+        </div>
 
-        <label htmlFor="Value">Value:</label>
-        <input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => setValue(Number(e.target.value))}></input><br />
+        <div className="form-group row">
+        <label htmlFor="Value" className="col-sm-2 col-form-label">Value</label>
+        <div className="col-sm-10">
+            <input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => setValue(Number(e.target.value))}></input><br />
+        </div>
+        </div>
 
-        <label htmlFor="Frequency">Frequency:</label>
+        
+        <label htmlFor="Frequency">Frequency</label>
         <select className="form-control" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)} value={frequency} >
             <option value="WEEKLY">Weekly</option>
             {/* <option value="BIWEEKLY">Bi-Weekly</option> */}
