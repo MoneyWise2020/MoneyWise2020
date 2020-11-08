@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import RRule from 'rrule';
 import { IApiRuleMutate } from './IRule';
 
-export const CreateForm = ({ onSubmit }: { onSubmit: (rule: IApiRuleMutate) => void }) => {
+export const CreateForm = ({
+    onSubmit,
+    onFailedValidation = () => {}
+}: {
+    onSubmit: (rule: IApiRuleMutate) => void,
+    onFailedValidation: (message: string) => void,
+}) => {
     const [name, setName] = useState('');
     const [value, setValue] = useState(0);
     const [frequency, setFrequency] = useState<string>("MONTHLY");
@@ -16,12 +22,12 @@ export const CreateForm = ({ onSubmit }: { onSubmit: (rule: IApiRuleMutate) => v
         e.stopPropagation();
 
         if (value === 0) {
-            alert(`Please enter a non zero value`);
+            onFailedValidation(`Please enter a non zero value`);
             return;
         }
 
         if (name.length < 3) {
-            alert(`Please enter more than 3 characters`);
+            onFailedValidation(`Please enter more than 3 characters, you entered '${name}'`);
             return;
         }
 
@@ -81,7 +87,7 @@ export const CreateForm = ({ onSubmit }: { onSubmit: (rule: IApiRuleMutate) => v
         setValue(0);
     }}>
         <label htmlFor="Name">Name:</label>
-        <input className="form-control" id="Name" type="string" placeholder="name" value={name} onChange={e => setName(e.target.value)}></input><br />
+        <input className="form-control" id="Name" type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} /><br />
 
         <label htmlFor="Value">Value:</label>
         <input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => setValue(Number(e.target.value))}></input><br />
@@ -95,7 +101,8 @@ export const CreateForm = ({ onSubmit }: { onSubmit: (rule: IApiRuleMutate) => v
         </select>
 
         {(frequency === "MONTHLY" || frequency === "YEARLY") && <>
-            <input className="form-control" type="number" min="1" max="31" placeholder="Day of month" value={bymonthday} onChange={e => setbymonthday(Number(e.target.value))} />
+            <label htmlFor="bymonthday">Day of month</label>
+            <input className="form-control" id="bymonthday" type="number" min="1" max="31" placeholder="Day of month" value={bymonthday} onChange={e => setbymonthday(Number(e.target.value))} />
         </>}
         {(frequency === "YEARLY") && <>
             <input className="form-control" type="number" min="1" max="12" placeholder="Month of year" value={bymonth} onChange={e => setbymonth(Number(e.target.value))} />
