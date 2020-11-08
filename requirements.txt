@@ -7,4 +7,3 @@ psycopg2-binary==2.8.6
 ptvsd==4.3.2
 pymysql==0.10.1
 django-mysql==2.2.0
-#mysqlclient>=1.4.0

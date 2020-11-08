@@ -7,7 +7,7 @@ from dateutil.rrule import rrule, rrulestr
 
 from convertdate import hebrew
 
-from src.transactions.instance import Instance
+from .instance import Instance
 
 
 #
