@@ -8,8 +8,6 @@ export const Header = ({}) => {
         <Link to="/">
             <Navbar.Brand>moneywise</Navbar.Brand>
         </Link>
-        <Link to="/plan">
-            <Nav.Link href="/plan">Plan</Nav.Link>
-        </Link>            
+        <Link to="/plan">Plan</Link>            
     </Navbar>
 }
