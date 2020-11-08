@@ -4,7 +4,6 @@ export interface IApiRuleMutate {
     rrule: string;
     value: number;
     labels?: { [label: string]: any };
-
 }
 
 // Extra server-assigned fields which
