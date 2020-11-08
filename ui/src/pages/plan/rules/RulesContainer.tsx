@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { RRule } from 'rrule';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { IApiRule } from './IRule';
+import { IApiRule, IApiRuleMutate } from './IRule';
 import { Rule } from './Rule';
-
+import {CreateForm} from './CreateRuleForm';
 
 export const RulesContainer = () => {
     // TODO(jamesfulford): When APIs ready, remove mock data
@@ -48,7 +48,12 @@ export const RulesContainer = () => {
     // TODO(jamesfulford): When DELETE API is ready, call it here
     const deleteHandler = useCallback((id: string) => console.log("DELETE", id), []);
 
-    return <ListGroup>
-        {rules.map(rule => <Rule rule={rule} onDelete={deleteHandler} key={rule.id}/>)}
-    </ListGroup>;
+    const createNewRule = useCallback((rule: IApiRuleMutate) => console.log('Creating new rule', rule), []);
+
+    return <>
+        <CreateForm onSubmit={createNewRule}/>
+        <ListGroup>
+            {rules.map(rule => <Rule rule={rule} onDelete={deleteHandler} key={rule.id}/>)}
+        </ListGroup>
+    </>;
 }
