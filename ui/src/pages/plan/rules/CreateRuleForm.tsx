@@ -80,19 +80,19 @@ export const CreateForm = ({ onSubmit }: { onSubmit: (rule: IApiRuleMutate) => v
         setName('');
         setValue(0);
     }}>
-        <label htmlFor="Name">Name:</label><input id="Name" type="string" placeholder="name" value={name} onChange={e => setName(e.target.value)}></input><br />
-        <label htmlFor="Value">Value:</label><input id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => setValue(Number(e.target.value))}></input><br />
-        <label htmlFor="Frequency">Frequency:</label><select id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)}>
+        <label htmlFor="Name">Name:</label><input className="form-control" id="Name" type="string" placeholder="name" value={name} onChange={e => setName(e.target.value)}></input><br />
+        <label htmlFor="Value">Value:</label><input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => setValue(Number(e.target.value))}></input><br />
+        <label htmlFor="Frequency">Frequency:</label><select className="form-control" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)}>
             <option value="WEEKLY" selected={frequency === "WEEKLY"}>Weekly</option>
             {/* <option value="BIWEEKLY" selected={frequency === "BIWEEKLY"}>Bi-Weekly</option> */}
             <option value="MONTHLY" selected={frequency === "MONTHLY"}>Monthly</option>
             <option value="YEARLY" selected={frequency === "YEARLY"}>Yearly</option>
         </select>
         {(frequency === "MONTHLY" || frequency === "YEARLY") && <>
-            <input type="number" min="1" max="31" placeholder="Day of month" value={bymonthday} onChange={e => setbymonthday(Number(e.target.value))} />
+            <input className="form-control" type="number" min="1" max="31" placeholder="Day of month" value={bymonthday} onChange={e => setbymonthday(Number(e.target.value))} />
         </>}
         {(frequency === "YEARLY") && <>
-            <input type="number" min="1" max="12" placeholder="Month of year" value={bymonth} onChange={e => setbymonth(Number(e.target.value))} />
+            <input className="form-control" type="number" min="1" max="12" placeholder="Month of year" value={bymonth} onChange={e => setbymonth(Number(e.target.value))} />
         </>}
         {(frequency === "WEEKLY") && <>
             <select className="custom-select" multiple onChange={e => {
@@ -108,6 +108,6 @@ export const CreateForm = ({ onSubmit }: { onSubmit: (rule: IApiRuleMutate) => v
                 <option value="SATURDAY" selected={weekdays.includes("SATURDAY")}>Saturday</option>
             </select>
         </>}
-       <button>Submit</button>
+       <button className="btn btn-primary mb-2">Submit</button>
     </form>
 }
