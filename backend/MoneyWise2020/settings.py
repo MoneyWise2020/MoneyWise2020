@@ -23,8 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'po@=v+!vl8y551g374tk96^k+-vv9wuea^q#6$=xjldu^00uel'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
+if os.environ['MONEYWISE_RUNTIME_ENV'] is "DEBUG":
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = True
+
+print("MoneyWise Running in " + os.environ['MONEYWISE_RUNTIME_ENV'])
 
 ALLOWED_HOSTS = ['*']
 
