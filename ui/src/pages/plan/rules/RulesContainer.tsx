@@ -49,9 +49,10 @@ export const RulesContainer = () => {
     const deleteHandler = useCallback((id: string) => console.log("DELETE", id), []);
 
     const createNewRule = useCallback((rule: IApiRuleMutate) => console.log('Creating new rule', rule), []);
+    const onFailedValidation = useCallback((message: string) => console.log('Bad input', message), []);
 
     return <>
-        <CreateForm onSubmit={createNewRule}/>
+        <CreateForm onSubmit={createNewRule} onFailedValidation={onFailedValidation} />
         <ListGroup>
             {rules.map(rule => <Rule rule={rule} onDelete={deleteHandler} key={rule.id}/>)}
         </ListGroup>

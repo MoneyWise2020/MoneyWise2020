@@ -21,10 +21,10 @@ export const Rule = ({
     const rrule = RRule.fromString(rule.rrule);
     return <ListGroup.Item>
         <div className="ruledescription">
-            <h4>Rule Name: {rule.name} </h4>
-            <h5>Rule Description: {rrule.toText()}</h5>
-            <h5>Rule Value: <Currency value={rule.value} /></h5>
-            <Button variant="outline-secondary" size="sm" onClick={deleteButtonHandler}>X</Button>
+            <h5>{rule.name} </h5>
+            <h6>Occurs {rrule.toText()}</h6>
+            <h6>Value: <Currency value={rule.value} /></h6>
+            <Button variant="outline-secondary" className="close" size="sm" onClick={deleteButtonHandler}>&times;</Button>
         </div>
     </ListGroup.Item>;
 }

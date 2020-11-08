@@ -10,6 +10,8 @@ import {
 import { Home } from './pages/home/Home';
 import { PlanContainer } from './pages/plan/PlanContainer';
 
+
+
 function App() {
   return (
     <>
@@ -24,10 +26,10 @@ function App() {
           </Route>
         </Switch>
       </Container>
-      <Container fluid style={{ background: 'black' }}>
+      <Container fluid style={{ background: 'lightgrey' }}>
         <Container>
           <Row>
-            Footer
+          &nbsp;&nbsp;MoneyWise &nbsp; &#169; &nbsp; 2020
           </Row>
         </Container>
       </Container>
