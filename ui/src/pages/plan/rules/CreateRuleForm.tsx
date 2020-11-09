@@ -146,12 +146,16 @@ export const CreateForm = ({
             </select>
         </div>
 
+        <div className="col-md-4 mb-3">
         <label htmlFor="Start">Start:</label>
-        <input type="date" name="Start" id="Start" value={startDate} onChange={e => setStartDate(e.target.value)} />
+        <input className="form-control" type="date" name="Start" id="Start" value={startDate} onChange={e => setStartDate(e.target.value)} />
+        </div>
 
         {frequency !== "ONCE" && <>
+        <div className="col-md-4 mb-3">
             <label htmlFor="End">End:</label>
-            <input type="date" name="End" id="End" value={endDate} onChange={e => setEndDate(e.target.value)} />
+            <input className="form-control" type="date" name="End" id="End" value={endDate} onChange={e => setEndDate(e.target.value)} />
+        </div>
         </>}
         
         {(frequency === "MONTHLY" || frequency === "YEARLY") && <>
