@@ -12,10 +12,18 @@ export const CreateForm = ({
     const [name, setName] = useState('');
     const [value, setValue] = useState(0);
     const [frequency, setFrequency] = useState<string>("MONTHLY");
+
     const [bymonthday, setbymonthday] = useState(1); 
     const [bymonth, setbymonth] = useState(1); 
-
     const [weekdays, setWeekdays] = useState<string[]>([]);
+
+    const [startDate, setStartDate] = useState<string>('');
+    const [endDate, setEndDate] = useState<string>('');
+
+    function clearForm() {
+        setName('');
+        setValue(0);
+    }
     
     return <form onSubmit={e => {
         e.preventDefault();
@@ -31,15 +39,22 @@ export const CreateForm = ({
             return;
         }
 
+        const dtstart = startDate ? new Date(startDate) : undefined;
+        const until = endDate ? new Date(endDate) : undefined;
+
         let options = {};
 
         switch (frequency) {
             case "BIWEEKLY":
-                // TODO: support BIWEEKLY properly
+                if (!dtstart) {
+                    onFailedValidation("You must select a start date for 'Biweekly' rules");
+                    return;
+                }
                 options = {
                     freq: RRule.WEEKLY,
                     interval: 2,
-                    byweekday: 0,
+                    dtstart,
+                    until,
                 };
                 break;
             case "WEEKLY":
@@ -56,12 +71,16 @@ export const CreateForm = ({
                 options = {
                     freq: RRule.WEEKLY,
                     byweekday: rruleWeekdays,
+                    dtstart,
+                    until,
                 };
                 break;
             case "MONTHLY":
                 options = {
                     freq: RRule.MONTHLY,
                     bymonthday: bymonthday,
+                    dtstart,
+                    until,
                 }
                 break;
             case "YEARLY":
@@ -69,7 +88,20 @@ export const CreateForm = ({
                     freq: RRule.YEARLY,
                     bymonth: bymonth,
                     bymonthday: bymonthday,
+                    dtstart,
+                    until,
                 }
+                break;
+            case "ONCE":
+                if (!dtstart) {
+                    onFailedValidation("You must select a start date for 'Once' rules");
+                    return;
+                }
+                options = {
+                    freq: RRule.YEARLY,
+                    dtstart,
+                    count: 1,
+                };
                 break;
         }
 
@@ -83,8 +115,7 @@ export const CreateForm = ({
             rrule: rruleString,
         });
 
-        setName('');
-        setValue(0);
+        clearForm();
     }}>
         <br />
         <h2>Create a New Rule</h2>
@@ -92,7 +123,7 @@ export const CreateForm = ({
         <div className="form-group row">
             <label htmlFor="Name" className="col-sm-2 col-form-label">Name</label>
         <div className="col-sm-10">
-            <input className="form-control" id="Name" placeholder="Enter rule name here..." type="string" value={name} onChange={e => setName(e.target.value)} /><br />
+            <input className="form-control" id="Name" placeholder="Enter rule name here..." type="text" value={name} onChange={e => setName(e.target.value)} /><br />
         </div>
         </div>
 
@@ -108,11 +139,20 @@ export const CreateForm = ({
         <label htmlFor="Frequency">Frequency</label>   
             <select className="form-control" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)} value={frequency} >
                 <option value="WEEKLY">Weekly</option>
-                {/* <option value="BIWEEKLY">Bi-Weekly</option> */}
+                <option value="BIWEEKLY">Biweekly</option>
                 <option value="MONTHLY">Monthly</option>
                 <option value="YEARLY">Yearly</option>
+                <option value="ONCE">Once</option>
             </select>
         </div>
+
+        <label htmlFor="Start">Start:</label>
+        <input type="date" name="Start" id="Start" value={startDate} onChange={e => setStartDate(e.target.value)} />
+
+        {frequency !== "ONCE" && <>
+            <label htmlFor="End">End:</label>
+            <input type="date" name="End" id="End" value={endDate} onChange={e => setEndDate(e.target.value)} />
+        </>}
         
         {(frequency === "MONTHLY" || frequency === "YEARLY") && <>
         <div className="col-md-4 mb-4">
@@ -122,24 +162,27 @@ export const CreateForm = ({
         </>}
         {(frequency === "YEARLY") && <>
         <div className="col-md-4 mb-4">
-            <label htmlFor="bymonthday">Month of Year</label>
-            <input className="form-control" type="number" min="1" max="12" placeholder="Month of year" value={bymonth} onChange={e => setbymonth(Number(e.target.value))} />
+            <label htmlFor="bymonth">Month of Year</label>
+            <input className="form-control" type="number" id="bymonth" min="1" max="12" placeholder="Month of year" value={bymonth} onChange={e => setbymonth(Number(e.target.value))} />
         </div>
         </>}
         {(frequency === "WEEKLY") && <>
         <div className="col-md-4 mb-4">
             <label htmlFor="Weekdays">Days of Week</label>
-            <select className="custom-select" multiple onChange={e => {
-                setWeekdays(Array.from(e.target.selectedOptions).map(opt => opt.value));
+            <select className="custom-select" id="Weekdays" name="Weekdays" multiple value={weekdays} onChange={e => {
+                const selectedValues = Array.from(e.target.options)
+                    .filter((x) => x.selected)
+                    .map((x)=>x.value);
+
+                setWeekdays(selectedValues);
             }}>
-                {/* TODO: start with Sunday or monday? */}
-                <option value="SUNDAY" selected={weekdays.includes("SUNDAY")}>Sunday</option>
-                <option value="MONDAY" selected={weekdays.includes("MONDAY")}>Monday</option>
-                <option value="TUESDAY" selected={weekdays.includes("TUESDAY")}>Tuesday</option>
-                <option value="WEDNESDAY" selected={weekdays.includes("WEDNESDAY")}>Wednesday</option>
-                <option value="THURSDAY" selected={weekdays.includes("THURSDAY")}>Thursday</option>
-                <option value="FRIDAY" selected={weekdays.includes("FRIDAY")}>Friday</option>
-                <option value="SATURDAY" selected={weekdays.includes("SATURDAY")}>Saturday</option>
+                <option value="SUNDAY">Sunday</option>
+                <option value="MONDAY">Monday</option>
+                <option value="TUESDAY">Tuesday</option>
+                <option value="WEDNESDAY">Wednesday</option>
+                <option value="THURSDAY">Thursday</option>
+                <option value="FRIDAY">Friday</option>
+                <option value="SATURDAY">Saturday</option>
             </select></div>
         </>}
         </div>

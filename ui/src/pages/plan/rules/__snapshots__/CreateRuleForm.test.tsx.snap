@@ -1,3 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`create rule form monthly should submit monthly expense 1`] = `"RRULE:FREQ=MONTHLY;BYMONTHDAY=1"`;
+exports[`create rule form biweekly should submit 1`] = `
+"DTSTART:20201010T000000Z
+RRULE:FREQ=WEEKLY;INTERVAL=2"
+`;
+
+exports[`create rule form monthly should submit 1`] = `"RRULE:FREQ=MONTHLY;BYMONTHDAY=15"`;
+
+exports[`create rule form weekly should submit for multiple days 1`] = `"RRULE:FREQ=WEEKLY;BYDAY=MO,TU"`;
+
+exports[`create rule form yearly should submit 1`] = `"RRULE:FREQ=YEARLY;BYMONTH=10;BYMONTHDAY=1"`;

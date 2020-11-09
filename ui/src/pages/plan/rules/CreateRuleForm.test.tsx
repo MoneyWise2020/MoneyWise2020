@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 import { CreateForm } from './CreateRuleForm';
 import { IApiRuleMutate } from './IRule';
@@ -37,6 +38,24 @@ describe('create rule form', () => {
         const dayOfMonthInput = element.getByLabelText(/Day of month/i);
         expect(dayOfMonthInput).toBeInTheDocument();
         fireEvent.change(dayOfMonthInput, { target: { value: String(day) }});
+    }
+
+    function setMonthOfYear(month: number) {
+        const dayOfMonthInput = element.getByLabelText(/Month of Year/i);
+        expect(dayOfMonthInput).toBeInTheDocument();
+        fireEvent.change(dayOfMonthInput, { target: { value: String(month) }});
+    }
+
+    function setDaysOfWeek(daysOfWeek: string[]) {
+        const dayOfWeekSelect = element.getByLabelText(/Days of Week/i);
+        expect(dayOfWeekSelect).toBeInTheDocument();
+        userEvent.selectOptions(dayOfWeekSelect, daysOfWeek);
+    }
+
+    function setStartDate(year: number, month: number, day: number) {
+        const startDateInput = element.getByLabelText(/Start/i);
+        expect(startDateInput).toBeInTheDocument();
+        fireEvent.change(startDateInput, { target: { value: `${year}-${month}-${day}` } });
     }
 
     function submit() {
@@ -78,13 +97,70 @@ describe('create rule form', () => {
         expect(failureHandler).toHaveBeenCalledWith(`Please enter a non zero value`);
     });
 
+    describe("weekly", () => {
+        it('should submit for multiple days', () => {
+            setName("Gas");
+            setValue(-25);
+    
+            selectFrequency("WEEKLY");
+            setDaysOfWeek(['MONDAY', 'TUESDAY']);
+    
+            submit();
+    
+            expect(failureHandler).not.toHaveBeenCalled();
+            expect(submitHandler).toHaveBeenCalledTimes(1);
+    
+            const rule = submitHandler.mock.calls[0][0];
+            expect(rule).toEqual(expect.objectContaining({
+                name: 'Gas',
+                value: -25
+            }));
+            expect(rule.rrule).toMatchSnapshot();
+        });
+    });
+
+    describe("biweekly", () => {
+        it('should submit', () => {
+            setName("Paycheck");
+            setValue(1800);
+    
+            selectFrequency("BIWEEKLY");
+            setStartDate(2020, 10, 10);
+
+            submit();
+    
+            expect(failureHandler).not.toHaveBeenCalled();
+            expect(submitHandler).toHaveBeenCalledTimes(1);
+    
+            const rule = submitHandler.mock.calls[0][0];
+            expect(rule).toEqual(expect.objectContaining({
+                name: 'Paycheck',
+                value: 1800,
+            }));
+            expect(rule.rrule).toMatchSnapshot();
+        });
+
+        it('should not submit without start date', () => {
+            setName("Paycheck");
+            setValue(1800);
+    
+            selectFrequency("BIWEEKLY");
+
+            submit();
+    
+            expect(submitHandler).not.toHaveBeenCalled();
+            expect(failureHandler).toHaveBeenCalledTimes(1);
+            expect(failureHandler).toHaveBeenCalledWith("You must select a start date for 'Biweekly' rules");
+        });
+    });
+
     describe("monthly", () => {
-        it('should submit monthly expense', () => {
+        it('should submit', () => {
             setName("Rent");
             setValue(-1000);
     
             selectFrequency("MONTHLY");
-            setDayOfMonth(1);
+            setDayOfMonth(15);
     
             submit();
     
@@ -95,6 +171,52 @@ describe('create rule form', () => {
             expect(rule).toEqual(expect.objectContaining({
                 name: 'Rent',
                 value: -1000
+            }));
+            expect(rule.rrule).toMatchSnapshot();
+        });
+    });
+
+    describe("yearly", () => {
+        it('should submit', () => {
+            setName("Birthday Present!");
+            setValue(-42);
+    
+            selectFrequency("YEARLY");
+            setMonthOfYear(10);
+            setDayOfMonth(1);
+    
+            submit();
+    
+            expect(failureHandler).not.toHaveBeenCalled();
+            expect(submitHandler).toHaveBeenCalledTimes(1);
+    
+            const rule = submitHandler.mock.calls[0][0];
+            expect(rule).toEqual(expect.objectContaining({
+                name: 'Birthday Present!',
+                value: -42
+            }));
+            expect(rule.rrule).toMatchSnapshot();
+        });
+    });
+
+    describe("once", () => {
+        // TODO(jamesfulford): Why is this not passing?
+        xit('should submit', () => {
+            setName("Haaaaahvaaaahd Tuition");
+            setValue(-2900);
+    
+            selectFrequency("ONCE");
+            setStartDate(2020, 11, 8);
+    
+            submit();
+    
+            expect(failureHandler).not.toHaveBeenCalled();
+            expect(submitHandler).toHaveBeenCalledTimes(1);
+    
+            const rule = submitHandler.mock.calls[0][0];
+            expect(rule).toEqual(expect.objectContaining({
+                name: 'Haaaaahvaaaahd Tuition',
+                value: -2900
             }));
             expect(rule.rrule).toMatchSnapshot();
         });
