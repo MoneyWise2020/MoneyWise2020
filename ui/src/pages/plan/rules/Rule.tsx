@@ -24,7 +24,15 @@ export const Rule = ({
             <h5>{rule.name} </h5>
             <h6>Occurs {rrule.toText()}</h6>
             <h6>Value: <Currency value={rule.value} /></h6>
-            <Button variant="outline-secondary" className="close" size="sm" onClick={deleteButtonHandler}>&times;</Button>
+            <div className="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+            <div className="btn-group mr-2" role="group" aria-label="First group">
+            <Button variant="secondary" size="sm">Edit</Button>
+            </div>
+            <div className="btn-group mr-2" role="group" aria-label="Second group">
+            
+            <Button variant="danger" size="sm" onClick={deleteButtonHandler}>Delete</Button>
+            </div>
+            </div>
         </div>
     </ListGroup.Item>;
 }
