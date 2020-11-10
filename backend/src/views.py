@@ -8,10 +8,6 @@ import json
 def hello_world(request):
     return JsonResponse({ "status": "UP" })
 
-def createrule(request):
-    context = {}
-    return render(request, "transactions/createrule.html", context)
-
 def process_transactions(request):
     start = dt(2020, 10, 29)
     end = dt(2021, 10, 29)
