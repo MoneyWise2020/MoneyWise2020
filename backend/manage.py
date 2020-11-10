@@ -1,3 +1,4 @@
+  
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
 import os
@@ -5,7 +6,7 @@ import sys
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'src.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'MoneyWise2020.settings')
 
     # start new section
     from django.conf import settings
@@ -18,7 +19,7 @@ def main():
             ptvsd.wait_for_attach()
             print('Attached!')
     # end new section
-
+    
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

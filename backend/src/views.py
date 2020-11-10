@@ -1,7 +1,6 @@
 # import it
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, redirect
-from src.transactions.handler import get_instances_from_rules
+from django.http import JsonResponse
+from .handler import get_instances_from_rules 
 from datetime import date as dt
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
 import json
