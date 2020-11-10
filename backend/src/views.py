@@ -1,6 +1,6 @@
 # import it
 from django.http import JsonResponse
-from src.transactions.handler import get_instances_from_rules
+from .handler import get_instances_from_rules 
 from datetime import date as dt
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
 import json
