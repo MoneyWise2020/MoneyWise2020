@@ -8,8 +8,7 @@ services:
   moneywise2020:
     image: moneywise2020
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: ./backend
     environment:
       - DJANGO_SECRET_KEY=a-random-string-of-junk
       - DB_USERNAME=admin
@@ -19,7 +18,7 @@ services:
       - DB_PORT=3306
       - DEBUG=${DEBUG}
     volumes:
-      - .:/app
+      - ./backend:/app
     depends_on:
       mysql:
         condition: service_healthy 
@@ -31,7 +30,6 @@ services:
 
   mysql:
     image: mysql:5.7
-    container_name: mysql
     hostname: mysql
     networks:
       - moneywise
@@ -50,7 +48,6 @@ services:
   
   myadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: myadmin
     hostname: myadmin
     networks:
       - moneywise
