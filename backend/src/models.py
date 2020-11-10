@@ -9,4 +9,4 @@ class Rule(models.Model):
     amount = models.CharField(max_length=50, null=True, blank=True)
    
     def __str__(self):
-        return self.rule_name
+        return self.name
