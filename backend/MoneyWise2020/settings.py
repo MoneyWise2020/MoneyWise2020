@@ -23,13 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'po@=v+!vl8y551g374tk96^k+-vv9wuea^q#6$=xjldu^00uel'
 
-DEBUG = False
+DEBUG = True
 
-if os.environ['MONEYWISE_RUNTIME_ENV'] is "DEBUG":
-    # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
+#if os.environ['MONEYWISE_RUNTIME_ENV'] is "DEBUG":
+#    # SECURITY WARNING: don't run with debug turned on in production!
+#    DEBUG = True
 
-print("MoneyWise Running in " + os.environ['MONEYWISE_RUNTIME_ENV'])
+#print("MoneyWise Running in " + os.environ['MONEYWISE_RUNTIME_ENV'])
 
 ALLOWED_HOSTS = ['*']
 
@@ -38,6 +38,8 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'src',
+    'rest_framework',
+#    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -130,3 +133,8 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8001',
+)

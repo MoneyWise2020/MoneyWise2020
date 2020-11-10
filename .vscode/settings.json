@@ -1,0 +1,30 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "ralph-database-1.c1idjdax3vgr.us-east-1.rds.amazonaws.com",
+            "port": 3306,
+            "driver": "MySQL",
+            "database": "ralph-database-1",
+            "username": "admin",
+            "password": "agile2020",
+            "name": "Ralph-Database-1"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "moneywise-database-1.c1idjdax3vgr.us-east-1.rds.amazonaws.com",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "MoneyWise",
+            "username": "admin",
+            "password": "agile2020",
+            "database": "MoneyWise"
+        }
+    ]
+}
