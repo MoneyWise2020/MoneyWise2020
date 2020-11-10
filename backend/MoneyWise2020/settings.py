@@ -20,16 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'po@=v+!vl8y551g374tk96^k+-vv9wuea^q#6$=xjldu^00uel'
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 DEBUG = False
 
-if os.environ['MONEYWISE_RUNTIME_ENV'] is "DEBUG":
-    # SECURITY WARNING: don't run with debug turned on in production!
+if os.environ['DEBUG'] == "DEBUG":
+    print("SECURITY WARNING: don't run with debug turned on in production!")
     DEBUG = True
-
-print("MoneyWise Running in " + os.environ['MONEYWISE_RUNTIME_ENV'])
 
 ALLOWED_HOSTS = ['*']
 
@@ -80,14 +77,21 @@ WSGI_APPLICATION = 'MoneyWise2020.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+database_name = os.environ["DB_DATABASE_NAME"]
+username = os.environ["DB_USERNAME"]
+password = os.environ["DB_PASSWORD"]
+host = os.environ["DB_HOST"]
+port = os.environ["DB_PORT"]
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'MoneyWise',
-        'USER': 'admin',
-        'PASSWORD': 'agile2020',
-        'HOST': 'moneywise-database-1.c1idjdax3vgr.us-east-1.rds.amazonaws.com',
-        'PORT': '3306',        
+        'NAME': database_name,
+        'USER': username,
+        'PASSWORD': password,
+        'HOST': host,
+        'PORT': port,
     }
 }
 
