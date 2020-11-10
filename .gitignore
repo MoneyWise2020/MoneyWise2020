@@ -131,3 +131,4 @@ dmypy.json
 
 .dockerignore
 docker-compose.debug.yml
+.DS_Store
