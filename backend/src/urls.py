@@ -10,3 +10,4 @@ urlpatterns = [
     path('api/get_rule_list', views.get_rule_list),    
     path('api/update_rule/<str:rule_id>', views.update_rule),
 ]
+
