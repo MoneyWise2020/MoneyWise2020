@@ -27,7 +27,7 @@ def update_rule(request, rule_id):
 def get_rule_list(request):
     rules = Rule.objects.all()
     rule_serializer = RuleSerializer(rules, many=True)
-    return JsonResponse(rule_serializer.data, safe=False)
+    return JsonResponse({ "data": rule_serializer.data })
 
 @csrf_exempt
 def get_rule(request, rule_id):
