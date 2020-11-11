@@ -5,9 +5,11 @@ import logging
 class RuleSerializer(serializers.Serializer):
 
     id = serializers.PrimaryKeyRelatedField(read_only=True)
+    userid = serializers.CharField()
     name = serializers.CharField()
     rrule = serializers.CharField()
     value = serializers.DecimalField(max_digits=None, decimal_places=2, coerce_to_string=False)
+    labels = serializers.JSONField()
 
     def create(self, validated_data):
         rule = Rule.objects.create(**validated_data)

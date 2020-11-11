@@ -12,32 +12,56 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
+from rest_framework.exceptions import APIException
 
 from django.core.exceptions import ObjectDoesNotExist
 
 
+def _get_userid(request):
+    # TODO: get from auth, not from query param
+    userid = request.query_params.get('userid')
+    return userid
+
 @api_view(['GET', 'POST'])
 def rules_handler(request):
+    userid = _get_userid(request)
+    if not userid:
+        return Response({ "message": "`userid` query param is required" }, status=status.HTTP_400_BAD_REQUEST)
+
     try:
         if request.method == 'GET': 
-            return(get_rule_list(request))
+            return(get_rule_list(request, userid))
         if request.method == "POST":
-            return(create_rule(request))
+            return(create_rule(request, userid))
     except Exception as e:
-        logging.error(e)
-        raise e
+        response_message = {'message': "Apologies, we had a small hiccup. Please try again (just in case!) or contact moneywise support."}
+        logging.error(f"Unexpected error: {e}")
+        return Response(response_message, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET', 'POST'])
-def rules_by_id_handler(request, rule_id):    
-    if request.method == 'GET': 
-        return(get_rule(request, rule_id))
-    elif request.method == 'DELETE':
-        return(delete_rule(request, rule_id))
-    elif request.method == 'PUT':
-        return(update_rule(request, rule_id))
+def rules_by_id_handler(request, rule_id):
+    userid = _get_userid(request)
+    if not userid:
+        return Response({ "message": "`userid` query param is required" }, status=status.HTTP_400_BAD_REQUEST)
 
-def update_rule(request, rule_id):
-    rule = Rule.objects.get(id=rule_id)
+    try:
+        if request.method == 'GET': 
+            return(get_rule(request, rule_id, userid))
+        elif request.method == 'DELETE':
+            return(delete_rule(request, rule_id, userid))
+        elif request.method == 'PUT':
+            return(update_rule(request, rule_id, userid))
+    except ObjectDoesNotExist as e:
+        response_message = { "message": f"Rule `{rule_id}` does not exist for userid `{userid}`" }
+        logging.warn(response_message)
+        return Response(response_message, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        response_message = {'message': "Apologies, we had a small hiccup. Please try again (just in case!) or contact moneywise support."}
+        logging.error(f"Unexpected error: {e}")
+        return Response(response_message, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def update_rule(request, rule_id, userid):
+    rule = Rule.objects.get(id=rule_id, userid=userid)
     rule_data = JSONParser().parse(request)
     rule_serializer = RuleSerializer(rule, data=rule_data)
     if rule_serializer.is_valid():
@@ -45,37 +69,30 @@ def update_rule(request, rule_id):
         return Response(rule_serializer.data)
     return Response(rule_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-def get_rule_list(request):
-    rules = Rule.objects.all()
+def get_rule_list(request, userid):
+    rules = Rule.objects.all(userid=userid)
     rule_serializer = RuleSerializer(rules, many=True)
     return Response({ "data": rule_serializer.data })
 
-def get_rule(request, rule_id):
-    rule = Rule.objects.get(id=rule_id)
+def get_rule(request, rule_id, userid):
+    rule = Rule.objects.get(id=rule_id, userid=userid)
     rule_serializer = RuleSerializer(rule) 
     return Response(rule_serializer.data)     
 
-def create_rule(request):
+def create_rule(request, userid):
     rule_data = JSONParser().parse(request)
+    rule_data['userid'] = userid
     rule_serializer = RuleSerializer(data=rule_data)
     if rule_serializer.is_valid():
         rule_serializer.save()
         j = Response(rule_serializer.data, status=status.HTTP_201_CREATED) 
-        logging.info(dir(j))
         return j
     return Response(rule_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def delete_rule(request, rule_id):
-    # user = request.user.id
-    try:
-        rule = Rule.objects.get(id=rule_id)
-        rule.delete()
-        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
-    except ObjectDoesNotExist as e:
-        return Response({'error': 'Rule not found' }, status=status.HTTP_404_NOT_FOUND)       
-    except Exception as e:
-        logging.error(str(e))
-        return Response({'error': "Apologies, we had a small hiccup. Please contact moneywise support."}, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
+def delete_rule(request, rule_id, userid):
+    rule = Rule.objects.get(id=rule_id, userid=userid)
+    rule.delete()
+    return HttpResponse(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
 def hello_world(request):
