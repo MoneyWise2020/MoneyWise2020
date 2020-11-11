@@ -38,7 +38,7 @@ def rules_handler(request):
         logging.error(f"Unexpected error: {e}")
         return Response(response_message, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'DELETE', 'PUT'])
 def rules_by_id_handler(request, rule_id):
     userid = _get_userid(request)
     if not userid:
@@ -92,7 +92,7 @@ def create_rule(request, userid):
 def delete_rule(request, rule_id, userid):
     rule = Rule.objects.get(id=rule_id, userid=userid)
     rule.delete()
-    return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+    return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
 def hello_world(request):
