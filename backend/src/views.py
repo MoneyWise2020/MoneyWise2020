@@ -4,6 +4,7 @@ from .handler import get_instances_from_rules
 from datetime import date as dt
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
 import json
+import logging
 
 from .models import Rule
 from django.views.decorators.csrf import csrf_exempt
@@ -28,6 +29,7 @@ def get_rule_list(request):
     rule_serializer = RuleSerializer(rules, many=True)
     return JsonResponse(rule_serializer.data, safe=False)
 
+@csrf_exempt
 def get_rule(request, rule_id):
     rule = Rule.objects.get(id=rule_id)
     rule_serializer = RuleSerializer(rule) 
@@ -52,7 +54,8 @@ def delete_rule(request, rule_id):
     except ObjectDoesNotExist as e:
         return JsonResponse({'error': 'Rule not found' }, status=status.HTTP_404_NOT_FOUND)       
     except Exception as e:
-        return JsonResponse({'error': str(e)}, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
+        logging.error(str(e))
+        return JsonResponse({'error': "Apologies, we had a small hiccup. Please contact moneywise support."}, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
 
 def hello_world(request):
     return JsonResponse({ "status": "UP" })
