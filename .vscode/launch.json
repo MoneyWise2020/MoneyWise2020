@@ -1,34 +1,5 @@
 {
     "configurations": [        
-        // {
-        //     "name": "Launch Chrome",
-        //     "request": "launch",
-        //     "type": "pwa-chrome",
-        //     "url": "http://localhost:8080",
-        //     "webRoot": "${workspaceFolder}/backend"
-        // },
-        // {
-        //     "name": "Attach to Chrome",
-        //     "port": 9222,
-        //     "request": "attach",
-        //     "type": "pwa-chrome",
-        //     "webRoot": "${workspaceFolder}/backend"
-        // },
-        // {
-        //     "name": "Docker: Python - Django",
-        //     "type": "docker",
-        //     "request": "launch",
-        //     "preLaunchTask": "docker-run: debug",
-        //     "python": {
-        //         "pathMappings": [
-        //             {
-        //                 "localRoot": "${workspaceFolder}/backend",
-        //                 "remoteRoot": "/app"
-        //             }
-        //         ],
-        //         "projectType": "django"
-        //     }
-        // },
         {
             "name": "Python: Remote Attach",
             "type": "python",
@@ -36,6 +7,21 @@
             "connect": {
                 "host": "0.0.0.0",
                 "port": 3000
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/backend",
+                    "remoteRoot": "/app/"
+                }
+            ]
+        },
+        {
+            "name": "Debug UTs",
+            "type": "python",
+            "request": "attach",
+            "connect": {
+                "host": "0.0.0.0",
+                "port": 3001
             },
             "pathMappings": [
                 {

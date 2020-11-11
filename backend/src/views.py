@@ -70,7 +70,7 @@ def update_rule(request, rule_id, userid):
     return Response(rule_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 def get_rule_list(request, userid):
-    rules = Rule.objects.all(userid=userid)
+    rules = Rule.objects.filter(userid=userid)
     rule_serializer = RuleSerializer(rules, many=True)
     return Response({ "data": rule_serializer.data })
 
