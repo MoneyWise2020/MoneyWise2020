@@ -92,3 +92,37 @@ class RuleTestCase(APITestCase):
         # Assert non-existing rules give 404 when delete attempted
         response = self.client.delete(f"http://testserver/api/rules/{rule_id}", params={"userid": "testuser"})
         self.assertEqual(response.status_code, 404)
+    
+    def test_update(self):
+        body = {
+            "name": "Rent",
+            "rrule": str(rrule(freq=MONTHLY, byweekday=1)),
+            "value": -1000
+        }
+        response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
+        self.assertEqual(response.status_code, 201)
+
+        rule_id = response.json()['id']
+
+
+        # Update the value
+        body = {
+            "name": "Rent",
+            "rrule": str(rrule(freq=MONTHLY, byweekday=1)),
+            "value": -1200
+        }
+        response = self.client.put(f"http://testserver/api/rules/{rule_id}", params={"userid": "testuser"}, json=body)
+        self.assertEqual(response.status_code, 200)
+
+        # Ensure change is saved
+        response = self.client.get(f"http://testserver/api/rules/{rule_id}", params={"userid": "testuser"})
+        self.assertEqual(response.status_code, 200)
+
+        res_json = response.json()
+        self.assertEqual(res_json["name"], body["name"])
+        self.assertEqual(res_json["rrule"], body["rrule"])
+        self.assertEqual(res_json["value"], body["value"])
+
+        self.assertEqual(res_json["userid"], "testuser")
+
+        self.assertIn("id", res_json)

@@ -63,6 +63,7 @@ def rules_by_id_handler(request, rule_id):
 def update_rule(request, rule_id, userid):
     rule = Rule.objects.get(id=rule_id, userid=userid)
     rule_data = JSONParser().parse(request)
+    rule_data["userid"] = userid
     rule_serializer = RuleSerializer(rule, data=rule_data)
     if rule_serializer.is_valid():
         rule_serializer.save()
