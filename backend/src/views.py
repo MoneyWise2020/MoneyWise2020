@@ -48,7 +48,7 @@ def delete_rule(request, rule_id):
     try:
         rule = Rule.objects.get(id=rule_id)
         rule.delete()
-        return JsonResponse({'message': 'Rule was successfully deleted'}, status=status.HTTP_204_NO_CONTENT)
+        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
     except ObjectDoesNotExist as e:
         return JsonResponse({'error': 'Rule not found' }, status=status.HTTP_404_NOT_FOUND)       
     except Exception as e:
