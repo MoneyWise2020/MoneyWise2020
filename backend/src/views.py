@@ -11,7 +11,24 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from .serializers import RuleSerializer
-from rest_framework.parsers import JSONParser 
+from rest_framework.parsers import JSONParser
+from django.http import HttpResponse
+
+@csrf_exempt
+def rules_handler(request):
+    if request.method == 'GET': 
+        return(get_rule_list(request))
+    if request.method == "POST":
+        return(create_rule(request))
+
+@csrf_exempt
+def rules_by_id_handler(request, rule_id):    
+    if request.method == 'GET': 
+        return(get_rule(request, rule_id))
+    elif request.method == 'DELETE':
+        return(delete_rule(request, rule_id))
+    elif request.method == 'PUT':
+        return(update_rule(request, rule_id))
 
 @csrf_exempt
 def update_rule(request, rule_id):
