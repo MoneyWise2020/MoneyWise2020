@@ -22,8 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
-DEBUG = True
-
+DEBUG = False
 
 if os.environ['DEBUG'] == "DEBUG":
     print("SECURITY WARNING: don't run with debug turned on in production!")
@@ -141,5 +140,5 @@ STATIC_URL = '/static/'
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8001',
+    'http://localhost:8080',
 )
