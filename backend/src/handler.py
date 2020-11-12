@@ -28,7 +28,9 @@ def datetime_parser(dct):
         if isinstance(v, str):
             try:
                 dct[k] = datetime.datetime.strptime(v, DATE_FORMAT).date()
+                print("Yey bro")
             except:
+                print("Wut happened")
                 pass
     return dct
 
