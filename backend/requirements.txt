@@ -9,3 +9,4 @@ pymysql==0.10.1
 django-mysql==2.2.0
 djangorestframework==3.12.2
 django-cors-headers==3.3.0
+requests==2.25.0

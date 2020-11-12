@@ -1,56 +1,59 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { RRule } from 'rrule';
+import React, { useCallback } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup';
 import { IApiRule, IApiRuleMutate } from './IRule';
 import { Rule } from './Rule';
 import {CreateForm} from './CreateRuleForm';
+import useAxios from 'axios-hooks'
+import axios from 'axios';
+
+// TODO: configure at build time
+const baseUrl = 'http://localhost:8000';
+
+// TODO: get from login
+const userid = 'test'
 
 export const RulesContainer = () => {
-    // TODO(jamesfulford): When APIs ready, remove mock data
-    const [rules, setRules] = useState<IApiRule[]>([]);
-    useEffect(() => {
-        const id = setTimeout(() => {
-            setRules([
-                {
-                    id: '1',
-                    userid: 'demo',
-                    version: '1.0.0',
-                    name: 'Rent',
-                    rrule: new RRule({
-                        freq: RRule.MONTHLY,
-                        bymonthday: 1,
+    const [{ data, loading, error }, refetch] = useAxios(
+        `${baseUrl}/api/rules?userid=${userid}`
+    )
 
-                        dtstart: new Date(Date.UTC(2012, 1, 1, 10, 30)),
-                        until: new Date(Date.UTC(2020, 12, 31))
-                      }).toString(),
-                    value: -2000,
-                },
-                {
-                    id: '2',
-                    userid: 'demo',
-                    version: '1.0.0',
-                    name: 'Paycheck',
-                    rrule: new RRule({
-                        freq: RRule.WEEKLY,
-                        interval: 2,
-                        byweekday: 1,
-
-                        dtstart: new Date(Date.UTC(2012, 1, 1, 10, 30)),
-                        until: new Date(Date.UTC(2020, 12, 31))
-                      }).toString(),
-                    value: 1500,
-                },
-            ])
-        }, 300);
-        return () => clearTimeout(id);
-    }, []);
-
-    // TODO(jamesfulford): When DELETE API is ready, call it here
-    const deleteHandler = useCallback((id: string) => console.log("DELETE", id), []);
+    const deleteHandler = useCallback((id: string) => {
+        axios.delete(`${baseUrl}/api/rules/${id}?userid=${userid}`)
+            .then(() => {
+                refetch();
+            })
+            .catch((e) => {
+                // TODO: toast an error
+                console.error('UHOH', e);
+            })
+    }, [refetch]);
 
     const createNewRule = useCallback((rule: IApiRuleMutate) => console.log('Creating new rule', rule), []);
     const onFailedValidation = useCallback((message: string) => console.log('Bad input', message), []);
 
+    if (loading) {
+        return <>
+            <CreateForm onSubmit={createNewRule} onFailedValidation={onFailedValidation} />
+            <p data-testid="rules-loading">Loading...</p>
+        </>
+    }
+    
+    if (error) {
+        return <>
+            <CreateForm onSubmit={createNewRule} onFailedValidation={onFailedValidation} />
+            <p data-testid="rules-load-error">Oops! Looks like we can't get your rules right now. Try reloading the page.</p>
+        </>
+    }
+
+    const rules = data.data as IApiRule[]
+
+    if (!rules?.length) { // empty
+        return <>
+            <CreateForm onSubmit={createNewRule} onFailedValidation={onFailedValidation} />
+            <h3 data-testid="no-rules-found">Looks like nothing's here. Try creating a rule!</h3>
+        </>
+    }
+    
     return <>
         <CreateForm onSubmit={createNewRule} onFailedValidation={onFailedValidation} />
         <ListGroup>

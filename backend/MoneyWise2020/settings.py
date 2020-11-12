@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,23 +81,33 @@ WSGI_APPLICATION = 'MoneyWise2020.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-database_name = os.environ["DB_DATABASE_NAME"]
-username = os.environ["DB_USERNAME"]
-password = os.environ["DB_PASSWORD"]
-host = os.environ["DB_HOST"]
-port = os.environ["DB_PORT"]
 
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': database_name,
-        'USER': username,
-        'PASSWORD': password,
-        'HOST': host,
-        'PORT': port,
+if 'test' in sys.argv:
+    # unit tests run with sqllite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'my_database',
+        }
     }
-}
+else:
+    # everything else runs with MySQL
+    database_name = os.environ["DB_DATABASE_NAME"]
+    username = os.environ["DB_USERNAME"]
+    password = os.environ["DB_PASSWORD"]
+    host = os.environ["DB_HOST"]
+    port = os.environ["DB_PORT"]
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': database_name,
+            'USER': username,
+            'PASSWORD': password,
+            'HOST': host,
+            'PORT': port,
+        }
+    }
 
 
 # Password validation
@@ -125,9 +136,9 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
+USE_I18N = False
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -142,3 +153,27 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
 )
+
+#
+# Rest framework
+#
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False
+}
+
+#
+# Logging
+#
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}

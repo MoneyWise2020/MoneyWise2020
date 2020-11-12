@@ -6,6 +6,14 @@ import { RRule } from 'rrule';
 import './Rule.css';
 import { Currency } from '../../../components/currency/Currency';
 
+function getRRuleDisplayString(rruleString: string): string {
+    try {
+        return RRule.fromString(rruleString).toText();
+    } catch (e) {
+        return "(Oops, looks like an invalid recurrence rule)"
+    }
+}
+
 export const Rule = ({
     rule,
     onDelete = () => {}
@@ -16,13 +24,11 @@ export const Rule = ({
 }) => {
     const deleteButtonHandler = useCallback(() => onDelete(rule.id), [rule.id, onDelete]);
 
-    // rule.name
-    // rule.rrule
-    const rrule = RRule.fromString(rule.rrule);
+    const rruleString = getRRuleDisplayString(rule.rrule);
     return <ListGroup.Item>
         <div className="ruledescription">
             <h5>{rule.name} </h5>
-            <h6>Occurs {rrule.toText()}</h6>
+            <h6>Occurs {rruleString}</h6>
             <h6>Value: <Currency value={rule.value} /></h6>
             <div className="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
             <div className="btn-group mr-2" role="group" aria-label="First group">
