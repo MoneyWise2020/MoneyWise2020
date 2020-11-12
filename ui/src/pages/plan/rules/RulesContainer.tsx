@@ -6,7 +6,10 @@ import {CreateForm} from './CreateRuleForm';
 import useAxios from 'axios-hooks'
 import axios from 'axios';
 
+// TODO: configure at build time
 const baseUrl = 'http://localhost:8000';
+
+// TODO: get from login
 const userid = 'test'
 
 export const RulesContainer = () => {
