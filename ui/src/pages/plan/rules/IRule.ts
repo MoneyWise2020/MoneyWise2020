@@ -10,5 +10,4 @@ export interface IApiRuleMutate {
 export interface IApiRule extends IApiRuleMutate {
     id: string;
     userid: string;
-    version: string;
 }
