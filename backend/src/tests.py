@@ -25,24 +25,6 @@ class RuleTestCase(APITestCase):
         response = self.client.get("http://testserver/api/rules")
         self.assertEqual(response.status_code, 400)
     
-    def test_create_response_successful(self):
-        body = {
-            "name": "Rent",
-            "rrule": str(rrule(freq=MONTHLY, byweekday=1)),
-            "value": -1000
-        }
-        response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
-        self.assertEqual(response.status_code, 201)
-
-        res_json = response.json()
-        self.assertEqual(res_json["name"], body["name"])
-        self.assertEqual(res_json["rrule"], body["rrule"])
-        self.assertEqual(res_json["value"], body["value"])
-
-        self.assertEqual(res_json["userid"], "testuser")
-
-        self.assertIn("id", res_json)
-    
     def test_can_get_after_create(self):
         body = {
             "name": "Rent",
@@ -62,10 +44,16 @@ class RuleTestCase(APITestCase):
         self.assertEqual(res_json["rrule"], body["rrule"])
         self.assertEqual(res_json["value"], body["value"])
 
+        self.assertEqual(res_json["id"], rule_id)
         self.assertEqual(res_json["userid"], "testuser")
 
-        self.assertIn("id", res_json)
-    
+        # Is rule_id in list of rules?
+        response = self.client.get("http://testserver/api/rules", params={"userid": "testuser"})
+        res_json = response.json()
+        rule_ids = list(map(lambda r: r["id"], res_json["data"]))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(rule_id, rule_ids)
+
     def test_delete(self):
         body = {
             "name": "Rent",
@@ -104,7 +92,6 @@ class RuleTestCase(APITestCase):
 
         rule_id = response.json()['id']
 
-
         # Update the value
         body = {
             "name": "Rent",
@@ -126,3 +113,20 @@ class RuleTestCase(APITestCase):
         self.assertEqual(res_json["userid"], "testuser")
 
         self.assertIn("id", res_json)
+    
+    def test_no_partial_update(self):
+        body = {
+            "name": "Rent",
+            "rrule": str(rrule(freq=MONTHLY, byweekday=1)),
+            "value": -1000
+        }
+        response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
+        self.assertEqual(response.status_code, 201)
+
+        rule_id = response.json()['id']
+
+        body = {
+            "name": "Rent"
+        }
+        response = self.client.put(f"http://testserver/api/rules/{rule_id}", params={"userid": "testuser"}, json=body)
+        self.assertEqual(response.status_code, 400)
