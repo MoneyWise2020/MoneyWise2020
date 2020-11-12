@@ -54,7 +54,7 @@ export const RulesContainer = () => {
     return <>
         <CreateForm onSubmit={createNewRule} onFailedValidation={onFailedValidation} />
         <ListGroup>
-            {rules.map((rule: any) => <Rule rule={rule} onDelete={deleteHandler} key={rule.id}/>)}
+            {rules.map(rule => <Rule rule={rule} onDelete={deleteHandler} key={rule.id}/>)}
         </ListGroup>
     </>;
 }
