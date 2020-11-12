@@ -16,9 +16,9 @@ class RuleSerializer(serializers.Serializer):
         return rule
     
     def update(self, instance, validated_data):
-        logging.info(validated_data)
         instance.name = validated_data.get('name', instance.name)
         instance.rrule = validated_data.get('rrule', instance.rrule)
         instance.value = validated_data.get('value', instance.value)
+        instance.labels = validated_data.get('labels', instance.labels)
         instance.save()
         return instance
