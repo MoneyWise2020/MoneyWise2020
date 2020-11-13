@@ -4,6 +4,13 @@ import { render, fireEvent } from '@testing-library/react'
 import { RulesContainer } from './RulesContainer';
 import { IApiRule } from './IRule';
 
+import {
+    setName,
+    setValue,
+    selectFrequency,
+    setDayOfMonth
+} from './formTestUtils';
+
 jest.mock('axios-hooks');
 jest.mock('axios');
 
@@ -132,9 +139,37 @@ describe('rules container', () => {
     });
 
     describe('create rules', () => {
-        // TODO(jamesfulford): Finish
-        xit('should post new rule to backend and refetch when form is submitted', () => {
 
+        let axiosPost: jest.MockedFunction<() => Promise<{ data: any }>>;
+        beforeEach(() => {
+            axiosPost = require('axios').default.post;
+        })
+
+        it('should post new rule to backend and refetch when form is submitted', async () => {
+            setUp([]);
+
+            setName(element, "Rent");
+            setValue(element, -1000.10);
+    
+            selectFrequency(element, "MONTHLY");
+            setDayOfMonth(element, 15);
+
+            const promise = Promise.resolve({ data: 'hello' });
+            axiosPost.mockReturnValue(promise);
+
+            const submitButton = element.getByText(/Submit/i);
+            fireEvent.click(submitButton);
+
+            await promise;
+            expect(axiosPost).toHaveBeenCalledTimes(1);
+            expect(require('axios').default.post).toHaveBeenCalledWith(
+                expect.stringContaining("api/rules"), 
+                expect.objectContaining({ // the rule we're trying to create
+                    name: 'Rent',
+                    value: -1000.10
+                }
+            ));
+            expect(mockRefetch).toHaveBeenCalledTimes(1);
         });
     });
 });
