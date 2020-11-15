@@ -48,3 +48,7 @@ export function submit(formElement: any) {
     expect(submitButton).toBeInTheDocument();
     fireEvent.click(submitButton);
 }
+
+it('should have a functioning test framework', () => {
+    expect(true).toBe(true);
+});
