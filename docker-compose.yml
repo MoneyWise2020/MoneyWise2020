@@ -23,9 +23,5 @@ services:
   myadmin:
     image: phpmyadmin/phpmyadmin
     hostname: myadmin
-    networks:
-      - moneywise
     ports:
       - 8090:80
-    environment:
-      PMA_HOST: mysql
