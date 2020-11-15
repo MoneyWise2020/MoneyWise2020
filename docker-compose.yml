@@ -1,8 +1,4 @@
-version: '3.4'
-
-networks:
-  moneywise:
-    name: moneywise
+version: '2.0'
 
 services:
   moneywise-ui:
@@ -20,7 +16,5 @@ services:
     image: moneywise-backend
     build:
       context: ./backend
-    networks:
-      - moneywise
     ports:
       - 8000:8000
