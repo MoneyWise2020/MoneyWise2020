@@ -104,7 +104,7 @@ Since all members of the scrum team are developers (with some hybrid scrum/PO), 
 #### Development:
 ```bash
 # Start up (in background)
-docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d --build
+docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d
 
 # Apply migrations
 docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml exec moneywise-backend python manage.py migrate
@@ -126,9 +126,7 @@ DB_PORT=
 # Leave out `DEBUG` for prod
 # DEBUG=
 # For backend, CORS
-UI_ORIGIN=http://localhost:18080
-# For UI, base URL to our backend
-API_BASE_URL=http://localhost:18000
+CORS_ORIGIN_WHITELIST_CSV=http://localhost:18080
 ```
 
 Then run the build job on the CICD pipeline. 
