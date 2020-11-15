@@ -9,7 +9,8 @@ services:
       image: moneywise-ui
       build:
         context: ./ui
-        # TODO: pass env var for base urls
+        args:
+          - REACT_APP_MONEYWISE_BASE_URL=http://localhost:8000
       depends_on:
         - moneywise-backend
       ports:
