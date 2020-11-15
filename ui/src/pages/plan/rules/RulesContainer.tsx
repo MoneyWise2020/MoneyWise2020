@@ -28,7 +28,13 @@ export const RulesContainer = () => {
             })
     }, [refetch]);
 
-    const createNewRule = useCallback((rule: IApiRuleMutate) => console.log('Creating new rule', rule), []);
+    const createNewRule = useCallback((rule: IApiRuleMutate) => {
+        axios.post(`${baseUrl}/api/rules?userid=${userid}`, rule)
+            .then((response) => {
+                console.log('Created rule', response.data);
+                refetch();
+            })
+    }, [refetch]);
     const onFailedValidation = useCallback((message: string) => console.log('Bad input', message), []);
 
     if (loading) {

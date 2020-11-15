@@ -130,3 +130,12 @@ class RuleTestCase(APITestCase):
         }
         response = self.client.put(f"http://testserver/api/rules/{rule_id}", params={"userid": "testuser"}, json=body)
         self.assertEqual(response.status_code, 400)
+
+    def test_400_when_ridiculously_large_value_is_used(self):
+        body = {
+            "name": "Paycheck",
+            "rrule": str(rrule(freq=WEEKLY, byweekday=1)),
+            "value": 99999999999999999999999999999999999
+        }
+        response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
+        self.assertEqual(response.status_code, 400)

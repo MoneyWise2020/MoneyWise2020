@@ -1,6 +1,16 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { render } from '@testing-library/react'
+
+import {
+    setName,
+    setValue,
+    selectFrequency,
+    setDayOfMonth,
+    setMonthOfYear,
+    setDaysOfWeek,
+    setStartDate,
+    submit
+} from './formUtils.test';
 
 import { CreateForm } from './CreateRuleForm';
 import { IApiRuleMutate } from './IRule';
@@ -16,67 +26,19 @@ describe('create rule form', () => {
         element = render(<CreateForm onSubmit={submitHandler} onFailedValidation={failureHandler} />);
     });
 
-    function setName(name: string) {
-        const nameInput = element.getByLabelText(/Name/i);
-        expect(nameInput).toBeInTheDocument();
-        fireEvent.change(nameInput, { target: { value: name }});
-    }
-
-    function setValue(value: number) {
-        const valueInput = element.getByLabelText(/Value/i);
-        expect(valueInput).toBeInTheDocument();
-        fireEvent.change(valueInput, { target: { value: String(value) }});
-    }
-
-    function selectFrequency(frequency: string) {
-        const frequencyInput = element.getByLabelText(/Frequency/i);
-        expect(frequencyInput).toBeInTheDocument();
-        fireEvent.change(frequencyInput, { target: { value: frequency }});
-    }
-
-    function setDayOfMonth(day: number) {
-        const dayOfMonthInput = element.getByLabelText(/Day of month/i);
-        expect(dayOfMonthInput).toBeInTheDocument();
-        fireEvent.change(dayOfMonthInput, { target: { value: String(day) }});
-    }
-
-    function setMonthOfYear(month: number) {
-        const dayOfMonthInput = element.getByLabelText(/Month of Year/i);
-        expect(dayOfMonthInput).toBeInTheDocument();
-        fireEvent.change(dayOfMonthInput, { target: { value: String(month) }});
-    }
-
-    function setDaysOfWeek(daysOfWeek: string[]) {
-        const dayOfWeekSelect = element.getByLabelText(/Days of Week/i);
-        expect(dayOfWeekSelect).toBeInTheDocument();
-        userEvent.selectOptions(dayOfWeekSelect, daysOfWeek);
-    }
-
-    function setStartDate(year: number, month: number, day: number) {
-        const startDateInput = element.getByLabelText(/Start/i);
-        expect(startDateInput).toBeInTheDocument();
-        fireEvent.change(startDateInput, { target: { value: `${year}-${month}-${day}` } });
-    }
-
-    function submit() {
-        const submitButton = element.getByRole("button", { name: /Submit/i });
-        expect(submitButton).toBeInTheDocument();
-        fireEvent.click(submitButton);
-    }
-
     it('should render', () => {
         expect(element).not.toBeUndefined();
         expect(submitHandler).not.toHaveBeenCalled();
     });
 
     it('should not allow short names', () => {
-        setName("1"); // Should be longer name
-        setValue(-1000);
+        setName(element, "1"); // Should be longer name
+        setValue(element, -1000);
 
-        selectFrequency("MONTHLY");
-        setDayOfMonth(1);
+        selectFrequency(element, "MONTHLY");
+        setDayOfMonth(element, 1);
 
-        submit();
+        submit(element);
 
         expect(submitHandler).not.toHaveBeenCalled();
         expect(failureHandler).toHaveBeenCalledTimes(1);
@@ -84,13 +46,13 @@ describe('create rule form', () => {
     });
 
     it('should not allow 0 value', () => {
-        setName("Rent");
-        setValue(0);
+        setName(element, "Rent");
+        setValue(element, 0);
 
-        selectFrequency("MONTHLY");
-        setDayOfMonth(1);
+        selectFrequency(element, "MONTHLY");
+        setDayOfMonth(element, 1);
 
-        submit();
+        submit(element);
 
         expect(submitHandler).not.toHaveBeenCalled();
         expect(failureHandler).toHaveBeenCalledTimes(1);
@@ -99,13 +61,13 @@ describe('create rule form', () => {
 
     describe("weekly", () => {
         it('should submit for multiple days', () => {
-            setName("Gas");
-            setValue(-25);
+            setName(element, "Gas");
+            setValue(element, -25);
     
-            selectFrequency("WEEKLY");
-            setDaysOfWeek(['MONDAY', 'TUESDAY']);
+            selectFrequency(element, "WEEKLY");
+            setDaysOfWeek(element, ['MONDAY', 'TUESDAY']);
     
-            submit();
+            submit(element);
     
             expect(failureHandler).not.toHaveBeenCalled();
             expect(submitHandler).toHaveBeenCalledTimes(1);
@@ -121,13 +83,13 @@ describe('create rule form', () => {
 
     describe("biweekly", () => {
         it('should submit', () => {
-            setName("Paycheck");
-            setValue(1800);
+            setName(element, "Paycheck");
+            setValue(element, 1800);
     
-            selectFrequency("BIWEEKLY");
-            setStartDate(2020, 10, 10);
+            selectFrequency(element, "BIWEEKLY");
+            setStartDate(element, 2020, 10, 10);
 
-            submit();
+            submit(element);
     
             expect(failureHandler).not.toHaveBeenCalled();
             expect(submitHandler).toHaveBeenCalledTimes(1);
@@ -141,12 +103,12 @@ describe('create rule form', () => {
         });
 
         it('should not submit without start date', () => {
-            setName("Paycheck");
-            setValue(1800);
+            setName(element, "Paycheck");
+            setValue(element, 1800);
     
-            selectFrequency("BIWEEKLY");
+            selectFrequency(element, "BIWEEKLY");
 
-            submit();
+            submit(element);
     
             expect(submitHandler).not.toHaveBeenCalled();
             expect(failureHandler).toHaveBeenCalledTimes(1);
@@ -156,13 +118,13 @@ describe('create rule form', () => {
 
     describe("monthly", () => {
         it('should submit', () => {
-            setName("Rent");
-            setValue(-1000);
+            setName(element, "Rent");
+            setValue(element, -1000);
     
-            selectFrequency("MONTHLY");
-            setDayOfMonth(15);
+            selectFrequency(element, "MONTHLY");
+            setDayOfMonth(element, 15);
     
-            submit();
+            submit(element);
     
             expect(failureHandler).not.toHaveBeenCalled();
             expect(submitHandler).toHaveBeenCalledTimes(1);
@@ -178,14 +140,14 @@ describe('create rule form', () => {
 
     describe("yearly", () => {
         it('should submit', () => {
-            setName("Birthday Present!");
-            setValue(-42);
+            setName(element, "Birthday Present!");
+            setValue(element, -42);
     
-            selectFrequency("YEARLY");
-            setMonthOfYear(10);
-            setDayOfMonth(1);
+            selectFrequency(element, "YEARLY");
+            setMonthOfYear(element, 10);
+            setDayOfMonth(element, 1);
     
-            submit();
+            submit(element);
     
             expect(failureHandler).not.toHaveBeenCalled();
             expect(submitHandler).toHaveBeenCalledTimes(1);
@@ -202,13 +164,13 @@ describe('create rule form', () => {
     describe("once", () => {
         // TODO(jamesfulford): Why is this not passing?
         xit('should submit', () => {
-            setName("Haaaaahvaaaahd Tuition");
-            setValue(-2900);
+            setName(element, "Haaaaahvaaaahd Tuition");
+            setValue(element, -2900);
     
-            selectFrequency("ONCE");
-            setStartDate(2020, 11, 8);
+            selectFrequency(element, "ONCE");
+            setStartDate(element, 2020, 11, 8);
     
-            submit();
+            submit(element);
     
             expect(failureHandler).not.toHaveBeenCalled();
             expect(submitHandler).toHaveBeenCalledTimes(1);
