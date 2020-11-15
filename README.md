@@ -95,3 +95,24 @@ Since all members of the scrum team are developers (with some hybrid scrum/PO), 
   - Testing
 - Have an established demo
 - Have a ready environment (can run locally and push to GitHub)
+
+### Requirements
+- Docker
+
+
+### How to run!
+###### In a development environment.
+```docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d```
+
+###### In a production environment.
+Create a backend-variables.env in the backend folder with your database variables.
+
+- DJANGO_SECRET_KEY
+- DB_USERNAME
+- DB_PASSWORD
+- DB_DATABASE_NAME
+- DB_HOST
+- DB_PORT
+- DEBUG=
+
+Then run the build job on the CICD pipeline. 

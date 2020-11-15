@@ -19,14 +19,6 @@ services:
     image: moneywise-backend
     build:
       context: ./backend
-    environment:
-      - DJANGO_SECRET_KEY=a-random-string-of-junk
-      - DB_USERNAME=admin
-      - DB_PASSWORD=admin
-      - DB_DATABASE_NAME=moneywise_db
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DEBUG=${DEBUG}
     volumes:
       - ./backend:/app
     depends_on:
@@ -36,26 +28,7 @@ services:
       - moneywise
     ports:
       - 8000:8000
-      - 3000:3000
 
-  mysql:
-    image: mysql:5.7
-    hostname: mysql
-    networks:
-      - moneywise
-    restart: always
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padmin"]
-      timeout: 3s
-      retries: 10
-    ports:
-      - 3306:3306
-    environment:
-      MYSQL_DATABASE: moneywise_db
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-  
   myadmin:
     image: phpmyadmin/phpmyadmin
     hostname: myadmin
