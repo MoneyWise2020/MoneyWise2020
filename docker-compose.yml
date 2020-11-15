@@ -1,9 +1,5 @@
 version: '2.0'
 
-networks:
-  moneywise:
-    name: moneywise
-
 services:
   moneywise-ui:
       image: moneywise-ui
