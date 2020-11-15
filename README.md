@@ -96,13 +96,5 @@ Since all members of the scrum team are developers (with some hybrid scrum/PO), 
 - Have an established demo
 - Have a ready environment (can run locally and push to GitHub)
 
-## First Sprint
-
-- **Forecasted Sprint Story Points:** 20
-- **Rational for Story Points Forecast:**  We initially decided to attempt 20 story points in the first sprint.  This number is based solely on our individual experiences with past projects like this one.  We have no history of working together as a team and thus cannot draw heavily on "yesterday's weather" to refine our forecast.  Plus, 20 is a nice round number. :)
-- **Refining the User Stories:** We reviewed and decided to split our 20 point "Manage Rules" User Story into two stores.  One story for the UI (at 8 points) and one story for the API (at 8 points).  Our two stores have been decomposed into tasks.  The stories with their tasks can be view at  https://github.com/MoneyWise2020/MoneyWise2020/issues/3 and https://github.com/MoneyWise2020/MoneyWise2020/issues/25
-- **Creating the Sprint Backlog:** We pulled the above two stories (totaling 16 points) into our sprint backlog durning our Sprint Planning meeting.  All team members participated in Sprint Planning since we are all developers on the project.  The meeting was recorded and can be accessed here: https://docs.google.com/document/d/1YBYvbtzQM9F6hqz737ofrRtsPcP2D6QY708qJeZ_BDg/edit
-- **Our Team Kanban Board:** https://agilesoftwarecourse.slack.com/archives/C019S0R4N8J/p1604849375110800
-- **Our Team Sprint Burndown Chart:** https://app.zenhub.com/workspaces/moneywise2020-5f984e412accf2001e9acc9c/reports/burndown?milestoneId=6045255
-- **Our Daily Scrums:** Our Daily Scrums were conducted asynchronously over Slack.  Please see https://agilesoftwarecourse.slack.com/archives/C01DC27UGJK for team member daily descriptions of accomplished and planned activities.
-- **Pair and Mob Programming:** Pair and mob programming sessions were conducted during the sprint.  Session recordings are available here: https://docs.google.com/document/d/1YBYvbtzQM9F6hqz737ofrRtsPcP2D6QY708qJeZ_BDg/edit 
+# Readme for sprint 1 is in README_Sprint_1.md
+[Sprint 1 README](README_Sprint_1.md)
