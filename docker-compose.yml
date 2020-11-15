@@ -20,11 +20,7 @@ services:
     image: moneywise-backend
     build:
       context: ./backend
-    volumes:
-      - ./backend:/app
     networks:
       - moneywise
     ports:
       - 8000:8000
-    environment:
-      - CORS_ORIGIN_WHITELIST_CSV=${UI_ORIGIN}
