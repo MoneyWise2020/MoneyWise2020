@@ -7,7 +7,7 @@ from .views import rules_handler, rules_by_id_handler
 
 import os
 
-if os.environ["DEBUG"] == "DEBUG":
+if os.environ.get("DEBUG", ""):
     import ptvsd
     print("Waiting for debugger to attach...")
     ptvsd.enable_attach(address=('0.0.0.0', 3001))
