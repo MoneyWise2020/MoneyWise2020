@@ -10,7 +10,7 @@ import {
     setDaysOfWeek,
     setStartDate,
     submit
-} from './formTestUtils';
+} from './formUtils.test';
 
 import { CreateForm } from './CreateRuleForm';
 import { IApiRuleMutate } from './IRule';

@@ -9,7 +9,7 @@ import {
     setValue,
     selectFrequency,
     setDayOfMonth
-} from './formTestUtils';
+} from './formUtils.test';
 
 jest.mock('axios-hooks');
 jest.mock('axios');
