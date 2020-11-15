@@ -101,18 +101,36 @@ Since all members of the scrum team are developers (with some hybrid scrum/PO), 
 
 
 ### How to run!
-###### In a development environment.
-```docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d```
+#### Development:
+```bash
+# Start up (in background)
+docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d --build
 
-###### In a production environment.
+# Apply migrations
+docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml exec moneywise-backend python manage.py migrate
+
+# Shut down
+docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml down
+```
+
+#### Prod:
+
 Create a backend-variables.env in the backend folder with your database variables.
-
-- DJANGO_SECRET_KEY
-- DB_USERNAME
-- DB_PASSWORD
-- DB_DATABASE_NAME
-- DB_HOST
-- DB_PORT
-- DEBUG=
+```bash
+DJANGO_SECRET_KEY=
+DB_USERNAME=
+DB_PASSWORD=
+DB_DATABASE_NAME=
+DB_HOST=
+DB_PORT=
+# Leave out `DEBUG` for prod
+# DEBUG=
+# For backend, CORS
+UI_ORIGIN=http://localhost:18080
+# For UI, base URL to our backend
+API_BASE_URL=http://localhost:18000
+```
 
 Then run the build job on the CICD pipeline. 
+
+(Commands are same as Development, but replace `.dev.yml` with `.prod.yml`)

@@ -6,8 +6,7 @@ import {CreateForm} from './CreateRuleForm';
 import useAxios from 'axios-hooks'
 import axios from 'axios';
 
-// TODO: configure at build time
-const baseUrl = 'http://localhost:8000';
+const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 
 // TODO: get from login
 const userid = 'test'

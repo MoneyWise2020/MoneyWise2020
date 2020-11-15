@@ -7,7 +7,7 @@ from .views import rules_handler, rules_by_id_handler
 
 import os
 
-if os.environ["DEBUG"] == "DEBUG":
+if os.environ.get("DEBUG", ""):
     import ptvsd
     print("Waiting for debugger to attach...")
     ptvsd.enable_attach(address=('0.0.0.0', 3001))
@@ -136,6 +136,15 @@ class RuleTestCase(APITestCase):
             "name": "Paycheck",
             "rrule": str(rrule(freq=WEEKLY, byweekday=1)),
             "value": 99999999999999999999999999999999999
+        }
+        response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
+        self.assertEqual(response.status_code, 400)
+
+    def test_rrule_validation_failure(self):
+        body = {
+            "name": "Paycheck",
+            "rrule": 'invalid rrule',
+            "value": 2000
         }
         response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
         self.assertEqual(response.status_code, 400)
