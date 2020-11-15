@@ -34,7 +34,7 @@ https://harvard.zoom.us/rec/play/_JtZjbOwsIBsXrQK-ydlafITKmSfAmvuuUEk09_Tb3nM43_
 TODO
 
 - **Backlog revisions [Rubric Criteria 17]**
-TODO
+Based on conversations with our stakeholder, he would like to see how we address variable expenses. We are going to deliberate on additional stories to account for variable expenses which may or may not get prioritized this sprint. (See Sprint Review video for more detail)
 
 - **Working software links [Rubric Criteria 16]**
 http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8080/ - Our working application front end
