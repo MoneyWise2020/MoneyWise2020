@@ -16,7 +16,5 @@ services:
     image: moneywise-backend
     build:
       context: ./backend
-    networks:
-      - moneywise
     ports:
       - 8000:8000
