@@ -7,9 +7,15 @@ COPY package.json yarn.lock ./
 RUN yarn --frozen-lockfile
 COPY ./src ./src
 COPY ./public ./public
+
+ARG REACT_APP_MONEYWISE_BASE_URL
+ENV REACT_APP_MONEYWISE_BASE_URL $REACT_APP_MONEYWISE_BASE_URL
 RUN yarn build
 # Build Stage 2
 # This build takes the production build from staging build
 #
-FROM httpd:2.4-alpine
-COPY --from=appbuild /usr/src/app/build /usr/local/apache2/htdocs/
+FROM nginx:stable-alpine
+COPY --from=appbuild /usr/src/app/build /usr/share/nginx/html
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
