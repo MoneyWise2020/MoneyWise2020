@@ -113,6 +113,6 @@ Create a backend-variables.env in the backend folder with your database variable
 - DB_DATABASE_NAME
 - DB_HOST
 - DB_PORT
-- DEBUG=False 
+- DEBUG=
 
 Then run the build job on the CICD pipeline. 
