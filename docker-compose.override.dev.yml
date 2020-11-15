@@ -17,6 +17,7 @@ services:
       - DB_HOST=mysql
       - DB_PORT=3306
       - DEBUG=${DEBUG}
+      - CORS_ORIGIN_WHITELIST_CSV=http://localhost:8080
     volumes:
       - ./backend:/app
     depends_on:
@@ -27,6 +28,7 @@ services:
     ports:
       - 8000:8000
       - 3000:3000
+        
 
   mysql:
     image: mysql:5.7

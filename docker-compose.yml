@@ -20,5 +20,4 @@ services:
       - ./backend:/app
     ports:
       - 8000:8000
-    environment:
-      - CORS_ORIGIN_WHITELIST_CSV=${UI_ORIGIN}
+    
