@@ -45,3 +45,13 @@ services:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
+  
+  myadmin:
+    image: phpmyadmin/phpmyadmin
+    hostname: myadmin
+    networks:
+      - moneywise
+    ports:
+      - 8090:80
+    environment:
+      PMA_HOST: mysql
