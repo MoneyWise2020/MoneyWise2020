@@ -139,3 +139,12 @@ class RuleTestCase(APITestCase):
         }
         response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
         self.assertEqual(response.status_code, 400)
+
+    def test_rrule_validation_failure(self):
+        body = {
+            "name": "Paycheck",
+            "rrule": 'invalid rrule',
+            "value": 2000
+        }
+        response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
+        self.assertEqual(response.status_code, 400)
