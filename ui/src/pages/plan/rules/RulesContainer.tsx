@@ -6,8 +6,7 @@ import {CreateForm} from './CreateRuleForm';
 import useAxios from 'axios-hooks'
 import axios from 'axios';
 
-// TODO: configure at build time
-const baseUrl = 'http://localhost:8000';
+const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 
 // TODO: get from login
 const userid = 'test'
@@ -28,7 +27,13 @@ export const RulesContainer = () => {
             })
     }, [refetch]);
 
-    const createNewRule = useCallback((rule: IApiRuleMutate) => console.log('Creating new rule', rule), []);
+    const createNewRule = useCallback((rule: IApiRuleMutate) => {
+        axios.post(`${baseUrl}/api/rules?userid=${userid}`, rule)
+            .then((response) => {
+                console.log('Created rule', response.data);
+                refetch();
+            })
+    }, [refetch]);
     const onFailedValidation = useCallback((message: string) => console.log('Bad input', message), []);
 
     if (loading) {

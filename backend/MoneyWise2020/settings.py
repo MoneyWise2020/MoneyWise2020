@@ -25,12 +25,17 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 DEBUG = False
 
-if os.environ['DEBUG'] == "DEBUG":
+if os.environ.get("DEBUG", ""):
     print("SECURITY WARNING: don't run with debug turned on in production!")
     DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# Test Configurations
+TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
+TEST_OUTPUT_VERBOSE = True
+TEST_OUTPUT_DESCRIPTIONS = True
+TEST_OUTPUT_DIR = 'xmlrunner'
 
 # Application definition
 
@@ -150,9 +155,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8080',
-)
+CORS_ORIGIN_WHITELIST = os.environ["CORS_ORIGIN_WHITELIST_CSV"].split(",")
 
 #
 # Rest framework

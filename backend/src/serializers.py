@@ -1,14 +1,24 @@
 from rest_framework import serializers 
 from .models import Rule 
 import logging
- 
+from dateutil.rrule import rrulestr
+
+
+def rrule_validation(rrule: str) -> str:
+    try:
+        rrulestr(rrule)
+        return rrule
+    except Exception:
+        raise serializers.ValidationError("Invalid recurrence rule")
+
+
 class RuleSerializer(serializers.Serializer):
 
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     userid = serializers.CharField()
     name = serializers.CharField()
-    rrule = serializers.CharField()
-    value = serializers.DecimalField(max_digits=None, decimal_places=2, coerce_to_string=False)
+    rrule = serializers.CharField(validators=[rrule_validation])
+    value = serializers.DecimalField(max_digits=19, decimal_places=2, coerce_to_string=False)
     labels = serializers.JSONField(required=False)
 
     def create(self, validated_data):

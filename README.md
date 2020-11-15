@@ -96,5 +96,43 @@ Since all members of the scrum team are developers (with some hybrid scrum/PO), 
 - Have an established demo
 - Have a ready environment (can run locally and push to GitHub)
 
+
 # Readme for sprint 1 is in README_Sprint_1.md
 [Sprint 1 README](README_Sprint_1.md)
+
+
+### Requirements
+- Docker
+
+### How to run!
+#### Development:
+```bash
+# Start up (in background)
+docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d
+
+# Apply migrations
+docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml exec moneywise-backend python manage.py migrate
+
+# Shut down
+docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml down
+```
+
+#### Prod:
+
+Create a backend-variables.env in the backend folder with your database variables.
+```bash
+DJANGO_SECRET_KEY=
+DB_USERNAME=
+DB_PASSWORD=
+DB_DATABASE_NAME=
+DB_HOST=
+DB_PORT=
+# Leave out `DEBUG` for prod
+# DEBUG=
+# For backend, CORS
+CORS_ORIGIN_WHITELIST_CSV=http://localhost:18080
+```
+
+Then run the build job on the CICD pipeline. 
+
+(Commands are same as Development, but replace `.dev.yml` with `.prod.yml`)

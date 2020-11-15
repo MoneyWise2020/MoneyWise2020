@@ -15,6 +15,7 @@
         "axios": "^0.21.0",
         "axios-hooks": "^2.1.0",
         "bootstrap": "^4.5.3",
+        "jest-junit":"^12.0.0",
         "react": "^16.13.1",
         "react-bootstrap": "^1.4.0",
         "react-dom": "^16.13.1",
@@ -22,6 +23,16 @@
         "react-scripts": "3.4.3",
         "rrule": "2.6.4",
         "typescript": "^3.7.5"
+    },
+    "jest-junit": {
+        "suiteName": "jest tests",
+        "outputDirectory": ".",
+        "outputName": "junit.xml",
+        "uniqueOutputName": "false",
+        "classNameTemplate": "{classname}-{title}",
+        "titleTemplate": "{classname}-{title}",
+        "ancestorSeparator": " › ",
+        "usePathForSuiteName": "true"
     },
     "scripts": {
         "start": "PORT=8080 react-scripts start",
