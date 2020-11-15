@@ -8,7 +8,7 @@ class RuleSerializer(serializers.Serializer):
     userid = serializers.CharField()
     name = serializers.CharField()
     rrule = serializers.CharField()
-    value = serializers.DecimalField(max_digits=None, decimal_places=2, coerce_to_string=False)
+    value = serializers.DecimalField(max_digits=19, decimal_places=2, coerce_to_string=False)
     labels = serializers.JSONField(required=False)
 
     def create(self, validated_data):
