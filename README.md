@@ -96,9 +96,13 @@ Since all members of the scrum team are developers (with some hybrid scrum/PO), 
 - Have an established demo
 - Have a ready environment (can run locally and push to GitHub)
 
+
+# Readme for sprint 1 is in README_Sprint_1.md
+[Sprint 1 README](README_Sprint_1.md)
+
+
 ### Requirements
 - Docker
-
 
 ### How to run!
 #### Development:
