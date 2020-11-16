@@ -31,12 +31,22 @@ TDD Pairing example - Skip ahead a bit to get to TDD.
 https://harvard.zoom.us/rec/play/_JtZjbOwsIBsXrQK-ydlafITKmSfAmvuuUEk09_Tb3nM43_6T6DwWJ9UmgyebHvFXbNnBM0otbBX33c_.YJ9WwRVW2ySlKq3r
 
 - **Sprint review with Stakeholder [Rubric Criteria 15,17]**
+Our stakeholder attended our session and we discussed our accomplishments and goals for the upcoming sprint. 
+
+Photos of our Sprint Review Demo with our stakeholder.:
+https://drive.google.com/drive/folders/1HEoM0ob8A9s1TttBtQLZ8W6-1dfZU7un?usp=sharing
+
+Video of our complete Sprint Review:
 TODO
 
 - **Backlog revisions [Rubric Criteria 17]**
 Based on conversations with our stakeholder, he would like to see how we address variable expenses. We are going to deliberate on additional stories to account for variable expenses which may or may not get prioritized this sprint. (See Sprint Review video for more detail)
 
 - **Working software links [Rubric Criteria 16]**
+Our product increment is working software. 
+The software is running on a publicly available system (Amazon EC2).
+The working demonstration of this software is available in the first few minutes of the Sprint Review Video. 
+
 http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8080/ - Our working application front end
 
 - **Sprint 1 Retro**
