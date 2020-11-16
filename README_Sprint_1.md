@@ -33,7 +33,7 @@ https://harvard.zoom.us/rec/play/_JtZjbOwsIBsXrQK-ydlafITKmSfAmvuuUEk09_Tb3nM43_
 - **Sprint review with Stakeholder [Rubric Criteria 15,17]**
 Our stakeholder attended our session and we discussed our accomplishments and goals for the upcoming sprint. 
 
-Photos of our Sprint Review Demo with our stakeholder.:
+Photos of our Sprint Review Demo with our stakeholder:
 https://drive.google.com/drive/folders/1HEoM0ob8A9s1TttBtQLZ8W6-1dfZU7un?usp=sharing
 
 Video of our complete Sprint Review:
