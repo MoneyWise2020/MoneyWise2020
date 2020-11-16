@@ -37,7 +37,7 @@ Photos of our Sprint Review Demo with our stakeholder:
 https://drive.google.com/drive/folders/1HEoM0ob8A9s1TttBtQLZ8W6-1dfZU7un?usp=sharing
 
 Video of our complete Sprint Review:
-TODO
+https://drive.google.com/file/d/1gdzKTdfXog6fWowfe59q9qeA1fAEUo3U/view?usp=sharing
 
 - **Backlog revisions [Rubric Criteria 17]**
 Based on conversations with our stakeholder, he would like to see how we address variable expenses. We are going to deliberate on additional stories to account for variable expenses which may or may not get prioritized this sprint. (See Sprint Review video for more detail)
