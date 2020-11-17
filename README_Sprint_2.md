@@ -101,6 +101,6 @@ http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/MoneyWiseCICD/4
 
 Failing "Red" build does not deploy:
 
-`TODO`: fail unit tests, add "red" job link
+http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/MoneyWiseCICD/41/console (UI tests fail, never goes on to deploy)
 
 `TODO`: "prod" tests question: https://agilesoftwarecourse.slack.com/archives/C019S0R4N8J/p1605584449129100
