@@ -50,7 +50,5 @@ export function submit(formElement: any) {
 }
 
 it('should have a functioning test framework', () => {
-    // TODO: revert to this once we have a link to a red build
-    // expect(true).toBe(true);
-    expect(true).toBe(false);
+    expect(true).toBe(true);
 });
