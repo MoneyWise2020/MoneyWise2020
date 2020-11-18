@@ -148,3 +148,10 @@ class RuleTestCase(APITestCase):
         }
         response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
         self.assertEqual(response.status_code, 400)
+
+    # Example tests
+    def test_another_test(self):
+        assert True
+
+    def test_again(self):
+        assert True
