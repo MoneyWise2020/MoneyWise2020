@@ -110,8 +110,14 @@ Since all members of the scrum team are developers (with some hybrid scrum/PO), 
 ### How to run!
 #### Development:
 ```bash
-# Start up (in background)
+# Start up WITHOUT debugging (in background)
 docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d
+
+# Start up WITH debug
+DEBUG=True docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d
+
+# Running tests
+docker exec -it <Container ID> python manage.py test 
 
 # Apply migrations
 docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml exec moneywise-backend python manage.py migrate
