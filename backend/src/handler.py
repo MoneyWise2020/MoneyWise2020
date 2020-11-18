@@ -61,13 +61,13 @@ def _get_instances_from_rules(event, context):
     parameters = event["queryStringParameters"]
     if parameters is None:
         parameters = {}
-    parameters.update({
-        'start': '',
-        'end': '',
-        'current': '',
-        'set_aside': '',
-        'biweekly_start': '',
-    })
+        parameters.update({
+            'start': '',
+            'end': '',
+            'current': '',
+            'set_aside': '',
+            'biweekly_start': '',
+        })
 
     start = parameters['start']
     if start:

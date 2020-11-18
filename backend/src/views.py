@@ -1,8 +1,10 @@
 import logging
 
 from .handler import get_instances_from_rules 
-from datetime import date as dt
+from datetime import datetime, date as dt
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
+from dateutil.relativedelta import relativedelta
+import dateutil.parser
 import json
 
 from .models import Rule
@@ -15,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.core.serializers.json import DjangoJSONEncoder
 
 def _get_userid(request):
     # TODO: get from auth, not from query param
@@ -95,38 +97,57 @@ def delete_rule(request, rule_id, userid):
     rule.delete()
     return Response(None, status=status.HTTP_204_NO_CONTENT)
 
+def get_transaction_formatted_rule_list(userid):
+    rules = Rule.objects.filter(userid=userid)
+    rrules = RuleSerializer(rules, many=True).data
+    jsonBodyForTransactionQuery = {}
+
+    for rrule in rrules:
+        #TODO Check for duplicate keys and reconcile.
+        jsonBodyForTransactionQuery[rrule['name']] = {
+            "rule": rrule['rrule'],
+            "value": float(rrule['value'])
+        }
+
+    return json.dumps(jsonBodyForTransactionQuery, cls=DjangoJSONEncoder)
+
 @api_view(['GET'])
 def hello_world(request):
     return Response({ "status": "UP" })
 
 @api_view(['POST'])
 def process_transactions(request):
-    start = dt(2020, 10, 29)
-    end = dt(2021, 10, 29)
-    biweekly_start = dt(2020, 10, 29)
+    userId = request.GET.get('userid', '')
+    currentBalanceParam = request.GET.get('currentBalance', '')
+    startParam = request.GET.get('startDate', '')
+    endParam = request.GET.get('endDate', '')
+    
+    queryBody = get_transaction_formatted_rule_list(userId)
+
+    # This handles ISO 8601 Formatted dates and MORE! 
+    now = datetime.now()
+    start = dateutil.parser.parse(startParam)
+    end = dateutil.parser.parse(endParam)
+
+    if start < now:
+        return Response({ "Error": "Start date should be current or future date." }, status=status.HTTP_400_BAD_REQUEST)
+    
+    if start > end:
+        return Response({ "Error": "End date should be after start date." }, status=status.HTTP_400_BAD_REQUEST)
+
+
+    if end > start + relativedelta(years=3):
+        return Response({ "Error": "We do not support projections father than 3 years." }, status=status.HTTP_400_BAD_REQUEST)
 
     results = get_instances_from_rules({
         "queryStringParameters": {
             "start": start.strftime("%Y-%m-%d"),
             "end": end.strftime("%Y-%m-%d"),
-            "current": "1000",
+            "current": currentBalanceParam,
             "set_aside": "0",
-            "biweekly_start": biweekly_start.strftime("%Y-%m-%d")
+            "biweekly_start": start.strftime("%Y-%m-%d")
         },
-        "body": json.dumps({
-            "gas": {
-                "rule": str(rrule(freq=WEEKLY, byweekday=1)),
-                "value": -100,
-            },
-            "rent": {
-                "rule": str(rrule(freq=MONTHLY, byweekday=1)),
-                "value": -2000,
-            },
-            "paycheck": {
-                "rule": str(rrule(freq=WEEKLY, byweekday=3, interval=2)),
-                "value": -2000,
-            }
-        })
+        "body": queryBody
     }, None)
 
     transactions = json.loads(results["body"])
