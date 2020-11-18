@@ -125,19 +125,18 @@ def process_transactions(request):
     queryBody = get_transaction_formatted_rule_list(userId)
 
     # This handles ISO 8601 Formatted dates and MORE! 
-    now = datetime.now()
-    start = dateutil.parser.parse(startParam)
-    end = dateutil.parser.parse(endParam)
+    now = datetime.now().date()
+    start = dateutil.parser.parse(startParam).date()
+    end = dateutil.parser.parse(endParam).date()
+
+    if start > end:
+        return Response({ "Error": "End date should be after start date." }, status=status.HTTP_400_BAD_REQUEST)    
 
     if start < now:
-        return Response({ "Error": "Start date should be current or future date." }, status=status.HTTP_400_BAD_REQUEST)
-    
-    if start > end:
-        return Response({ "Error": "End date should be after start date." }, status=status.HTTP_400_BAD_REQUEST)
+        return Response({ "Error": "Start date should be the current date or a future date." }, status=status.HTTP_400_BAD_REQUEST)
 
-
-    if end > start + relativedelta(years=3):
-        return Response({ "Error": "We do not support projections father than 3 years." }, status=status.HTTP_400_BAD_REQUEST)
+    if start > now + relativedelta(years=3) or end > start + relativedelta(years=3):
+        return Response({ "Error": "We do not support projections more than 3 years in the future." }, status=status.HTTP_400_BAD_REQUEST)    
 
     results = get_instances_from_rules({
         "queryStringParameters": {

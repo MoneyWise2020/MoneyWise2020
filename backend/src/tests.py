@@ -2,6 +2,8 @@ from rest_framework.test import APITestCase
 from rest_framework.test import RequestsClient
 
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
+from datetime import datetime, date as dt
+from dateutil.relativedelta import relativedelta
 
 from .views import rules_handler, rules_by_id_handler
 
@@ -149,9 +151,25 @@ class RuleTestCase(APITestCase):
         response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
         self.assertEqual(response.status_code, 400)
 
-    # Example tests
-    def test_another_test(self):
-        assert True
+    def test_future_start_end_dates(self):
+        response = self.client.post("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": "2020-1-1", "endDate": "2021-1-1"})
+        self.assertEqual(response.status_code, 400)     
 
-    def test_again(self):
-        assert True
+    def test_start_date_preceeds_end_date(self):
+        now = datetime.now().date()
+        endDate = now - relativedelta(days=1)      
+        response = self.client.post("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 400)
+
+    def test_future_limit_start_date(self):
+        now = datetime.now().date()
+        startDate = now + relativedelta(years=3, days=1)
+        endDate = now + relativedelta(years=3, days=2)        
+        response = self.client.post("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": startDate.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 400)
+
+    def test_future_limit_end_date(self):
+        now = datetime.now().date()
+        endDate = now + relativedelta(years=3, days=1)
+        response = self.client.post("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 400)
