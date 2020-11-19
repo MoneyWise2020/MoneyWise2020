@@ -117,7 +117,7 @@ docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d
 DEBUG=True docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d
 
 # Running tests
-docker exec -it <Container ID> python manage.py test 
+docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml exec moneywise-backend python manage.py test
 
 # Apply migrations
 docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml exec moneywise-backend python manage.py migrate
