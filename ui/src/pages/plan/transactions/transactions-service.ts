@@ -19,8 +19,8 @@ export class TransactionsService {
         return axios.get(`${baseUrl}/api/transactions`, { params: { 
             userid,
             startDate: now.toISOString(),
-            endDate: new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)).toISOString()
+            endDate: new Date(now.getTime() + (720 * 24 * 60 * 60 * 1000)).toISOString()
         }})
-            .then(({ data }) => data);
+            .then(({ data }) => data.transactions);
     }
 }
