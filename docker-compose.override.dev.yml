@@ -7,10 +7,9 @@ networks:
 services:
   moneywise-ui:
     environment: 
-      - API_BASE_URL=http://localhost:8000
+      - REACT_APP_MONEYWISE_BASE_URL=http://localhost:8000
     build:
       args:
-        - API_BASE_URL=http://localhost:8000
         - REACT_APP_MONEYWISE_BASE_URL=http://localhost:8000
   moneywise-backend:
     image: moneywise-backend
