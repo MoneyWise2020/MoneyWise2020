@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { IApiTransaction, TransactionsService } from './transactions-service';
-// import InfiniteScroll from "react-infinite-scroll-component";
 import { Currency } from '../../../components/currency/Currency';
 
 // TODO: get from login
@@ -23,8 +22,6 @@ export const TransactionsContainer = () => {
                 setData('error');
             });
     }, []);
-
-    const [number, setNumber] = useState<number>(20);
     const tableData = Array.isArray(data) ? data : [];
     
     if (!data) {
@@ -34,6 +31,7 @@ export const TransactionsContainer = () => {
     if ('error' === data) {
         return <p>Error occurred while fetching transactions! Try refreshing the page.</p>
     }
+
     return <div className="table-responsive" style={{height:300}}>
         <table className="table table-sm table-hover">
             <thead>
@@ -57,29 +55,6 @@ export const TransactionsContainer = () => {
                     )
                 }
             </tbody>
-        {/* <InfiniteScroll
-            dataLength={tableData.length}
-            next={() => {
-                console.log('next called')
-                setNumber(n => n + 20)
-            }}
-            hasMore={true}
-            loader={<h4>Loading...</h4>}
-            scrollableTarget="scrollableDiv"
-            endMessage={
-            <p style={{ textAlign: "center" }}>
-                <b>Yay! You have seen it all</b>
-            </p>
-            }
-        >
-            {
-                tableData.slice(0, number).map(
-                    (i, index) => <div style={style} key={index}>
-                        div - #{index}
-                    </div>
-                )
-            }
-        </InfiniteScroll> */}
         </table>
     </div>
 }
