@@ -87,7 +87,7 @@ describe('transactions container', () => {
                 rule_id: 'Rent',
                 id: 'rent-1',
                 value: -2000,
-                day: '2020-01-01',
+                day: '1970-01-01',
                 calculations: {
                     balance: 1337,
                     working_capital: 1000,
@@ -96,7 +96,7 @@ describe('transactions container', () => {
                 rule_id: 'Paycheck',
                 id: 'paycheck-1',
                 value: 2000,
-                day: '2020-01-05',
+                day: '1970-01-05',
                 calculations: {
                     balance: 3337,
                     working_capital: 1000,
@@ -110,6 +110,53 @@ describe('transactions container', () => {
             expect(transactionElements).toHaveLength(2);
             expect(transactionElements[0].textContent).toContain('Rent');
             expect(transactionElements[1].textContent).toContain('Paycheck');
+        });
+
+        it('should not list transactions over 3 months', () => {
+            setUp([{
+                rule_id: 'Rent',
+                id: 'rent-1',
+                value: -2000,
+                day: '1970-04-02', // 1 day more than 3 months later
+                calculations: {
+                    balance: 1337,
+                    working_capital: 1000,
+                }
+            }, {
+                rule_id: 'Paycheck',
+                id: 'paycheck-1',
+                value: 2000,
+                day: '1970-04-02',
+                calculations: {
+                    balance: 3337,
+                    working_capital: 1000,
+                }
+            }]);
+            expect(transactionsEmpty()).toBeDefined();
+            expect(transactionsLoading()).not.toBeDefined();
+            expect(transactionsError()).not.toBeDefined();
+        });
+
+        it('should not list over 100 transactions at once', () => {
+            // Create 120 transactions (more than 100)
+            const transactions: IApiTransaction[] = Array.from([ ...Array(120) ]).map((_, i) => i)
+                .map(i => ({
+                    rule_id: `Rule #${i}`,
+                    id: `Rule id #${i}`,
+                    value: 1000,
+                    day: '1970-01-02',
+                    calculations: {
+                        balance: 123,
+                        working_capital: 121323,
+                    }
+                }))
+
+            setUp(transactions);
+            expect(transactionsEmpty()).not.toBeDefined();
+            expect(transactionsLoading()).not.toBeDefined();
+            expect(transactionsError()).not.toBeDefined();
+            const transactionElements: any[] = Array.from(element.container.querySelectorAll('tbody > tr'));
+            expect(transactionElements).toHaveLength(100); // not 120, 100.
         });
     });
 });

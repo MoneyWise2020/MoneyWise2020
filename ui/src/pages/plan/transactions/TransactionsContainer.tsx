@@ -7,10 +7,23 @@ import useAxios from 'axios-hooks'
 const userid = 'test'
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 
+export function limitShownTransactions(transactions: IApiTransaction[], showEnd: Date): IApiTransaction[] {
+    return transactions
+        .filter(t => {
+            const d = new Date(t.day)
+            return d <= showEnd;
+        })
+        .slice(0, 100);
+}
+
 export const TransactionsContainer = ({ currentTime }: { currentTime: number }) => {
     const now = new Date(currentTime)
+    const start = now;
+    const queryEnd = new Date(now.getTime() + (120 * 24 * 60 * 60 * 1000)); // add 120 days
+    const showEnd = new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)); // add 90 days
+
     const [{ data, loading, error }, refetch] = useAxios(
-        `${baseUrl}/api/transactions?userid=${userid}&startDate=${now.toISOString()}&endDate=${new Date(now.getTime() + (720 * 24 * 60 * 60 * 1000)).toISOString()}`
+        `${baseUrl}/api/transactions?userid=${userid}&startDate=${start.toISOString()}&endDate=${queryEnd.toISOString()}`
     )
     
     if (loading) {
@@ -21,7 +34,7 @@ export const TransactionsContainer = ({ currentTime }: { currentTime: number }) 
         return <p data-testid="transactions-error">Error occurred while fetching transactions! Try refreshing the page.</p>
     }
     
-    const tableData = data.transactions as IApiTransaction[];
+    const tableData = limitShownTransactions(data.transactions as IApiTransaction[], showEnd);
 
     if (tableData.length === 0) {
         return <p data-testid="transactions-empty">Sorry, it looks like you don't have any transactions. Try setting up a new rule.</p>
