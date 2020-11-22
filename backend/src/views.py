@@ -38,6 +38,7 @@ def rules_handler(request):
         if request.method == "POST":
             return(create_rule(request, userid))
     except Exception as e:
+        # TODO: global exception handler
         response_message = {'message': "Apologies, we had a small hiccup. Please try again (just in case!) or contact moneywise support."}
         logging.error(f"Unexpected error: {e}")
         return Response(response_message, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -104,7 +105,7 @@ def hello_world(request):
     return Response({ "status": "UP" })
 
 
-def make_execution_parameters(request):
+def make_execution_parameters(request) -> ExecutionParameters:
     """
     Extracts execution parameters from request
     """
@@ -143,7 +144,7 @@ def make_execution_parameters(request):
     return parameters
 
 
-def make_execution_rules(rules):
+def make_execution_rules(rules) -> ExecutionRules:
     """
     Converts serialized rules from database into ExecutionRules object
     """
@@ -161,6 +162,13 @@ def make_execution_rules(rules):
     return rules
     
 
+def get_rules_from_database(userid: str) -> ExecutionRules:
+    # Get rules from database
+    database_rules = Rule.objects.filter(userid=userid)
+    serialized_rules = RuleSerializer(database_rules, many=True).data
+    return make_execution_rules(serialized_rules)
+
+
 @api_view(['GET'])
 def process_transactions(request):
     userid = _get_userid(request)
@@ -176,14 +184,15 @@ def process_transactions(request):
     except ParserError as e:
         return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
     
-    # Get rules from database
-    database_rules = Rule.objects.filter(userid=userid)
-    serialized_rules = RuleSerializer(database_rules, many=True).data
-    rules = make_execution_rules(serialized_rules)
+    rules = None
+    try:
+        rules = get_rules_from_database(userid)
+    except Exception as e:
+        logging.error(f"Error while getting rules from database", e)
+        return Response({ "message": "Internal Server Error" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # Calculate transactions
-    execution_context = ExecutionContext(parameters, rules)
-    transactions = get_instances_up_to(execution_context)
+    transactions = get_instances_up_to(ExecutionContext(parameters, rules))
     results = list(map(lambda i: i.serialize(), transactions))
 
     return Response({ "transactions": results })
