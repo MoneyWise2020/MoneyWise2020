@@ -1,7 +1,7 @@
 import logging
 
 from .handler import get_instances_from_rules 
-from datetime import datetime, date as dt
+from datetime import date
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
 from dateutil.relativedelta import relativedelta
 import dateutil.parser
@@ -103,7 +103,7 @@ def get_transaction_formatted_rule_list(userid):
     jsonBodyForTransactionQuery = {}
 
     for rrule in rrules:
-        #TODO Check for duplicate keys and reconcile.
+        #TODO Switch to 'id' instead of 'name' when the UI is ready for it
         jsonBodyForTransactionQuery[rrule['name']] = {
             "rule": rrule['rrule'],
             "value": float(rrule['value'])
@@ -115,28 +115,46 @@ def get_transaction_formatted_rule_list(userid):
 def hello_world(request):
     return Response({ "status": "UP" })
 
-@api_view(['POST'])
+@api_view(['GET'])
 def process_transactions(request):
     userId = request.GET.get('userid', '')
-    currentBalanceParam = request.GET.get('currentBalance', '')
+    currentBalanceParam = request.GET.get('currentBalance', '0')
     startParam = request.GET.get('startDate', '')
     endParam = request.GET.get('endDate', '')
-    
-    queryBody = get_transaction_formatted_rule_list(userId)
 
-    # This handles ISO 8601 Formatted dates and MORE! 
-    now = datetime.now().date()
-    start = dateutil.parser.parse(startParam).date()
-    end = dateutil.parser.parse(endParam).date()
+    if userId == '':
+        return Response({ "Error": "userid must be provided." }, status=status.HTTP_400_BAD_REQUEST)
+
+    if startParam == '':
+        return Response({ "Error": "startDate must be provided." }, status=status.HTTP_400_BAD_REQUEST)
+
+    if endParam == '':
+        return Response({ "Error": "endDate must be provided." }, status=status.HTTP_400_BAD_REQUEST)         
+
+    try:
+        start = dateutil.parser.parse(startParam).date()
+    except (ValueError):
+        return Response({ "Error": "startDate (YYYY-MM-DD): " + startParam + " is invalid." }, status=status.HTTP_400_BAD_REQUEST)      
+
+    try:
+        end = dateutil.parser.parse(endParam).date()
+    except (ValueError):
+        return Response({ "Error": "endDate (YYYY-MM-DD): " + endParam + " is invalid." }, status=status.HTTP_400_BAD_REQUEST)
+
+    now = date.today()
 
     if start > end:
-        return Response({ "Error": "End date should be after start date." }, status=status.HTTP_400_BAD_REQUEST)    
+        return Response({ "Error": "End date should be after start date." }, status=status.HTTP_400_BAD_REQUEST)
 
     if start < now:
         return Response({ "Error": "Start date should be the current date or a future date." }, status=status.HTTP_400_BAD_REQUEST)
 
     if start > now + relativedelta(years=3) or end > start + relativedelta(years=3):
         return Response({ "Error": "We do not support projections more than 3 years in the future." }, status=status.HTTP_400_BAD_REQUEST)    
+
+    queryBody = get_transaction_formatted_rule_list(userId)
+    if queryBody == '{}':
+        return Response({ "Error": "No rules found for user: '" + userId + "'." }, status=status.HTTP_400_BAD_REQUEST)             
 
     results = get_instances_from_rules({
         "queryStringParameters": {

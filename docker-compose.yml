@@ -1,17 +1,6 @@
 version: '2.0'
 
 services:
-  moneywise-ui:
-    image: moneywise-ui
-    build:
-      context: ./ui
-      args:
-        - REACT_APP_MONEYWISE_BASE_URL=${API_BASE_URL}
-    depends_on:
-      - moneywise-backend
-    ports:
-      - 8080:80
-
   moneywise-backend:
     image: moneywise-backend
     build:
