@@ -132,23 +132,20 @@ def make_execution_parameters(request):
     else:
         set_aside = 0
 
-    assert start < end, '`start` comes after `end`, when it should come before'
-    assert current >= 0, '`current` is negative, when it should be 0 or positive'
-    assert set_aside >= 0, '`set_aside` is negative, when it should be 0 or positive'
-
-    assert end <= start + relativedelta(years=3), "We do not support projections spanning more than 3 years."
-
-    return ExecutionParameters(
+    parameters = ExecutionParameters(
         start,
         end,
         current,
         set_aside
     )
+    parameters.assert_valid()
+
+    return parameters
 
 
 def make_execution_rules(rules):
     """
-    Converts
+    Converts serialized rules from database into ExecutionRules object
     """
     rule_map = {}
 
@@ -159,7 +156,9 @@ def make_execution_rules(rules):
             "value": float(rule['value'])
         }
     
-    return ExecutionRules(rule_map)
+    rules = ExecutionRules(rule_map)
+    rules.assert_valid()
+    return rules
     
 
 @api_view(['GET'])
