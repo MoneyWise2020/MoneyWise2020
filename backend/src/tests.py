@@ -2,6 +2,8 @@ from rest_framework.test import APITestCase
 from rest_framework.test import RequestsClient
 
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 from .views import rules_handler, rules_by_id_handler
 
@@ -148,3 +150,61 @@ class RuleTestCase(APITestCase):
         }
         response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
         self.assertEqual(response.status_code, 400)
+
+    def test_missing_userid_parm(self):
+        now = date.today()
+        endDate = now + relativedelta(days=1)
+        response = self.client.get("http://testserver/api/transactions", params={"currentBalance": "0", "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 400)        
+
+    def test_missing_startdate_parm(self):
+        now = date.today()
+        endDate = now + relativedelta(days=1)
+        response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 400)
+
+    def test_missing_enddate_parm(self):
+        startDate = date.today()
+        response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": startDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 400)
+
+    def test_valid_start_date(self):
+        response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": "2020-13-1", "endDate": "2021-1-1"})
+        self.assertEqual(response.status_code, 400)
+
+    def test_valid_end_date(self):
+        response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": "2020-1-1", "endDate": "2021-13-1"})
+        self.assertEqual(response.status_code, 400)
+
+    def test_past_start_date_disallowed(self):
+        now = date.today()
+        startDate = now - relativedelta(days=1)            
+        endDate = now + relativedelta(years=2)        
+        response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": startDate.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 400)     
+
+    def test_start_date_preceeds_end_date(self):
+        now = date.today()
+        endDate = now - relativedelta(days=1)      
+        response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 400)
+
+    def test_future_limit_start_date(self):
+        now = date.today()
+        startDate = now + relativedelta(years=3, days=1)
+        endDate = now + relativedelta(years=3, days=2)        
+        response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": startDate.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 400)
+
+    def test_future_limit_end_date(self):
+        now = date.today()
+        endDate = now + relativedelta(years=3, days=1)
+        response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 400)
+
+    def test_rules_exist_for_user(self):
+        now = date.today()
+        endDate = now + relativedelta(years=3)
+        response = self.client.get("http://testserver/api/transactions", params={"userid": "fakeuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 400)
+

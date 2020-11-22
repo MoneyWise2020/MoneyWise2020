@@ -5,7 +5,17 @@ services:
     env_file:
       - backend-variables.env # This file is NOT committed to the REPO. This should only exist on the corresponding environments defined by the users.
       
+  # not defined in base or dev since `yarn start` is used locally
   moneywise-ui:
+    image: moneywise-ui
+    build:
+      context: ./ui
+      args:
+        - REACT_APP_MONEYWISE_BASE_URL=${API_BASE_URL}
+    depends_on:
+      - moneywise-backend
+    ports:
+      - 8080:80
     env_file:
       - backend-variables.env # This file is NOT committed to the REPO. This should only exist on the corresponding environments defined by the users.
     

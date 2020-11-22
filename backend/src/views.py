@@ -1,8 +1,10 @@
 import logging
 
 from .handler import get_instances_from_rules 
-from datetime import date as dt
+from datetime import date
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
+from dateutil.relativedelta import relativedelta
+import dateutil.parser
 import json
 
 from .models import Rule
@@ -15,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.core.serializers.json import DjangoJSONEncoder
 
 def _get_userid(request):
     # TODO: get from auth, not from query param
@@ -95,38 +97,74 @@ def delete_rule(request, rule_id, userid):
     rule.delete()
     return Response(None, status=status.HTTP_204_NO_CONTENT)
 
+def get_transaction_formatted_rule_list(userid):
+    rules = Rule.objects.filter(userid=userid)
+    rrules = RuleSerializer(rules, many=True).data
+    jsonBodyForTransactionQuery = {}
+
+    for rrule in rrules:
+        #TODO Switch to 'id' instead of 'name' when the UI is ready for it
+        jsonBodyForTransactionQuery[rrule['name']] = {
+            "rule": rrule['rrule'],
+            "value": float(rrule['value'])
+        }
+
+    return json.dumps(jsonBodyForTransactionQuery, cls=DjangoJSONEncoder)
+
 @api_view(['GET'])
 def hello_world(request):
     return Response({ "status": "UP" })
 
-@api_view(['POST'])
+@api_view(['GET'])
 def process_transactions(request):
-    start = dt(2020, 10, 29)
-    end = dt(2021, 10, 29)
-    biweekly_start = dt(2020, 10, 29)
+    userId = request.GET.get('userid', '')
+    currentBalanceParam = request.GET.get('currentBalance', '0')
+    startParam = request.GET.get('startDate', '')
+    endParam = request.GET.get('endDate', '')
+
+    if userId == '':
+        return Response({ "Error": "userid must be provided." }, status=status.HTTP_400_BAD_REQUEST)
+
+    if startParam == '':
+        return Response({ "Error": "startDate must be provided." }, status=status.HTTP_400_BAD_REQUEST)
+
+    if endParam == '':
+        return Response({ "Error": "endDate must be provided." }, status=status.HTTP_400_BAD_REQUEST)         
+
+    try:
+        start = dateutil.parser.parse(startParam).date()
+    except (ValueError):
+        return Response({ "Error": "startDate (YYYY-MM-DD): " + startParam + " is invalid." }, status=status.HTTP_400_BAD_REQUEST)      
+
+    try:
+        end = dateutil.parser.parse(endParam).date()
+    except (ValueError):
+        return Response({ "Error": "endDate (YYYY-MM-DD): " + endParam + " is invalid." }, status=status.HTTP_400_BAD_REQUEST)
+
+    now = date.today()
+
+    if start > end:
+        return Response({ "Error": "End date should be after start date." }, status=status.HTTP_400_BAD_REQUEST)
+
+    if start < now:
+        return Response({ "Error": "Start date should be the current date or a future date." }, status=status.HTTP_400_BAD_REQUEST)
+
+    if start > now + relativedelta(years=3) or end > start + relativedelta(years=3):
+        return Response({ "Error": "We do not support projections more than 3 years in the future." }, status=status.HTTP_400_BAD_REQUEST)    
+
+    queryBody = get_transaction_formatted_rule_list(userId)
+    if queryBody == '{}':
+        return Response({ "Error": "No rules found for user: '" + userId + "'." }, status=status.HTTP_400_BAD_REQUEST)             
 
     results = get_instances_from_rules({
         "queryStringParameters": {
             "start": start.strftime("%Y-%m-%d"),
             "end": end.strftime("%Y-%m-%d"),
-            "current": "1000",
+            "current": currentBalanceParam,
             "set_aside": "0",
-            "biweekly_start": biweekly_start.strftime("%Y-%m-%d")
+            "biweekly_start": start.strftime("%Y-%m-%d")
         },
-        "body": json.dumps({
-            "gas": {
-                "rule": str(rrule(freq=WEEKLY, byweekday=1)),
-                "value": -100,
-            },
-            "rent": {
-                "rule": str(rrule(freq=MONTHLY, byweekday=1)),
-                "value": -2000,
-            },
-            "paycheck": {
-                "rule": str(rrule(freq=WEEKLY, byweekday=3, interval=2)),
-                "value": -2000,
-            }
-        })
+        "body": queryBody
     }, None)
 
     transactions = json.loads(results["body"])
