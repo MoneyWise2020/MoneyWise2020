@@ -1,7 +1,7 @@
 import logging
 
 from .handler import get_instances_from_rules 
-from datetime import datetime, date as dt
+from datetime import date
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
 from dateutil.relativedelta import relativedelta
 import dateutil.parser
@@ -142,7 +142,7 @@ def process_transactions(request):
     except (ValueError):
         return Response({ "Error": "endDate (YYYY-MM-DD): " + endParam + " is invalid." }, status=status.HTTP_400_BAD_REQUEST)
 
-    now = datetime.now().date()
+    now = date.today()
 
     if start > end:
         return Response({ "Error": "End date should be after start date." }, status=status.HTTP_400_BAD_REQUEST)
