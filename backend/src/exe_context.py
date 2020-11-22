@@ -5,14 +5,12 @@ class ExecutionParameters():
         start: date,
         end: date,
         current: float,
-        set_aside: float,
-        biweekly_start: date
+        set_aside: float
     ):
         self.start: date = start
         self.end: date = end
         self.current: float = current
         self.set_aside: float = set_aside
-        self.biweekly_start: date = biweekly_start
 
 
 class ExecutionRules():

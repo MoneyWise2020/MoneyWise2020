@@ -143,13 +143,10 @@ def make_execution_parameters(request):
         set_aside = round(float(set_aside), 2)
     else:
         set_aside = 0
-    
-    biweekly_start = start # TODO: check if this is needed
 
     assert start < end, '`start` comes after `end`, when it should come before'
     assert current >= 0, '`current` is negative, when it should be 0 or positive'
     assert set_aside >= 0, '`set_aside` is negative, when it should be 0 or positive'
-    assert biweekly_start <= start, '`biweekly_start` is after `start`, when it should be before'
 
     assert end <= start + relativedelta(years=3), "We do not support projections spanning more than 3 years."
 
@@ -157,8 +154,7 @@ def make_execution_parameters(request):
         start,
         end,
         current,
-        set_aside,
-        biweekly_start
+        set_aside
     )
 
 @api_view(['GET'])
