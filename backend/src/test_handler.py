@@ -81,7 +81,7 @@ class HandlerTests(TestCase):
             "day": date(2018, 7, 1),
             "calculations": {
                 "balance": 90.0,
-                "working_capital": -10.0
+                "working_capital": 80.0
             }
         },{
             "rule_id": "rule-2",
