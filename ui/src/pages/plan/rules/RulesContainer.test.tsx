@@ -16,16 +16,19 @@ jest.mock('axios');
 
 describe('rules container', () => {
     let element: ReturnType<typeof render>;
-    let mockRefetch: jest.MockedFunction<() => void>;
+    let mockRefetch: jest.MockedFunction<() => Promise<void>>;
     let axiosDelete: jest.MockedFunction<() => Promise<void>>;
+    let onRefreshProp: jest.MockedFunction<() => void>;
 
     function setUp(rules?: IApiRule[], loading: boolean = false, error: boolean = false) {
         mockRefetch = jest.fn();
+        onRefreshProp = jest.fn();
         require('axios-hooks').default.mockReturnValue([
             { data: { data: rules }, loading, error },
             mockRefetch
         ]);
-        element = render(<RulesContainer />);
+        element = render(<RulesContainer onRefresh={onRefreshProp} />);
+
         axiosDelete = require('axios').default.delete
     }
 
@@ -133,8 +136,10 @@ describe('rules container', () => {
             expect(axiosDelete).toHaveBeenCalledTimes(1);
     
             expect(mockRefetch).toHaveBeenCalledTimes(0);
+            expect(onRefreshProp).toHaveBeenCalledTimes(0);
             await promise; // let delete call finish and trigger all the `.then`s
             expect(mockRefetch).toHaveBeenCalledTimes(1);
+            expect(onRefreshProp).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -170,6 +175,7 @@ describe('rules container', () => {
                 }
             ));
             expect(mockRefetch).toHaveBeenCalledTimes(1);
+            expect(onRefreshProp).toHaveBeenCalledTimes(1);
         });
     });
 });

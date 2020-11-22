@@ -11,29 +11,34 @@ const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 // TODO: get from login
 const userid = 'test'
 
-export const RulesContainer = () => {
+export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => void }) => {
     const [{ data, loading, error }, refetch] = useAxios(
         `${baseUrl}/api/rules?userid=${userid}`
     )
 
+    const triggerRefresh = useCallback(() => {
+        refetch()
+        onRefresh()
+    }, [refetch, onRefresh])
+
     const deleteHandler = useCallback((id: string) => {
         axios.delete(`${baseUrl}/api/rules/${id}?userid=${userid}`)
             .then(() => {
-                refetch();
+                triggerRefresh();
             })
             .catch((e) => {
                 // TODO: toast an error
                 console.error('UHOH', e);
             })
-    }, [refetch]);
+    }, [triggerRefresh]);
 
     const createNewRule = useCallback((rule: IApiRuleMutate) => {
         axios.post(`${baseUrl}/api/rules?userid=${userid}`, rule)
             .then((response) => {
                 console.log('Created rule', response.data);
-                refetch();
+                triggerRefresh();
             })
-    }, [refetch]);
+    }, [triggerRefresh]);
     const onFailedValidation = useCallback((message: string) => console.log('Bad input', message), []);
 
     if (loading) {
