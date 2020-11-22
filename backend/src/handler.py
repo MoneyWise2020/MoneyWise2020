@@ -57,7 +57,7 @@ def get_instances_from_rules(*args):
         return buildErrorResponse(500, 'An internal error occurred.')
 
 
-def _get_instances_from_rules(event, context):
+def _get_instances_from_rules(event, parameters):
     parameters = event["queryStringParameters"]
     if parameters is None:
         parameters = {}
@@ -69,52 +69,6 @@ def _get_instances_from_rules(event, context):
             'biweekly_start': '',
         })
 
-    start = parameters['start']
-    if start:
-        start = datetime.datetime.strptime(start, DATE_FORMAT).date()
-    else:
-        start = datetime.date.today()
-    
-    end = parameters['end']
-    if end:
-        end = datetime.datetime.strptime(end, DATE_FORMAT).date()
-    else:
-        end = start + relativedelta(months=12)
-    
-    current = parameters['current']
-    if current:
-        current = round(float(current), 2)
-    else:
-        current = 0
-    
-    set_aside = parameters['set_aside']
-    if set_aside:
-        set_aside = round(float(set_aside), 2)
-    else:
-        set_aside = 0
-    
-    biweekly_start = parameters['biweekly_start']
-    if biweekly_start:
-        biweekly_start = datetime.datetime.strptime(biweekly_start, DATE_FORMAT).date()
-    else:
-        biweekly_start = datetime.date(2020, 2, 7)
-
-    try:
-        assert start < end, '`start` comes after `end`, when it should come before'
-        assert current >= 0, '`current` is negative, when it should be 0 or positive'
-        assert set_aside >= 0, '`set_aside` is negative, when it should be 0 or positive'
-        assert biweekly_start <= start, '`biweekly_start` is after `start`, when it should be before'
-    except AssertionError as e:
-        return buildErrorResponse(400, str(e.args[0]))
-
-
-    parameters = ExecutionParameters(
-        start,
-        end,
-        current,
-        set_aside,
-        biweekly_start
-    )
 
     rules_map = {}
     try:

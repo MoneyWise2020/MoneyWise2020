@@ -111,13 +111,13 @@ Since all members of the scrum team are developers (with some hybrid scrum/PO), 
 #### Development:
 ```bash
 # Start up WITHOUT debugging (in background)
-docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d
+DEBUG=1 docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d --build moneywise-backend 
 
 # Start up WITH debug
 DEBUG=True docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d
 
 # Running tests
-docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml exec moneywise-backend python manage.py test
+DEBUG=1 docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml run -p 3001:3001 moneywise-backend python manage.py test
 
 # Apply migrations
 docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml exec moneywise-backend python manage.py migrate

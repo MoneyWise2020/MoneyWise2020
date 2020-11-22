@@ -4,6 +4,7 @@ from .handler import get_instances_from_rules
 from datetime import date
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
 from dateutil.relativedelta import relativedelta
+from dateutil.parser._parser import ParserError
 import dateutil.parser
 import json
 
@@ -115,58 +116,73 @@ def get_transaction_formatted_rule_list(userid):
 def hello_world(request):
     return Response({ "status": "UP" })
 
+
+def make_execution_parameters(request):
+    
+    start = request.GET.get('startDate', '')
+    if start:
+        start = dateutil.parser.parse(start).date()
+    else:
+        start = datetime.date.today()
+    
+    end = request.GET.get('endDate', '')
+    if end:
+        end = dateutil.parser.parse(end).date()
+    else:
+        end = start + relativedelta(months=12)
+    
+    current = request.GET.get('currentBalance', '0')
+    if current:
+        current = round(float(current), 2)
+    else:
+        current = 0
+    
+    set_aside = 0 # TODO: support this later
+    if set_aside:
+        set_aside = round(float(set_aside), 2)
+    else:
+        set_aside = 0
+    
+    biweekly_start = start # TODO: check if this is needed
+
+    assert start < end, '`start` comes after `end`, when it should come before'
+    assert current >= 0, '`current` is negative, when it should be 0 or positive'
+    assert set_aside >= 0, '`set_aside` is negative, when it should be 0 or positive'
+    assert biweekly_start <= start, '`biweekly_start` is after `start`, when it should be before'
+
+    assert end <= start + relativedelta(years=3), "We do not support projections spanning more than 3 years."
+
+    return ExecutionParameters(
+        start,
+        end,
+        current,
+        set_aside,
+        biweekly_start
+    )
+
 @api_view(['GET'])
 def process_transactions(request):
-    userId = request.GET.get('userid', '')
-    currentBalanceParam = request.GET.get('currentBalance', '0')
-    startParam = request.GET.get('startDate', '')
-    endParam = request.GET.get('endDate', '')
-
-    if userId == '':
-        return Response({ "Error": "userid must be provided." }, status=status.HTTP_400_BAD_REQUEST)
-
-    if startParam == '':
-        return Response({ "Error": "startDate must be provided." }, status=status.HTTP_400_BAD_REQUEST)
-
-    if endParam == '':
-        return Response({ "Error": "endDate must be provided." }, status=status.HTTP_400_BAD_REQUEST)         
-
+    userid = _get_userid(request)
+    if not userid:
+        return Response({ "message": "`userid` query param is required" }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Pull out parameters
+    execution_params = None
     try:
-        start = dateutil.parser.parse(startParam).date()
-    except (ValueError):
-        return Response({ "Error": "startDate (YYYY-MM-DD): " + startParam + " is invalid." }, status=status.HTTP_400_BAD_REQUEST)      
-
-    try:
-        end = dateutil.parser.parse(endParam).date()
-    except (ValueError):
-        return Response({ "Error": "endDate (YYYY-MM-DD): " + endParam + " is invalid." }, status=status.HTTP_400_BAD_REQUEST)
-
-    now = date.today()
-
-    if start > end:
-        return Response({ "Error": "End date should be after start date." }, status=status.HTTP_400_BAD_REQUEST)
-
-    if start < now:
-        return Response({ "Error": "Start date should be the current date or a future date." }, status=status.HTTP_400_BAD_REQUEST)
-
-    if start > now + relativedelta(years=3) or end > start + relativedelta(years=3):
-        return Response({ "Error": "We do not support projections more than 3 years in the future." }, status=status.HTTP_400_BAD_REQUEST)    
-
-    queryBody = get_transaction_formatted_rule_list(userId)
+        execution_params = make_execution_parameters(request)
+    except AssertionError as e:
+        return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
+    except ParserError as e:
+        return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
+    
+    queryBody = get_transaction_formatted_rule_list(userid)
     if queryBody == '{}':
         logging.info("No rules for user.")
         return Response({ "transactions": [] })          
 
     results = get_instances_from_rules({
-        "queryStringParameters": {
-            "start": start.strftime("%Y-%m-%d"),
-            "end": end.strftime("%Y-%m-%d"),
-            "current": currentBalanceParam,
-            "set_aside": "0",
-            "biweekly_start": start.strftime("%Y-%m-%d")
-        },
         "body": queryBody
-    }, None)
+    }, execution_params)
 
     transactions = json.loads(results["body"])
     return Response({ "transactions": transactions })

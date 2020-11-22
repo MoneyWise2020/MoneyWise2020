@@ -206,6 +206,7 @@ class RuleTestCase(APITestCase):
         now = date.today()
         endDate = now + relativedelta(years=3)
         response = self.client.get("http://testserver/api/transactions", params={"userid": "fakeuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.json(), '')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["transactions"], [])
     
@@ -223,5 +224,6 @@ class RuleTestCase(APITestCase):
         now = date.today()
         endDate = now + relativedelta(years=3)
         response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.content, '')
         self.assertEqual(response.status_code, 200)
         self.assertGreater(len(response.json()["transactions"]), 0)
