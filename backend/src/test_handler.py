@@ -7,20 +7,15 @@ from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY, MO
 
 DATE_FORMAT = "%Y-%m-%d"
 
-def get_transactions(start: date, end: date, current: float, rules):
+def get_transactions(params, rules):
     response = get_instances_from_rules({
-        "queryStringParameters": {
-            'start': start.strftime(DATE_FORMAT),
-            'end': end.strftime(DATE_FORMAT),
-            'current': str(current),
-            'set_aside': '0',
-            'biweekly_start': start.strftime(DATE_FORMAT), # TODO: check this needed still?
-        },
         'body': json.dumps(rules)
-    }, None)
+    }, params)
     return json.loads(response["body"])
 
 class HandlerTests(TestCase):
+    def setUp(self):
+        self.maxDiff = 5000
 
     def test_buildResponse(self):
         expected = {
@@ -55,9 +50,12 @@ class HandlerTests(TestCase):
 
     def test_get_instances_from_rules_oneRule(self):
         actual = get_transactions(
-            datetime.date(2018, 6, 21),
-            datetime.date(2018, 7, 21),
-            0,
+            ExecutionParameters(
+                datetime.date(2018, 6, 21),
+                datetime.date(2018, 7, 21),
+                0,
+                0
+            ),
             {
                 'rule-1': {
                     "rule": str(rrule(freq=MONTHLY, bymonthday=1, interval=1, dtstart=datetime.date(2018, 6, 21))),
@@ -80,11 +78,13 @@ class HandlerTests(TestCase):
         self.assertEqual(expected, actual)
 
     def test_get_instances_from_rules_multipleRules(self):
-        self.maxDiff = 5000
         actual = get_transactions(
-            datetime.date(2018, 6, 21),
-            datetime.date(2018, 7, 2),
-            0,
+            ExecutionParameters(
+                datetime.date(2018, 6, 21),
+                datetime.date(2018, 7, 2),
+                0,
+                0
+            ),
             {
                 'rule-1': {
                     "rule": str(rrule(freq=MONTHLY, bymonthday=1, interval=1, dtstart=datetime.date(2018, 6, 21))),
