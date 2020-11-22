@@ -1,6 +1,5 @@
 import logging
 
-from .handler import get_instances_from_rules 
 from datetime import date
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
 from dateutil.relativedelta import relativedelta
@@ -10,7 +9,8 @@ import json
 
 from .models import Rule
 from .serializers import RuleSerializer
-from .exe_context import ExecutionParameters, ExecutionRules
+from .exe_context import ExecutionParameters, ExecutionRules, ExecutionContext
+from .generate_instances import get_instances_up_to 
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -126,7 +126,7 @@ def make_execution_parameters(request):
     else:
         current = 0
     
-    set_aside = 0 # TODO: support this later
+    set_aside = request.GET.get('setAside', '0')
     if set_aside:
         set_aside = round(float(set_aside), 2)
     else:
@@ -169,22 +169,22 @@ def process_transactions(request):
         return Response({ "message": "`userid` query param is required" }, status=status.HTTP_400_BAD_REQUEST)
     
     # Pull out parameters
-    execution_params = None
+    parameters = None
     try:
-        execution_params = make_execution_parameters(request)
+        parameters = make_execution_parameters(request)
     except AssertionError as e:
         return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
     except ParserError as e:
         return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
     
     # Get rules from database
-    rules = Rule.objects.filter(userid=userid)
-    rrules = RuleSerializer(rules, many=True).data
+    database_rules = Rule.objects.filter(userid=userid)
+    serialized_rules = RuleSerializer(database_rules, many=True).data
+    rules = make_execution_rules(serialized_rules)
 
-    # Build rules object
-    execution_rules = make_execution_rules(rrules)
-    
     # Calculate transactions
-    results = get_instances_from_rules(execution_rules, execution_params)
+    execution_context = ExecutionContext(parameters, rules)
+    transactions = get_instances_up_to(execution_context)
+    results = list(map(lambda i: i.serialize(), transactions))
 
     return Response({ "transactions": results })
