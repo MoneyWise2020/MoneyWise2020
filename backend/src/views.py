@@ -10,6 +10,7 @@ import json
 
 from .models import Rule
 from .serializers import RuleSerializer
+from .exe_context import ExecutionParameters
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -123,7 +124,7 @@ def make_execution_parameters(request):
     if start:
         start = dateutil.parser.parse(start).date()
     else:
-        start = datetime.date.today()
+        start = date.today()
     
     end = request.GET.get('endDate', '')
     if end:

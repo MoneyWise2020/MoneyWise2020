@@ -58,18 +58,6 @@ def get_instances_from_rules(*args):
 
 
 def _get_instances_from_rules(event, parameters):
-    parameters = event["queryStringParameters"]
-    if parameters is None:
-        parameters = {}
-        parameters.update({
-            'start': '',
-            'end': '',
-            'current': '',
-            'set_aside': '',
-            'biweekly_start': '',
-        })
-
-
     rules_map = {}
     try:
         rules_map = json.loads(event["body"], object_hook=datetime_parser)
