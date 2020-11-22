@@ -1,29 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { IApiTransaction, TransactionsService } from './transactions-service';
+import React from 'react';
+import { IApiTransaction} from './ITransaction';
 import { Transaction } from './Transaction'
+import useAxios from 'axios-hooks'
 
 // TODO: get from login
 const userid = 'test'
+const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
+
+
+const now = new Date();
 
 export const TransactionsContainer = () => {
-    const [data, setData] = useState<IApiTransaction[] | 'error'>();
-    useEffect(() => {
-        TransactionsService.getTransactions(userid)
-            .then(setData)
-            .catch(e => {
-                console.error('Transaction API error', e);
-                setData('error');
-            });
-    }, []);
-    const tableData = Array.isArray(data) ? data : [];
+    const [{ data, loading, error }, refetch] = useAxios(
+        `${baseUrl}/api/transactions?userid=${userid}&startDate=${now.toISOString()}&endDate=${new Date(now.getTime() + (720 * 24 * 60 * 60 * 1000)).toISOString()}`
+    )
     
-    if (!data) {
+    if (loading) {
         return <p>Loading...</p>
     }
 
-    if ('error' === data) {
+    if (error) {
         return <p>Error occurred while fetching transactions! Try refreshing the page.</p>
     }
+
+    console.log(data)
+    const tableData = data.transactions as IApiTransaction[];
 
     return <div className="table-responsive" style={{height:300}}>
         <table className="table table-sm table-hover">
