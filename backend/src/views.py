@@ -155,7 +155,7 @@ def process_transactions(request):
     queryBody = get_transaction_formatted_rule_list(userId)
     if queryBody == '{}':
         logging.info("No rules for user.")
-        return Response({ "transactions": {} })          
+        return Response({ "transactions": [] })          
 
     results = get_instances_from_rules({
         "queryStringParameters": {
