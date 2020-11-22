@@ -5,12 +5,6 @@ networks:
     name: moneywise
 
 services:
-  moneywise-ui:
-    environment: 
-      - REACT_APP_MONEYWISE_BASE_URL=http://localhost:8000
-    build:
-      args:
-        - REACT_APP_MONEYWISE_BASE_URL=http://localhost:8000
   moneywise-backend:
     image: moneywise-backend
     build:
@@ -32,8 +26,8 @@ services:
     networks:
       - moneywise
     ports:
-      - 8000:8000
-      - 3000:3000
+      - 8000:8000  # ./ui/.env relies on this
+      - 3000:3000  # debugging
         
 
   mysql:
