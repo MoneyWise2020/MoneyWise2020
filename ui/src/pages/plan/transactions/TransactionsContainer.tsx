@@ -16,17 +16,20 @@ export const TransactionsContainer = () => {
     )
     
     if (loading) {
-        return <p>Loading...</p>
+        return <p data-testid="transactions-loading">Loading...</p>
     }
 
     if (error) {
-        return <p>Error occurred while fetching transactions! Try refreshing the page.</p>
+        return <p data-testid="transactions-error">Error occurred while fetching transactions! Try refreshing the page.</p>
     }
-
-    console.log(data)
+    
     const tableData = data.transactions as IApiTransaction[];
 
-    return <div className="table-responsive" style={{height:300}}>
+    if (tableData.length === 0) {
+        return <p data-testid="transactions-empty">Sorry, it looks like you don't have any transactions. Try setting up a new rule.</p>
+    }
+
+    return <div data-testid="transactions-showing" className="table-responsive" style={{height:300}}>
         <table className="table table-sm table-hover">
             <thead>
                 <tr>
@@ -39,7 +42,7 @@ export const TransactionsContainer = () => {
             </thead>
             <tbody>
                 {tableData.map(
-                        (transaction) => <Transaction transaction={transaction} />
+                        (transaction) => <Transaction transaction={transaction} key={transaction.id} />
                     )
                 }
             </tbody>
