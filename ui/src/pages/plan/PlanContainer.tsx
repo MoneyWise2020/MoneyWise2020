@@ -17,6 +17,7 @@ export const PlanContainer = () => {
             <Col>
                 <h3>Transactions</h3>
                 <TransactionsContainer />
+
             </Col>
         </Row>
     </Container>
