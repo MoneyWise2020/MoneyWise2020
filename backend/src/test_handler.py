@@ -8,8 +8,7 @@ from .generate_instances import get_instances_up_to
 DATE_FORMAT = "%Y-%m-%d"
 
 def get_transactions(parameters, rules):
-    execution_context = ExecutionContext(parameters, ExecutionRules(rules))
-    transactions = get_instances_up_to(execution_context)
+    transactions = get_instances_up_to(ExecutionContext(parameters, rules))
     return list(map(lambda i: i.serialize(), transactions))
 
 
@@ -25,12 +24,12 @@ class HandlerTests(TestCase):
                 0,
                 0
             ),
-            {
+            ExecutionRules({
                 'rule-1': {
                     "rule": str(rrule(freq=MONTHLY, bymonthday=1, interval=1, dtstart=date(2018, 6, 21))),
                     "value": 100
                 }
-            }
+            })
         )
 
         expected = [{
@@ -54,7 +53,7 @@ class HandlerTests(TestCase):
                 0,
                 0
             ),
-            {
+            ExecutionRules({
                 'rule-1': {
                     "rule": str(rrule(freq=MONTHLY, bymonthday=1, interval=1, dtstart=date(2018, 6, 21))),
                     "value": 100
@@ -63,7 +62,7 @@ class HandlerTests(TestCase):
                     "rule": str(rrule(freq=WEEKLY, byweekday=[MO], interval=1, dtstart=date(2018, 6, 21))),
                     "value": -10
                 }
-            }
+            })
         )
 
         expected = [{
