@@ -154,7 +154,8 @@ def process_transactions(request):
 
     queryBody = get_transaction_formatted_rule_list(userId)
     if queryBody == '{}':
-        return Response({ "Error": "No rules found for user: '" + userId + "'." }, status=status.HTTP_400_BAD_REQUEST)             
+        logging.info("No rules for user.")
+        return Response({ "transactions": {} })          
 
     results = get_instances_from_rules({
         "queryStringParameters": {
