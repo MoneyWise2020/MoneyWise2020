@@ -202,9 +202,26 @@ class RuleTestCase(APITestCase):
         response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
         self.assertEqual(response.status_code, 400)
 
-    def test_rules_exist_for_user(self):
+    def test_no_transactions_when_no_rules_exist_for_user(self):
         now = date.today()
         endDate = now + relativedelta(years=3)
         response = self.client.get("http://testserver/api/transactions", params={"userid": "fakeuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["transactions"], [])
+    
+    def test_transactions_when_rules_exist(self):
+        # Create a rule
+        body = {
+            "name": "Rent",
+            "rrule": str(rrule(freq=MONTHLY, byweekday=1)),
+            "value": -1000
+        }
+        response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
+        self.assertEqual(response.status_code, 201)
 
+        # Check transactions
+        now = date.today()
+        endDate = now + relativedelta(years=3)
+        response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
+        self.assertEqual(response.status_code, 200)
+        self.assertGreater(len(response.json()["transactions"]), 0)
