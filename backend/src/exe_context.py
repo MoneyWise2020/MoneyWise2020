@@ -15,8 +15,8 @@ class ExecutionParameters():
         self.set_aside: float = set_aside
     
     def assert_valid(self):
-        assert self.start < self.end, '`start` comes after `end`, when it should come before'
-        assert self.set_aside >= 0, '`set_aside` is negative, when it should be 0 or positive'
+        assert self.start < self.end, '`startDate` comes after `endDate`, when it should come before'
+        assert self.set_aside >= 0, '`setAside` is negative, when it should be 0 or positive'
         assert self.end <= self.start + relativedelta(years=3), "We do not support projections spanning more than 3 years."
 
 
