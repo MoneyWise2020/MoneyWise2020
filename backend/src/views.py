@@ -103,7 +103,6 @@ def get_transaction_formatted_rule_list(userid):
     jsonBodyForTransactionQuery = {}
 
     for rrule in rrules:
-        #TODO Check for duplicate keys and reconcile.
         #TODO Switch to 'id' instead of 'name' when the UI is ready for it
         jsonBodyForTransactionQuery[rrule['name']] = {
             "rule": rrule['rrule'],
