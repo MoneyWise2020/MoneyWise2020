@@ -7,10 +7,8 @@ import useAxios from 'axios-hooks'
 const userid = 'test'
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 
-
-const now = new Date();
-
-export const TransactionsContainer = () => {
+export const TransactionsContainer = ({ currentTime }: { currentTime: number }) => {
+    const now = new Date(currentTime)
     const [{ data, loading, error }, refetch] = useAxios(
         `${baseUrl}/api/transactions?userid=${userid}&startDate=${now.toISOString()}&endDate=${new Date(now.getTime() + (720 * 24 * 60 * 60 * 1000)).toISOString()}`
     )

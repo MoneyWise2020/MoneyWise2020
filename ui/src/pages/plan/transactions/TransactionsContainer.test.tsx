@@ -17,7 +17,7 @@ describe('transactions container', () => {
             { data: { transactions }, loading, error },
             mockRefetch
         ]);
-        element = render(<TransactionsContainer />);
+        element = render(<TransactionsContainer currentTime={1} />);
         axiosDelete = require('axios').default.delete
     }
 
