@@ -10,7 +10,7 @@ import json
 
 from .models import Rule
 from .serializers import RuleSerializer
-from .exe_context import ExecutionParameters
+from .exe_context import ExecutionParameters, ExecutionRules
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -99,27 +99,15 @@ def delete_rule(request, rule_id, userid):
     rule.delete()
     return Response(None, status=status.HTTP_204_NO_CONTENT)
 
-def get_transaction_formatted_rule_list(userid):
-    rules = Rule.objects.filter(userid=userid)
-    rrules = RuleSerializer(rules, many=True).data
-    jsonBodyForTransactionQuery = {}
-
-    for rrule in rrules:
-        #TODO Switch to 'id' instead of 'name' when the UI is ready for it
-        jsonBodyForTransactionQuery[rrule['name']] = {
-            "rule": rrule['rrule'],
-            "value": float(rrule['value'])
-        }
-
-    return json.dumps(jsonBodyForTransactionQuery, cls=DjangoJSONEncoder)
-
 @api_view(['GET'])
 def hello_world(request):
     return Response({ "status": "UP" })
 
 
 def make_execution_parameters(request):
-    
+    """
+    Extracts execution parameters from request
+    """
     start = request.GET.get('startDate', '')
     if start:
         start = dateutil.parser.parse(start).date()
@@ -157,6 +145,23 @@ def make_execution_parameters(request):
         set_aside
     )
 
+
+def make_execution_rules(rules):
+    """
+    Converts
+    """
+    rule_map = {}
+
+    for rule in rules:
+        #TODO Switch to 'id' instead of 'name' when the UI is ready for it
+        rule_map[rule['name']] = {
+            "rule": rule['rrule'],
+            "value": float(rule['value'])
+        }
+    
+    return ExecutionRules(rule_map)
+    
+
 @api_view(['GET'])
 def process_transactions(request):
     userid = _get_userid(request)
@@ -172,14 +177,14 @@ def process_transactions(request):
     except ParserError as e:
         return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
     
-    queryBody = get_transaction_formatted_rule_list(userid)
-    if queryBody == '{}':
-        logging.info("No rules for user.")
-        return Response({ "transactions": [] })          
+    # Get rules from database
+    rules = Rule.objects.filter(userid=userid)
+    rrules = RuleSerializer(rules, many=True).data
 
-    results = get_instances_from_rules({
-        "body": queryBody
-    }, execution_params)
+    # Build rules object
+    execution_rules = make_execution_rules(rrules)
+    
+    # Calculate transactions
+    results = get_instances_from_rules(execution_rules, execution_params)
 
-    transactions = json.loads(results["body"])
-    return Response({ "transactions": transactions })
+    return Response({ "transactions": results })

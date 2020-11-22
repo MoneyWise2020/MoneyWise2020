@@ -48,43 +48,8 @@ def buildErrorResponse(code: int, message: str):
     return buildResponse(code, json.dumps({"message": message, "code": code}))
 
 
-def get_instances_from_rules(*args):
-    try:
-        return _get_instances_from_rules(*args)
-    except Exception as e:
-        print("Error in handler!!! {}".format(e))
-        print()
-        return buildErrorResponse(500, 'An internal error occurred.')
-
-
-def _get_instances_from_rules(event, parameters):
-    rules_map = {}
-    try:
-        rules_map = json.loads(event["body"], object_hook=datetime_parser)
-    except Exception:
-        return buildErrorResponse(422, "Body must be valid JSON")
-    
-    try:
-        assert isinstance(rules_map, dict), "Root must be an object/map, like {}"
-        for rule_id, rule in rules_map.items():
-            assert "value" in rule, f"Rule `{rule_id}` is missing the `value` field"
-            assert isinstance(rule["value"], (float, int)), f"Rule `{rule_id}`'s `value` must be a number"
-            assert "rule" in rule, f"Rule `{rule_id}` is missing the `rule` field"
-    except AssertionError as e:
-        return buildErrorResponse(400, str(e.args[0]))
-
-    rules = ExecutionRules(rules_map)
+def get_instances_from_rules(rules, parameters):
     execution_context = ExecutionContext(parameters, rules)
-
-    all_instances = []
-    try:
-        all_instances = get_instances_up_to(execution_context)
-    except AssertionError as e:
-        return buildErrorResponse(400, str(e.args[0]))
-
-    all_instances = list(map(lambda i: i.serialize(), all_instances))
-
-    return buildResponse(200, json.dumps(
-        round_floats(all_instances),
-        cls=DateTimeEncoder
-    ))
+    transactions = get_instances_up_to(execution_context)
+    serialized_transactions = list(map(lambda i: i.serialize(), transactions))
+    return round_floats(serialized_transactions)

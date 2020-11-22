@@ -8,10 +8,8 @@ from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY, MO
 DATE_FORMAT = "%Y-%m-%d"
 
 def get_transactions(params, rules):
-    response = get_instances_from_rules({
-        'body': json.dumps(rules)
-    }, params)
-    return json.loads(response["body"])
+    response = get_instances_from_rules(ExecutionRules(rules), params)
+    return response
 
 class HandlerTests(TestCase):
     def setUp(self):
@@ -68,7 +66,7 @@ class HandlerTests(TestCase):
             "rule_id": "rule-1",
             "id": "rule-1::2018-07-01",
             "value": 100,
-            "day": "2018-07-01",
+            "day": datetime.date(2018, 7, 1),
             "calculations": {
                 "balance": 100.0,
                 "working_capital": 100.0
@@ -101,7 +99,7 @@ class HandlerTests(TestCase):
             "rule_id": "rule-2",
             "id": "rule-2::2018-06-25",
             "value": -10,
-            "day": "2018-06-25",
+            "day": datetime.date(2018, 6, 25),
             "calculations": {
                 "balance": -10.0,
                 "working_capital": -10.0
@@ -110,7 +108,7 @@ class HandlerTests(TestCase):
             "rule_id": "rule-1",
             "id": "rule-1::2018-07-01",
             "value": 100,
-            "day": "2018-07-01",
+            "day": datetime.date(2018, 7, 1),
             "calculations": {
                 "balance": 90.0,
                 "working_capital": -10.0
@@ -119,7 +117,7 @@ class HandlerTests(TestCase):
             "rule_id": "rule-2",
             "id": "rule-2::2018-07-02",
             "value": -10,
-            "day": "2018-07-02",
+            "day": datetime.date(2018, 7, 2),
             "calculations": {
                 "balance": 80.0,
                 "working_capital": 80.0
