@@ -178,4 +178,47 @@ describe('rules container', () => {
             expect(onRefreshProp).toHaveBeenCalledTimes(1);
         });
     });
+
+    // TODO: Get this green!
+    describe('modify existing rule', () => {
+
+        let axiosPut: jest.MockedFunction<() => Promise<{ data: any }>>;
+        beforeEach(() => {
+            axiosPut = require('axios').default.put;
+        })
+
+        it('should put a rule with an existing id to backend and refetch when form is submitted', async () => {
+            setUp([{
+                id: 'test-id-rent',
+                name: 'Rent',
+                userid: 'test',
+                rrule: 'adsf',
+                value: -1000
+            }]);
+
+            setName(element, "Rent");
+            setValue(element, -1000.10);
+    
+            selectFrequency(element, "MONTHLY");
+            setDayOfMonth(element, 15);
+
+            const promise = Promise.resolve({ data: 'hello' });
+            axiosPut.mockReturnValue(promise);
+
+            const submitButton = element.getByText(/Submit/i);
+            fireEvent.click(submitButton);
+
+            await promise;
+            expect(axiosPut).toHaveBeenCalledTimes(1);
+            expect(require('axios').default.post).toHaveBeenCalledWith(
+                expect.stringContaining("api/rules"), 
+                expect.objectContaining({ // the rule we're trying to create
+                    name: 'Rent',
+                    value: -1000.10
+                }
+            ));
+            expect(mockRefetch).toHaveBeenCalledTimes(1);
+            expect(onRefreshProp).toHaveBeenCalledTimes(1);
+        });
+    });
 });

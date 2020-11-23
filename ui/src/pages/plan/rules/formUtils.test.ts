@@ -43,6 +43,12 @@ export function setStartDate(formElement: any, year: number, month: number, day:
     fireEvent.change(startDateInput, { target: { value: `${year}-${month}-${day}` } });
 }
 
+export function clearStartDate(formElement: any) {
+    const startDateInput = formElement.getByLabelText(/Start/i);
+    expect(startDateInput).toBeInTheDocument();
+    fireEvent.change(startDateInput, { target: { value: `` } });
+}
+
 export function submit(formElement: any) {
     const submitButton = formElement.getByRole("button", { name: /Submit/i });
     expect(submitButton).toBeInTheDocument();
