@@ -51,6 +51,7 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
         axios.put(`${baseUrl}/api/rules/${id}?userid=${userid}`, rule)
         .then((response) => {
             console.log('Updated rule', response.data);
+            closeModal();
             triggerRefresh();
         })
         .catch((e) => {

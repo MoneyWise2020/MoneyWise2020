@@ -27,8 +27,8 @@ describe('rules container', () => {
             { data: { data: rules }, loading, error },
             mockRefetch
         ]);
-        element = render(<RulesContainer onRefresh={onRefreshProp} />);
-
+        
+        element = render(<RulesContainer onRefresh={onRefreshProp} />); 
         axiosDelete = require('axios').default.delete
     }
 
@@ -183,6 +183,7 @@ describe('rules container', () => {
     describe('modify existing rule', () => {
 
         let axiosPut: jest.MockedFunction<() => Promise<{ data: any }>>;
+        
         beforeEach(() => {
             axiosPut = require('axios').default.put;
         })
@@ -196,17 +197,22 @@ describe('rules container', () => {
                 value: -1000
             }]);
 
-            setName(element, "Rent");
-            setValue(element, -1000.10);
+            const editButton = element.getByText(/Edit/i);
+            fireEvent.click(editButton);
+            
+            const updateButton = element.getByText(/Update/i);
+            fireEvent.click(updateButton);
+            // setName(modal, "Rent");
+            // setValue(modal, -1000.10);
     
-            selectFrequency(element, "MONTHLY");
-            setDayOfMonth(element, 15);
+            // selectFrequency(modal, "MONTHLY");
+            // setDayOfMonth(modal, 15);
 
             const promise = Promise.resolve({ data: 'hello' });
             axiosPut.mockReturnValue(promise);
 
-            const submitButton = element.getByText(/Submit/i);
-            fireEvent.click(submitButton);
+            // const submitButton = element.getByText(/Submit/i);
+            // fireEvent.click(submitButton);
 
             await promise;
             expect(axiosPut).toHaveBeenCalledTimes(1);

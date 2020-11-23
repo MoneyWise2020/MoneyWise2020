@@ -10,14 +10,14 @@ import {
     setMonthOfYear,
     setDaysOfWeek,
     setStartDate,
-    submit
+    update
 } from './formUtils.test';
 
 import { ModifyForm } from './ModifyRuleForm';
 import { IApiRule, IApiRuleMutate } from './IRule';
 
 describe('Modify rule form', () => {
-    let submitHandler: jest.MockedFunction<(rule: IApiRuleMutate) => void>;
+    let submitHandler: jest.MockedFunction<(id: string, rule: IApiRuleMutate) => void>;
     let failureHandler: jest.MockedFunction<(message: string) => void>;
     let element: ReturnType<typeof render>;
     let rule: IApiRule = {
@@ -26,12 +26,13 @@ describe('Modify rule form', () => {
         rrule: "DTSTART:20201123T142000Z\nRRULE:FREQ=YEARLY;UNTIL=20201225T142000Z;COUNT=30;INTERVAL=1;WKST=MO",
         name: "test",
         value: 20
-    }
+    };
 
     beforeEach(() => {
         submitHandler = jest.fn();
         failureHandler = jest.fn();
         element = render(<ModifyForm rule={rule} onSubmit={submitHandler} onFailedValidation={failureHandler} />);
+        
     });
 
     it('should render', () => {
@@ -46,7 +47,7 @@ describe('Modify rule form', () => {
         selectFrequency(element, "MONTHLY");
         setDayOfMonth(element, 1);
 
-        submit(element);
+        update(element);
 
         expect(submitHandler).not.toHaveBeenCalled();
         expect(failureHandler).toHaveBeenCalledTimes(1);
@@ -60,7 +61,7 @@ describe('Modify rule form', () => {
         selectFrequency(element, "MONTHLY");
         setDayOfMonth(element, 1);
 
-        submit(element);
+        update(element);
 
         expect(submitHandler).not.toHaveBeenCalled();
         expect(failureHandler).toHaveBeenCalledTimes(1);
@@ -75,17 +76,17 @@ describe('Modify rule form', () => {
             selectFrequency(element, "WEEKLY");
             setDaysOfWeek(element, ['MONDAY', 'TUESDAY']);
     
-            submit(element);
+            update(element);
     
             expect(failureHandler).not.toHaveBeenCalled();
             expect(submitHandler).toHaveBeenCalledTimes(1);
     
-            const rule = submitHandler.mock.calls[0][0];
-            expect(rule).toEqual(expect.objectContaining({
+            const outputrule = submitHandler.mock.calls[0][1];
+            expect(outputrule).toEqual(expect.objectContaining({
                 name: 'Gas',
                 value: -25
             }));
-            expect(rule.rrule).toMatchSnapshot();
+            expect(outputrule.rrule).toMatchSnapshot();
         });
     });
 
@@ -97,17 +98,17 @@ describe('Modify rule form', () => {
             selectFrequency(element, "BIWEEKLY");
             setStartDate(element, 2020, 10, 10);
 
-            submit(element);
+            update(element);
     
             expect(failureHandler).not.toHaveBeenCalled();
             expect(submitHandler).toHaveBeenCalledTimes(1);
     
-            const rule = submitHandler.mock.calls[0][0];
-            expect(rule).toEqual(expect.objectContaining({
+            const ouputrule = submitHandler.mock.calls[0][1];
+            expect(ouputrule).toEqual(expect.objectContaining({
                 name: 'Paycheck',
                 value: 1800,
             }));
-            expect(rule.rrule).toMatchSnapshot();
+            expect(ouputrule.rrule).toMatchSnapshot();
         });
 
         it('should not submit without start date', () => {
@@ -117,7 +118,7 @@ describe('Modify rule form', () => {
     
             selectFrequency(element, "BIWEEKLY");
 
-            submit(element);
+            update(element);
     
             expect(submitHandler).not.toHaveBeenCalled();
             expect(failureHandler).toHaveBeenCalledTimes(1);
@@ -133,17 +134,17 @@ describe('Modify rule form', () => {
             selectFrequency(element, "MONTHLY");
             setDayOfMonth(element, 15);
     
-            submit(element);
+            update(element);
     
             expect(failureHandler).not.toHaveBeenCalled();
             expect(submitHandler).toHaveBeenCalledTimes(1);
     
-            const rule = submitHandler.mock.calls[0][0];
-            expect(rule).toEqual(expect.objectContaining({
+            const outputRule = submitHandler.mock.calls[0][1];
+            expect(outputRule).toEqual(expect.objectContaining({
                 name: 'Rent',
                 value: -1000
             }));
-            expect(rule.rrule).toMatchSnapshot();
+            expect(outputRule.rrule).toMatchSnapshot();
         });
     });
 
@@ -156,17 +157,17 @@ describe('Modify rule form', () => {
             setMonthOfYear(element, 10);
             setDayOfMonth(element, 1);
     
-            submit(element);
+            update(element);
     
             expect(failureHandler).not.toHaveBeenCalled();
             expect(submitHandler).toHaveBeenCalledTimes(1);
     
-            const rule = submitHandler.mock.calls[0][0];
-            expect(rule).toEqual(expect.objectContaining({
+            const outputRule = submitHandler.mock.calls[0][1];
+            expect(outputRule).toEqual(expect.objectContaining({
                 name: 'Birthday Present!',
                 value: -42
             }));
-            expect(rule.rrule).toMatchSnapshot();
+            expect(outputRule.rrule).toMatchSnapshot();
         });
     });
 
@@ -179,17 +180,17 @@ describe('Modify rule form', () => {
             selectFrequency(element, "ONCE");
             clearStartDate(element);
     
-            submit(element);
+            update(element);
     
             expect(failureHandler).not.toHaveBeenCalled();
             expect(submitHandler).toHaveBeenCalledTimes(1);
     
-            const rule = submitHandler.mock.calls[0][0];
-            expect(rule).toEqual(expect.objectContaining({
+            const outputRule = submitHandler.mock.calls[0][1];
+            expect(outputRule).toEqual(expect.objectContaining({
                 name: 'Haaaaahvaaaahd Tuition',
                 value: -2900
             }));
-            expect(rule.rrule).toMatchSnapshot();
+            expect(outputRule.rrule).toMatchSnapshot();
         });
     });
 });

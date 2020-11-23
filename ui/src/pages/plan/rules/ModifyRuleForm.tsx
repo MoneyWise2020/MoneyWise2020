@@ -35,7 +35,6 @@ export const ModifyForm = ({
 
     const frequencies = [ "YEARLY", "MONTHLY", 'WEEKLY', "DAILY", "HOURLY", "MINUTELY", "SECONDLY"]
 
-    console.log(rruleObject)
     if (rruleObject.origOptions.freq != undefined) {
         strFrequency = frequencies[rruleObject.origOptions.freq];
     }
@@ -75,7 +74,6 @@ export const ModifyForm = ({
     const [startDate, setStartDate] = useState<string>(ruleStartDate);
     const [endDate, setEndDate] = useState<string>(ruleEndDate);
 
-    console.log(startDate)
     function clearForm() {
         setName('');
         setValue(0);
@@ -171,6 +169,7 @@ export const ModifyForm = ({
             rrule: rruleString,
         });
 
+        
         // clearForm();
     }}>
         <br />
@@ -246,6 +245,6 @@ export const ModifyForm = ({
             </select></div>
         </>}
         </div>
-       <button className="btn btn-primary mb-2">Submit</button><br /><br />
+       <button className="btn btn-primary mb-2">Update</button><br /><br />
     </form>
 }

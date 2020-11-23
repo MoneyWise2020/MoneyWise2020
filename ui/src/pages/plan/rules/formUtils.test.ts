@@ -55,6 +55,12 @@ export function submit(formElement: any) {
     fireEvent.click(submitButton);
 }
 
+export function update(formElement: any) {
+    const updateButton = formElement.getByRole("button", { name: /Update/i });
+    expect(updateButton).toBeInTheDocument();
+    fireEvent.click(updateButton);
+}
+
 it('should have a functioning test framework', () => {
     expect(true).toBe(true);
 });
