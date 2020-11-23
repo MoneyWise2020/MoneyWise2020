@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Frequency, RRule, rrulestr } from 'rrule';
-import { IApiRuleMutate } from './IRule';
+import { IApiRule, IApiRuleMutate } from './IRule';
 import './ModalForm.css';
 
 export const ModifyForm = ({
@@ -9,10 +9,12 @@ export const ModifyForm = ({
     onFailedValidation = () => {}
 }: {
     rule: IApiRuleMutate,
-    onSubmit: (rule: IApiRuleMutate) => void,
+    onSubmit: (id: string, rule: IApiRuleMutate) => void,
     onFailedValidation: (message: string) => void,
 }) => {
     // Parse an RRule Object
+    let apiRule = rule as IApiRule;
+    let ruleId = apiRule.id
     let rruleObject = rrulestr(rule.rrule);
     let strFrequency = "MONTHLY";
     let ruleByMonthDay;
@@ -32,8 +34,6 @@ export const ModifyForm = ({
     // }
 
     const frequencies = [ "YEARLY", "MONTHLY", 'WEEKLY', "DAILY", "HOURLY", "MINUTELY", "SECONDLY"]
-
-    // console.log(rruleObject)
 
     console.log(rruleObject)
     if (rruleObject.origOptions.freq != undefined) {
@@ -165,7 +165,7 @@ export const ModifyForm = ({
 
         const rruleString = new RRule(options).toString()
 
-        onSubmit({
+        onSubmit(ruleId, {
             name: name,
             value: value,
             rrule: rruleString,

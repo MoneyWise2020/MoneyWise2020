@@ -47,8 +47,8 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
             })
     }, [triggerRefresh]);
 
-    const updateExistingRule = useCallback((id:string, rule: IApiRuleMutate) => {
-        axios.put(`${baseUrl}/api/rules?userid=${userid}`, rule)
+    const updateExistingRule = useCallback((id: string, rule: IApiRuleMutate) => {
+        axios.put(`${baseUrl}/api/rules/${id}?userid=${userid}`, rule)
         .then((response) => {
             console.log('Updated rule', response.data);
             triggerRefresh();
@@ -126,7 +126,7 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
         {isShown ? (
                 <Modal
                     rule={modalRule} 
-                    onSubmit={() => updateExistingRule}
+                    onSubmit={updateExistingRule}
                     modalRef={(n: any) => (modal = n)}
                     buttonRef={(n: any) => (closeButton = n)} 
                     closeModal={closeModal}

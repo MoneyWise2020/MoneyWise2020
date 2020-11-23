@@ -12,7 +12,7 @@ export const Modal = ({
     modalRef = (n: any) => {},
     buttonRef = (n: any) => {},
     closeModal = () => {},
-    onSubmit = () => {}
+    onSubmit
     
 } : {
     rule: IApiRuleMutate,
@@ -21,7 +21,7 @@ export const Modal = ({
     modalRef: (n: any) => void
     buttonRef: (n: any) => void
     closeModal: () => void
-    onSubmit: () => void
+    onSubmit: (id: string, rule: IApiRuleMutate) => void
 }) => {
 return ReactDOM.createPortal(
 <FocusTrap>
