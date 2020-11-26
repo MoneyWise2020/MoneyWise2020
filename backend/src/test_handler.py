@@ -16,7 +16,7 @@ class HandlerTests(TestCase):
     def setUp(self):
         self.maxDiff = 5000
 
-    def test_get_instances_from_rules_oneRule(self):
+    def test_get_instances_from_rules_monthly(self):
         actual = get_transactions(
             ExecutionParameters(
                 date(2018, 6, 21),
@@ -91,6 +91,150 @@ class HandlerTests(TestCase):
             "calculations": {
                 "balance": 80.0,
                 "working_capital": 80.0
+            }
+        }]
+
+        self.assertEqual(expected, actual)
+    
+    def test_get_instances_from_rules_weekly(self):
+        actual = get_transactions(
+            ExecutionParameters(
+                date(2018, 6, 21),
+                date(2018, 7, 2),
+                0,
+                0
+            ),
+            ExecutionRules({
+                'rule-1': {
+                    "rule": str(rrule(freq=WEEKLY, byweekday=MO, interval=1, dtstart=date(2018, 6, 21))),
+                    "value": 100
+                }
+            })
+        )
+
+        expected = [{
+            "rule_id": "rule-1",
+            "id": "rule-1::2018-06-25",
+            "value": 100,
+            "day": date(2018, 6, 25),
+            "calculations": {
+                "balance": 100.0,
+                "working_capital": 100.0
+            }
+        }, {
+            "rule_id": "rule-1",
+            "id": "rule-1::2018-07-02",
+            "value": 100,
+            "day": date(2018, 7, 2),
+            "calculations": {
+                "balance": 200.0,
+                "working_capital": 200.0
+            }
+        }]
+
+        self.assertEqual(expected, actual)
+    
+
+    def test_get_instances_from_rules_biweekly(self):
+        actual = get_transactions(
+            ExecutionParameters(
+                date(2018, 6, 20),
+                date(2018, 7, 9),
+                0,
+                0
+            ),
+            ExecutionRules({
+                'rule-1': {
+                    "rule": str(rrule(freq=WEEKLY, interval=2, dtstart=date(2018, 6, 21))),
+                    "value": 100
+                }
+            })
+        )
+
+        expected = [{
+            "rule_id": "rule-1",
+            "id": "rule-1::2018-06-21",
+            "value": 100,
+            "day": date(2018, 6, 21),
+            "calculations": {
+                "balance": 100.0,
+                "working_capital": 100.0
+            }
+        }, {
+            "rule_id": "rule-1",
+            "id": "rule-1::2018-07-05",
+            "value": 100,
+            "day": date(2018, 7, 5),
+            "calculations": {
+                "balance": 200.0,
+                "working_capital": 200.0
+            }
+        }]
+
+        self.assertEqual(expected, actual)
+
+    def test_get_instances_from_rules_yearly(self):
+        actual = get_transactions(
+            ExecutionParameters(
+                date(2018, 6, 20),
+                date(2019, 7, 9),
+                0,
+                0
+            ),
+            ExecutionRules({
+                'rule-1': {
+                    "rule": str(rrule(freq=YEARLY, dtstart=date(2018, 6, 21))),
+                    "value": 100
+                }
+            })
+        )
+
+        expected = [{
+            "rule_id": "rule-1",
+            "id": "rule-1::2018-06-21",
+            "value": 100,
+            "day": date(2018, 6, 21),
+            "calculations": {
+                "balance": 100.0,
+                "working_capital": 100.0
+            }
+        }, {
+            "rule_id": "rule-1",
+            "id": "rule-1::2019-06-21",
+            "value": 100,
+            "day": date(2019, 6, 21),
+            "calculations": {
+                "balance": 200.0,
+                "working_capital": 200.0
+            }
+        }]
+
+        self.assertEqual(expected, actual)
+    
+    def test_get_instances_from_rules_once(self):
+        actual = get_transactions(
+            ExecutionParameters(
+                date(2018, 6, 20),
+                date(2019, 7, 9),
+                0,
+                0
+            ),
+            ExecutionRules({
+                'rule-1': {
+                    "rule": str(rrule(freq=YEARLY, count=1, dtstart=date(2018, 6, 21))),
+                    "value": 100
+                }
+            })
+        )
+
+        expected = [{
+            "rule_id": "rule-1",
+            "id": "rule-1::2018-06-21",
+            "value": 100,
+            "day": date(2018, 6, 21),
+            "calculations": {
+                "balance": 100.0,
+                "working_capital": 100.0
             }
         }]
 
