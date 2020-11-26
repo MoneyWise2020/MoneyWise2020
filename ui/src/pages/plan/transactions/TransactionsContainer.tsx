@@ -22,7 +22,7 @@ export const TransactionsContainer = ({ currentTime }: { currentTime: number }) 
     const queryEnd = new Date(now.getTime() + (120 * 24 * 60 * 60 * 1000)); // add 120 days
     const showEnd = new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)); // add 90 days
 
-    const [{ data, loading, error }, refetch] = useAxios(
+    const [{ data, loading, error }] = useAxios(
         `${baseUrl}/api/transactions?userid=${userid}&startDate=${start.toISOString()}&endDate=${queryEnd.toISOString()}`
     )
     
