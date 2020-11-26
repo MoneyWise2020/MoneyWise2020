@@ -5,6 +5,7 @@ import { TransactionsContainer } from './transactions/TransactionsContainer';
 
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row';
+import { DayByDayContainer } from './daybyday/DayByDayContainer';
 
 
 
@@ -18,11 +19,15 @@ export const PlanContainer = () => {
 
     return <Container>
         <Row>
+            <DayByDayContainer currentTime={currentTime} />
+        </Row>
+        <hr />
+        <Row>
             <Col>
                 <RulesContainer onRefresh={onRefresh} />
             </Col>
             <Col>
-                <h3>Transactions</h3>
+                <h2>Transactions</h2>
                 <TransactionsContainer currentTime={currentTime} />
 
             </Col>
