@@ -3,12 +3,12 @@ from django.test import TestCase
 from datetime import datetime, date
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY, MO
 from .exe_context import ExecutionParameters, ExecutionRules, ExecutionContext
-from .generate_instances import get_instances_up_to
+from .generate_instances import get_transactions_up_to
 
 DATE_FORMAT = "%Y-%m-%d"
 
 def get_transactions(parameters, rules):
-    transactions = get_instances_up_to(ExecutionContext(parameters, rules))
+    transactions = get_transactions_up_to(ExecutionContext(parameters, rules))
     return list(map(lambda i: i.serialize(), transactions))
 
 

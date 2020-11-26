@@ -10,7 +10,7 @@ import json
 from .models import Rule
 from .serializers import RuleSerializer
 from .exe_context import ExecutionParameters, ExecutionRules, ExecutionContext
-from .generate_instances import get_instances_up_to 
+from .generate_instances import get_transactions_up_to, get_daybydays_up_to
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -192,7 +192,35 @@ def process_transactions(request):
         return Response({ "message": "Internal Server Error" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # Calculate transactions
-    transactions = get_instances_up_to(ExecutionContext(parameters, rules))
+    transactions = get_transactions_up_to(ExecutionContext(parameters, rules))
     results = list(map(lambda i: i.serialize(), transactions))
 
     return Response({ "transactions": results })
+
+
+@api_view(['GET'])
+def process_daybydays(request):
+    userid = _get_userid(request)
+    if not userid:
+        return Response({ "message": "`userid` query param is required" }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Pull out parameters
+    parameters = None
+    try:
+        parameters = make_execution_parameters(request)
+    except AssertionError as e:
+        return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
+    except ParserError as e:
+        return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
+    
+    rules = None
+    try:
+        rules = get_rules_from_database(userid)
+    except Exception as e:
+        logging.error(f"Error while getting rules from database", e)
+        return Response({ "message": "Internal Server Error" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # Calculate daybydays
+    daybydays = get_daybydays_up_to(ExecutionContext(parameters, rules))
+
+    return Response({ "daybydays": daybydays })
