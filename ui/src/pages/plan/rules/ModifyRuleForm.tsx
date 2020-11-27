@@ -22,6 +22,8 @@ export const ModifyForm = ({
     let ruleWeekDays: string[] | (() => string[]) = [];
     let ruleStartDate = '';
     let ruleEndDate = '';
+    let currentStartDate = new Date();
+    let currentEndDate = new Date();
 
     // Frequency {
     //     YEARLY = 0,
@@ -56,11 +58,15 @@ export const ModifyForm = ({
     }
 
     if (rruleObject.origOptions.dtstart != undefined){
-        ruleStartDate = rruleObject.origOptions.dtstart.toString()       
+        currentStartDate = rruleObject.origOptions.dtstart;
+        ruleStartDate = (currentStartDate.getFullYear().toString() + "-" + ((currentStartDate.getMonth() > 8) ? (currentStartDate.getMonth() + 1) : ('0' + (currentStartDate.getMonth() + 1)))).toString() + '-' + (((currentStartDate.getDate() > 9) ? currentStartDate.getDate() : ('0' + currentStartDate.getDate()))).toString();
+        // ruleStartDate = rruleObject.origOptions.dtstart.toString()       
     }
 
     if (rruleObject.origOptions.until != undefined) {
-        ruleEndDate = rruleObject.origOptions.until.toString()
+        currentEndDate = rruleObject.origOptions.until;
+        ruleEndDate = (currentEndDate.getFullYear().toString() + "-" + ((currentEndDate.getMonth() > 8) ? (currentEndDate.getMonth() + 1) : ('0' + (currentEndDate.getMonth() + 1)))).toString() + '-' + (((currentEndDate.getDate() > 9) ? currentEndDate.getDate() : ('0' + currentEndDate.getDate()))).toString();
+        // ruleEndDate = rruleObject.origOptions.until.toString()
     }
 
     const [name, setName] = useState(rule.name);
@@ -73,13 +79,8 @@ export const ModifyForm = ({
 
     const [startDate, setStartDate] = useState<string>(ruleStartDate);
     const [endDate, setEndDate] = useState<string>(ruleEndDate);
-
-    function clearForm() {
-        setName('');
-        setValue(0);
-    }
     
-    return <form onSubmit={e => {
+    return <form id="modifyRule" onSubmit={e => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -168,9 +169,6 @@ export const ModifyForm = ({
             value: value,
             rrule: rruleString,
         });
-
-        
-        // clearForm();
     }}>
         <br />
         <h2>Modify {rule.name}</h2>
