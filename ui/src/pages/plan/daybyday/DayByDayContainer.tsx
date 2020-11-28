@@ -29,6 +29,8 @@ const options = {
     tooltip: {},
     hAxis: {
         title: "Time",
+        minTextSpacing: 10,
+        format: "short"
     },
     vAxis: {
         title: "Funds"
@@ -100,11 +102,11 @@ export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
     )
 
     if (loading) {
-        return <p data-testid="transactions-loading">Loading...</p>
+        return <p data-testid="daybyday-loading">Loading...</p>
     }
 
     if (error) {
-        return <p data-testid="transactions-error">Error occurred while fetching transactions! Try refreshing the page.</p>
+        return <p data-testid="daybyday-error">Error occurred while fetching daybydays! Try refreshing the page.</p>
     }
 
     const daybyday = data
@@ -115,5 +117,6 @@ export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
         <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)))}}>3 Months</button>&nbsp;
         <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (365 * 24 * 60 * 60 * 1000)))}}>1 Year</button>&nbsp;
         <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (730 * 24 * 60 * 60 * 1000)))}}>2 Years</button>&nbsp;
+        <br />
     </>
 }
