@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
 import Chart from "react-google-charts";
+import useAxios from 'axios-hooks'
 
+// TODO: get from login
+const userid = 'test'
+const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
+const now = new Date();
+const start = now;
+let showEnd = new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)); // add 90 days
 interface IDayByDayApi {
     daybydays: {
         date: string;
         balance: {
-            low: string;
-            high: string;
+            low: number;
+            high: number;
         };
         working_capital: {
-            low: string;
-            high: string;
+            low: number;
+            high: number;
         };
     }[]
 }
@@ -18,7 +25,15 @@ interface IDayByDayApi {
 const options = {
     title: "",
     curveType: "none",
-    legend: { position: "top" }
+    legend: { position: "top" },
+    tooltip: {},
+    hAxis: {
+        title: "Time",
+    },
+    vAxis: {
+        title: "Funds"
+    }
+
 };
 
 const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartType: 'SteppedAreaChart' | 'CandlestickChart' }) => {
@@ -75,169 +90,30 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
 }
 
 export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
+    
     const [chartType, setChartType] = useState<'SteppedAreaChart' | 'CandlestickChart'>('SteppedAreaChart');
+    const [queryEnd, setQueryEnd] = useState(new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)));
+    
 
-    const daybyday = {
-        "daybydays": [
-            {
-                "date": "2020-11-24",
-                "balance": {
-                    "low": "-100.0",
-                    "high": "400.0"
-                },
-                "working_capital": {
-                    "low": "-100.0",
-                    "high": "300.0"
-                }
-            },
-            {
-                "date": "2020-11-25",
-                "balance": {
-                    "low": "400.0",
-                    "high": "400.0"
-                },
-                "working_capital": {
-                    "low": "300.0",
-                    "high": "300.0"
-                }
-            },
-            {
-                "date": "2020-11-26",
-                "balance": {
-                    "low": "400.0",
-                    "high": "400.0"
-                },
-                "working_capital": {
-                    "low": "300.0",
-                    "high": "300.0"
-                }
-            },
-            {
-                "date": "2020-11-27",
-                "balance": {
-                    "low": "400.0",
-                    "high": "400.0"
-                },
-                "working_capital": {
-                    "low": "300.0",
-                    "high": "300.0"
-                }
-            },
-            {
-                "date": "2020-11-28",
-                "balance": {
-                    "low": "400.0",
-                    "high": "400.0"
-                },
-                "working_capital": {
-                    "low": "300.0",
-                    "high": "300.0"
-                }
-            },
-            {
-                "date": "2020-11-29",
-                "balance": {
-                    "low": "400.0",
-                    "high": "400.0"
-                },
-                "working_capital": {
-                    "low": "300.0",
-                    "high": "300.0"
-                }
-            },
-            {
-                "date": "2020-11-30",
-                "balance": {
-                    "low": "400.0",
-                    "high": "400.0"
-                },
-                "working_capital": {
-                    "low": "300.0",
-                    "high": "300.0"
-                }
-            },
-            {
-                "date": "2020-12-01",
-                "balance": {
-                    "low": "300.0",
-                    "high": "800.0"
-                },
-                "working_capital": {
-                    "low": "300.0",
-                    "high": "800.0"
-                }
-            },
-            {
-                "date": "2020-12-02",
-                "balance": {
-                    "low": "800.0",
-                    "high": "800.0"
-                },
-                "working_capital": {
-                    "low": "800.0",
-                    "high": "800.0"
-                }
-            },
-            {
-                "date": "2020-12-03",
-                "balance": {
-                    "low": "800.0",
-                    "high": "800.0"
-                },
-                "working_capital": {
-                    "low": "800.0",
-                    "high": "800.0"
-                }
-            },
-            {
-                "date": "2020-12-04",
-                "balance": {
-                    "low": "800.0",
-                    "high": "800.0"
-                },
-                "working_capital": {
-                    "low": "800.0",
-                    "high": "800.0"
-                }
-            },
-            {
-                "date": "2020-12-05",
-                "balance": {
-                    "low": "800.0",
-                    "high": "800.0"
-                },
-                "working_capital": {
-                    "low": "800.0",
-                    "high": "800.0"
-                }
-            },
-            {
-                "date": "2020-12-06",
-                "balance": {
-                    "low": "800.0",
-                    "high": "800.0"
-                },
-                "working_capital": {
-                    "low": "800.0",
-                    "high": "800.0"
-                }
-            },
-            {
-                "date": "2020-12-07",
-                "balance": {
-                    "low": "800.0",
-                    "high": "800.0"
-                },
-                "working_capital": {
-                    "low": "800.0",
-                    "high": "800.0"
-                }
-            }
-        ]
+    const [{ data, loading, error }] = useAxios(
+        `${baseUrl}/api/daybydays?userid=${userid}&startDate=${start.toISOString()}&endDate=${queryEnd.toISOString()}`
+    )
+
+    if (loading) {
+        return <p data-testid="transactions-loading">Loading...</p>
     }
 
+    if (error) {
+        return <p data-testid="transactions-error">Error occurred while fetching transactions! Try refreshing the page.</p>
+    }
+
+    const daybyday = data
+
     return <>
-        <button onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button>
+        <button className="btn btn-outline-primary btn-sm" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button>
         <DayByDayChart chartType={chartType} daybyday={daybyday} />
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)))}}>3 Months</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (365 * 24 * 60 * 60 * 1000)))}}>1 Year</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (730 * 24 * 60 * 60 * 1000)))}}>2 Years</button>&nbsp;
     </>
 }
