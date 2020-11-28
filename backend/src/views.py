@@ -169,8 +169,9 @@ def get_rules_from_database(userid: str) -> ExecutionRules:
     return make_execution_rules(serialized_rules)
 
 
-@api_view(['GET'])
-def process_transactions(request):
+def extract_params(request):
+    param_dictionary = {}
+
     userid = _get_userid(request)
     if not userid:
         return Response({ "message": "`userid` query param is required" }, status=status.HTTP_400_BAD_REQUEST)
@@ -179,10 +180,11 @@ def process_transactions(request):
     parameters = None
     try:
         parameters = make_execution_parameters(request)
+    except ValueError as e:
+        return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
     except AssertionError as e:
         return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
-    except ParserError as e:
-        return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
+    
     
     rules = None
     try:
@@ -191,8 +193,18 @@ def process_transactions(request):
         logging.error(f"Error while getting rules from database", e)
         return Response({ "message": "Internal Server Error" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    param_dictionary['userid'] = userid
+    param_dictionary['parameters'] = parameters
+    param_dictionary['rules'] = rules
+
+    return param_dictionary
+
+@api_view(['GET'])
+def process_transactions(request):
+    params = extract_params(request)
+
     # Calculate transactions
-    transactions = get_transactions_up_to(ExecutionContext(parameters, rules))
+    transactions = get_transactions_up_to(ExecutionContext(params.get('parameters'), params.get('rules')))
     results = list(map(lambda i: i.serialize(), transactions))
 
     return Response({ "transactions": results })
@@ -200,27 +212,9 @@ def process_transactions(request):
 
 @api_view(['GET'])
 def process_daybydays(request):
-    userid = _get_userid(request)
-    if not userid:
-        return Response({ "message": "`userid` query param is required" }, status=status.HTTP_400_BAD_REQUEST)
-    
-    # Pull out parameters
-    parameters = None
-    try:
-        parameters = make_execution_parameters(request)
-    except AssertionError as e:
-        return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
-    except ParserError as e:
-        return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
-    
-    rules = None
-    try:
-        rules = get_rules_from_database(userid)
-    except Exception as e:
-        logging.error(f"Error while getting rules from database", e)
-        return Response({ "message": "Internal Server Error" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    params = extract_params(request)
 
     # Calculate daybydays
-    daybydays = get_daybydays_up_to(ExecutionContext(parameters, rules))
+    daybydays = get_daybydays_up_to(ExecutionContext(params.get('parameters'), params.get('rules')))
 
     return Response({ "daybydays": daybydays })
