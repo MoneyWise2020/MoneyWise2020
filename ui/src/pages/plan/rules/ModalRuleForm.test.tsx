@@ -23,7 +23,7 @@ describe('Modify rule form', () => {
     let rule: IApiRule = {
         id: "test-uuid",
         userid: "test",
-        rrule: "DTSTART:20201123T142000Z\nRRULE:FREQ=YEARLY;UNTIL=20201225T142000Z;COUNT=30;INTERVAL=1;WKST=MO",
+        rrule: "DTSTART:20201123T000000Z\nRRULE:FREQ=YEARLY;UNTIL=20201225T000000Z;COUNT=30;INTERVAL=1;WKST=MO",
         name: "test",
         value: 20
     };
@@ -103,12 +103,12 @@ describe('Modify rule form', () => {
             expect(failureHandler).not.toHaveBeenCalled();
             expect(submitHandler).toHaveBeenCalledTimes(1);
     
-            const ouputrule = submitHandler.mock.calls[0][1];
-            expect(ouputrule).toEqual(expect.objectContaining({
+            const outputrule = submitHandler.mock.calls[0][1];
+            expect(outputrule).toEqual(expect.objectContaining({
                 name: 'Paycheck',
                 value: 1800,
             }));
-            expect(ouputrule.rrule).toMatchSnapshot();
+            expect(outputrule.rrule).toMatchSnapshot();
         });
 
         it('should not submit without start date', () => {
