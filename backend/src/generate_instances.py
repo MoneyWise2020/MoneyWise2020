@@ -1,17 +1,26 @@
 from typing import Set, List
 
-from .recur import generate_event_instances, Instance
+from .recur import generate_event_transactions, Instance, generate_event_daybydays
 from .aggregators import calculate_balance, calculate_working_capital
 from .exe_context import ExecutionContext
 
 
-def get_instances_up_to(context: ExecutionContext) -> List[Instance]:
+def get_transactions_up_to(context: ExecutionContext) -> List[Instance]:
     """
     Returns all projected transactions, sorted by date, with aggregations calculated and set.
     """
-    all_instances = generate_event_instances(context)
+    all_transactions = generate_event_transactions(context)
 
-    calculate_balance(context, all_instances)
-    calculate_working_capital(context, all_instances)
+    calculate_balance(context, all_transactions)
+    calculate_working_capital(context, all_transactions)
 
-    return all_instances
+    return all_transactions
+
+
+def get_daybydays_up_to(context: ExecutionContext) -> List[Instance]:
+    """
+    Returns all projected daybydays, sorted by date, with aggregations calculated and set.
+    """
+    all_daybydays = generate_event_daybydays(context)
+
+    return all_daybydays
