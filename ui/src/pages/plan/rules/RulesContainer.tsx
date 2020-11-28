@@ -4,12 +4,19 @@ import { IApiRule, IApiRuleMutate } from './IRule';
 import { Rule } from './Rule';
 import {CreateForm} from './CreateRuleForm';
 import useAxios from 'axios-hooks'
+import { Modal } from './RuleModal'
 import axios from 'axios';
 
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 
 // TODO: get from login
 const userid = 'test'
+// Modal Interactions
+let isShown = false;
+let modal;
+let closeButton;
+let modalRule: IApiRuleMutate;
+let modalRuleId;
 
 export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => void }) => {
     const [{ data, loading, error }, refetch] = useAxios(
@@ -39,6 +46,56 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
                 triggerRefresh();
             })
     }, [triggerRefresh]);
+
+    const updateExistingRule = useCallback((id: string, rule: IApiRuleMutate) => {
+        axios.put(`${baseUrl}/api/rules/${id}?userid=${userid}`, rule)
+        .then((response) => {
+            console.log('Updated rule', response.data);
+            closeModal();
+            triggerRefresh();
+        })
+        .catch((e) => {
+            // TODO: toast an error
+            console.error('UHOH', e);
+        })
+    }, [triggerRefresh])
+    
+    const showModal = useCallback((id: string, rule: IApiRuleMutate) => {
+        isShown = true;
+        modalRule = rule;
+        modalRuleId = id;
+        console.log("yoyo");
+        triggerRefresh();
+        toggleScrollLock();
+    }, [triggerRefresh]);
+    
+    const toggleScrollLock = () => {
+        const allcontent = document.querySelector('html')
+        
+        if (allcontent) {
+            allcontent.classList.toggle('scroll-lock');
+        }
+    };
+
+    const onKeyDown = (event: any) => {
+        if (event.keyCode === 27) {
+            closeModal();
+          }
+         };
+
+    const onClickOutside = (event: any) => {
+        // if (modal && modal.contains(event.target)) return
+        // closeModal();
+};
+    
+    const closeModal = useCallback(() => {
+        isShown = false;
+        // this.TriggerButton.focus();
+        toggleScrollLock();
+        triggerRefresh();
+    }, [triggerRefresh]);
+
+
     const onFailedValidation = useCallback((message: string) => console.log('Bad input', message), []);
 
     if (loading) {
@@ -66,8 +123,23 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
     
     return <>
         <CreateForm onSubmit={createNewRule} onFailedValidation={onFailedValidation} />
+        
+        {isShown ? (
+                <Modal
+                    rule={modalRule} 
+                    onSubmit={updateExistingRule}
+                    modalRef={(n: any) => (modal = n)}
+                    buttonRef={(n: any) => (closeButton = n)} 
+                    closeModal={closeModal}
+                    onKeyDown={onKeyDown}
+                    onClickOutside={onClickOutside}
+                />
+                ) : null
+            }
+
         <ListGroup>
-            {rules.map(rule => <Rule rule={rule} onDelete={deleteHandler} key={rule.id}/>)}
+            {rules.map(rule => <Rule rule={rule} onDelete={deleteHandler} onUpdate={updateExistingRule} showModal={showModal} key={rule.id}/>)}
         </ListGroup>
+        <p>{isShown ? "true" : "false"} </p>
     </>;
 }

@@ -8,6 +8,7 @@ from dateutil.rrule import rrule, rrulestr
 from convertdate import hebrew
 
 from .instance import Instance
+from .aggregators import calculate_balance, calculate_working_capital
 
 
 #
@@ -55,14 +56,14 @@ def get_dates(rule, parameters):
     return dates
 
 
-def generate_event_instances(context) -> List[Instance]:
-    instances = []
+def generate_event_transactions(context) -> List[Instance]:
+    transactions = []
     rrules = context.rules.rules_map
     for rule_id, rule in rrules.items():
         try:
             dates = get_dates(rule, context.parameters)
 
-            rrule_instances = [
+            rrule_transactions = [
                 Instance(
                     rule_id=rule_id,
                     instance_id="{}::{}".format(rule_id, d.isoformat()),
@@ -72,9 +73,80 @@ def generate_event_instances(context) -> List[Instance]:
                 for d in dates
             ]
 
-            instances.extend(rrule_instances)
+            transactions.extend(rrule_transactions)
         except Exception:
             assert False, f"Rule `{rule_id}` is an invalid rrule per RFC 5545"
  
-    instances.sort(key=lambda x: (x.day, x.rule_id))
-    return instances
+    transactions.sort(key=lambda x: (x.day, x.rule_id))
+    return transactions
+
+
+def generate_event_daybydays(context) -> List[Instance]:
+
+    daybydays = []
+
+    transactions = generate_event_transactions(context)
+    transactionCount = len(transactions)
+
+    calculate_balance(context, transactions)
+    calculate_working_capital(context, transactions)
+
+    rule = {
+        'rule': 'FREQ=DAILY;INTERVAL=1'
+    }
+    dates = get_dates(rule, context.parameters)
+    dateCount = len(dates)
+    if (dateCount == 0):
+        return daybydays    
+
+    balEnd = context.parameters.current
+    balLow = balEnd
+    balHigh = balEnd
+
+    wcEnd = context.parameters.current
+    wcLow = wcEnd
+    wcHigh = wcEnd
+
+    i = 0
+    j = 0
+
+    while (i < dateCount):    
+
+        if (j < transactionCount and dates[i] == transactions[j].day):
+
+            wcLow = transactions[j].calculations["working_capital"]
+            wcHigh = transactions[j].calculations["working_capital"]
+
+            while (j < transactionCount and dates[i] == transactions[j].day):
+
+                balEnd += transactions[j].value
+                if (balEnd > balHigh):
+                    balHigh = balEnd
+                elif (balEnd < balLow):
+                    balLow = balEnd
+
+                wcEnd = transactions[j].calculations["working_capital"]
+                if (wcEnd > wcHigh):
+                    wcHigh = wcEnd
+                elif (wcEnd < wcLow):
+                    wcLow = wcEnd                
+
+                j += 1
+
+        daybyday = {
+            'date': dates[i],
+            'balance': 
+                {'low': balLow, 'high': balHigh},                
+            'working_capital':
+                {'low': wcLow, 'high': wcHigh},                
+        }
+
+        balLow = balEnd
+        balHigh = balEnd
+        wcLow = wcEnd
+        wcHigh = wcEnd           
+
+        daybydays.append(daybyday)
+        i += 1
+
+    return daybydays

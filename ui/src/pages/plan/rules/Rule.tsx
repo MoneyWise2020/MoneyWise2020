@@ -16,14 +16,18 @@ function getRRuleDisplayString(rruleString: string): string {
 
 export const Rule = ({
     rule,
-    onDelete = () => {}
+    onDelete = () => {},
+    onUpdate = () => {},
+    showModal = () => {}
 }: {
     rule: IApiRule,
     onDelete?: (id: string) => void,
     onUpdate?: (id: string, ruleUpdate: IApiRuleMutate) => void,
+    showModal?: (id: string, rule: IApiRuleMutate) => void,
 }) => {
-    const deleteButtonHandler = useCallback(() => onDelete(rule.id), [rule.id, onDelete]);
 
+    const deleteButtonHandler = useCallback(() => onDelete(rule.id), [rule.id, onDelete]);
+    const editButtonHandler = useCallback(() => showModal(rule.id, rule), [rule.id, rule, showModal])
     const rruleString = getRRuleDisplayString(rule.rrule);
     return <ListGroup.Item>
         <div className="ruledescription">
@@ -32,7 +36,7 @@ export const Rule = ({
             <h6>Value: <Currency value={rule.value} /></h6>
             <div className="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
             <div className="btn-group mr-2" role="group" aria-label="First group">
-            <Button variant="secondary" size="sm">Edit</Button>
+            <Button variant="secondary" onClick={editButtonHandler} size="sm">Edit</Button>
             </div>
             <div className="btn-group mr-2" role="group" aria-label="Second group">
             

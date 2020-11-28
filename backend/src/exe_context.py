@@ -1,26 +1,38 @@
 from datetime import date
+from dateutil.relativedelta import relativedelta
+
 
 class ExecutionParameters():
     def __init__(self,
         start: date,
         end: date,
         current: float,
-        set_aside: float,
-        biweekly_start: date
+        set_aside: float
     ):
         self.start: date = start
         self.end: date = end
         self.current: float = current
         self.set_aside: float = set_aside
-        self.biweekly_start: date = biweekly_start
+    
+    def assert_valid(self):
+        assert self.start < self.end, '`startDate` comes after `endDate`, when it should come before'
+        assert self.set_aside >= 0, '`setAside` is negative, when it should be 0 or positive'
+        assert self.end <= self.start + relativedelta(years=3), "We do not support projections spanning more than 3 years."
 
 
 class ExecutionRules():
     def __init__(self, rules_map):
         self.rules_map = rules_map
+    
+    def assert_valid(self):
+        assert isinstance(self.rules_map, dict), "Root must be an object/map, like {}"
+        for rule_id, rule in self.rules_map.items():
+            assert "value" in rule, f"Rule `{rule_id}` is missing the `value` field"
+            assert isinstance(rule["value"], (float, int)), f"Rule `{rule_id}`'s `value` must be a number"
+            assert "rule" in rule, f"Rule `{rule_id}` is missing the `rule` field"
 
 
-class ExecutionContext(object):
+class ExecutionContext():
     def __init__(self, parameters: ExecutionParameters, rules: ExecutionRules):
         self.parameters: ExecutionParameters = parameters
         self.rules: ExecutionRules = rules
