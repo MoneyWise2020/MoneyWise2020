@@ -43,7 +43,8 @@ Our Daily Scrums were conducted asynchronously over Slack. Please see https://ag
 
 Our burndown chart updates automatically. We manually update our tasks and stories. Here are some screenshots that show changes:
 
-`TODO`: Provide screenshots of Burndown
+Burndown
+https://github.com/MoneyWise2020/MoneyWise2020#workspaces/moneywise2020-5f984e412accf2001e9acc9c/reports/burndown?milestoneId=6108069
 
 ![Tasks beginning of sprint](https://drive.google.com/uc?export=download&id=1FQ0xY1LWycS0dj3eTlxI6378LqifYbuT)
 ![Tasks end of sprint](https://drive.google.com/uc?export=download&id=1vILflfoqxgWcoz9eHepBPleNmImn03dd)
@@ -60,6 +61,9 @@ https://harvard.zoom.us/rec/play/wGjtVoGaALKnyHxT_LjODfyPz_K9UHMLnd2Ug9Nrj36-3wy
 
 Nov 28 - MOB programming with Alex Ralph and Sarab
 https://harvard.zoom.us/rec/play/mKrKQ0Te2aPezaHiEVwaNXjm9HdlyS5iO9FULIoS-8iiW9tJB4jal44l9GF30Xl6TK03I18ZYpenWmlk.gtRZZkAz3ae3M9pg
+
+Nov 29 - MOB Programming with Everyone!
+https://harvard.zoom.us/rec/share/h8mJO0SxTeG8cuI5ySwySpcweOhGTk2XJ12JM-MgAZJUkjD99c9liF9FjsGQUGy6.CSbPOsKT4kDysvOn
 
 Photos of Paring and Mobbing
 https://drive.google.com/drive/folders/1ZSjRYSRtsE92ZcmVKFg2VDBkSRoW6fdn
@@ -82,11 +86,12 @@ http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/MoneyWiseCICD/l
 
 ### Sprint Review [Criteria 15, 17]
 
-`TODO`: Javier or other stakeholder should attend
+You can find the sprint review video link in this document. It is titled 
+Nov 29 - Sprint Review & Nov 29 - Sprint Retro respectively
+https://docs.google.com/document/d/1YBYvbtzQM9F6hqz737ofrRtsPcP2D6QY708qJeZ_BDg/edit
 
-`TODO`: provide link to recording
 
-`TODO`: outline what changes we made to our backlog as a result of feedback
+Given the feedback of our stakeholder we may prioritize some variable transactions features a little higher. 
 
 ### Delivery [Criteria 16]
 
