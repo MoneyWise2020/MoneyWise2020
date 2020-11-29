@@ -22,9 +22,17 @@ def generate_daybydays(context) -> List[Instance]:
     # inserting a dummy first transaction on the start day
     first_transaction = Instance('fake-starting-transaction', 'starting-transaction-1', 0, context.parameters.start)
     first_transaction.set_calculation("balance", context.parameters.current)
-    first_transaction.set_calculation("working_capital", transactions[0].get_calculation("working_capital"))
+
+    # initial_working_capital is before the first transaction
+    # it will be the working_capital of the first transaction or the current value, whichever is lower.
+    # (current will be used in case of first transaction triggering working_capital growth,
+    # so users don't assume they have money that they'll get when their first transaction comes in)
+    initial_working_capital = min(transactions[0].get_calculation("working_capital"), context.parameters.current)
+    first_transaction.set_calculation("working_capital", initial_working_capital)
+
     transactions.insert(0, first_transaction)
 
+    # Tracking state
     current_balance = transactions[0].get_calculation('balance')
     current_working_capital = transactions[0].get_calculation('working_capital')
 
