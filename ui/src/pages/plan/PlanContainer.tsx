@@ -23,7 +23,7 @@ export const PlanContainer = () => {
         </Row>
         <div>
             <p></p>
-            <h5>Working Capital</h5> <p>This value represents the money to work with taking into account your future expenses.</p>
+            <h5>Working Capital</h5> <p>This value represents the money you have to work with taking into account your future expenses.</p>
         </div>
         <hr />
         <Row>

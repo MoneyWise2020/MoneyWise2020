@@ -77,7 +77,7 @@ We deployed our changes. You can view our application here:
 http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8080/
 
 Our product increment was:
-`TODO`: quick list of features we added
+You can now execute rules and visualize what they mean for your future. 
 
 ### CI [Criteria 18, 19]
 
@@ -95,12 +95,18 @@ It is triggered on merge to "main" branch, here is our configuration:
 
 The job runs tests, stores a test report (see our "Test Driven Development" section for a link), and if the tests pass, triggers a deploy of our backend and our UI, and runs database migrations against our "prod" environment. Our evidence that this works properly is that the application is updated, see "Delivery" section for a link.
 
-Passing "Green" Build deploys:
+###### Passing "Green" Build deploys
 
 http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/MoneyWiseCICD/40/console
 
-Failing "Red" build does not deploy:
+###### Failing "Red" build does not deploy
 
 http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/MoneyWiseCICD/41/console (UI tests fail, never goes on to deploy)
 
-`TODO`: "prod" tests question: https://agilesoftwarecourse.slack.com/archives/C019S0R4N8J/p1605584449129100
+###### Health Check 
+
+http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/Moneywise%202020%20-%20Health%20Check/6/console
+
+###### Complete Pipeline 
+
+http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/view/Moneywise%202020%20-%20Pipeline/

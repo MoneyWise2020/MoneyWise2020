@@ -64,7 +64,6 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
         isShown = true;
         modalRule = rule;
         modalRuleId = id;
-        console.log("yoyo");
         triggerRefresh();
         toggleScrollLock();
     }, [triggerRefresh]);

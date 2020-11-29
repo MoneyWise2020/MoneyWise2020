@@ -41,14 +41,22 @@ export const ModifyForm = ({
         strFrequency = frequencies[rruleObject.origOptions.freq];
     }
 
-    if (rruleObject.origOptions.bymonthday != undefined && typeof(rruleObject.origOptions.bymonthday) == typeof(Number)) {
-        ruleByMonthDay = rruleObject.origOptions.bymonthday;
+    if (rruleObject.origOptions.bymonthday != undefined) {
+        if (Array.isArray(rruleObject.origOptions.bymonthday)) {
+            ruleByMonthDay = rruleObject.origOptions.bymonthday[0];
+        } else {
+            ruleByMonthDay = rruleObject.origOptions.bymonthday
+        }
     } else {
         ruleByMonthDay = 1;
     }
 
-    if (rruleObject.origOptions.bymonth != undefined && typeof(rruleObject.origOptions.bymonth) == typeof(Number)) {
-        ruleByMonth = rruleObject.origOptions.bymonth;
+    if (rruleObject.origOptions.bymonth != undefined) {
+        if (Array.isArray(rruleObject.origOptions.bymonth)) {
+            ruleByMonth = rruleObject.origOptions.bymonth[0];
+        } else {
+            ruleByMonth = rruleObject.origOptions.bymonth;
+        }
     } else {
         ruleByMonth = 1;
     }
@@ -60,13 +68,11 @@ export const ModifyForm = ({
     if (rruleObject.origOptions.dtstart != undefined){
         currentStartDate = rruleObject.origOptions.dtstart;
         ruleStartDate = (currentStartDate.getFullYear().toString() + "-" + ((currentStartDate.getMonth() > 8) ? (currentStartDate.getMonth() + 1) : ('0' + (currentStartDate.getMonth() + 1)))).toString() + '-' + (((currentStartDate.getDate() > 9) ? currentStartDate.getDate() : ('0' + currentStartDate.getDate()))).toString();
-        // ruleStartDate = rruleObject.origOptions.dtstart.toString()       
     }
 
     if (rruleObject.origOptions.until != undefined) {
         currentEndDate = rruleObject.origOptions.until;
         ruleEndDate = (currentEndDate.getFullYear().toString() + "-" + ((currentEndDate.getMonth() > 8) ? (currentEndDate.getMonth() + 1) : ('0' + (currentEndDate.getMonth() + 1)))).toString() + '-' + (((currentEndDate.getDate() > 9) ? currentEndDate.getDate() : ('0' + currentEndDate.getDate()))).toString();
-        // ruleEndDate = rruleObject.origOptions.until.toString()
     }
 
     const [name, setName] = useState(rule.name);
@@ -214,13 +220,13 @@ export const ModifyForm = ({
         {(frequency === "MONTHLY" || frequency === "YEARLY") && <>
         <div className="col-md-4 mb-4">
             <label htmlFor="bymonthday">Day of month</label>
-            <input className="form-control" id="bymonthday" type="number" min="1" max="31" placeholder="Day of month" value={Number(bymonthday)} onChange={e => setbymonthday(Number(e.target.value))} />
+            <input className="form-control" id="bymonthday" type="number" min="1" max="31" placeholder="Day of month" value={bymonthday} onChange={e => setbymonthday(Number(e.target.value))} />
         </div>
         </>}
         {(frequency === "YEARLY") && <>
         <div className="col-md-4 mb-4">
             <label htmlFor="bymonth">Month of Year</label>
-            <input className="form-control" type="number" id="bymonth" min="1" max="12" placeholder="Month of year" value={Number(bymonth)} onChange={e => setbymonth(Number(e.target.value))} />
+            <input className="form-control" type="number" id="bymonth" min="1" max="12" placeholder="Month of year" value={bymonth} onChange={e => setbymonth(Number(e.target.value))} />
         </div>
         </>}
         {(frequency === "WEEKLY") && <>
