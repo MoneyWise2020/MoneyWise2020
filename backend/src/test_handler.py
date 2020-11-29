@@ -282,7 +282,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 21),
             "working_capital": {
                 "high": 100,
-                "low": 100
+                "low": 0
             }
         }, {
             "balance": {
@@ -321,13 +321,13 @@ class HandlerTests(TestCase):
 
         expected = [{
             "balance": {
-                "high": 100,
-                "low": 0
+                "high": 90,
+                "low": -10
             },
             "date": date(2018, 6, 18),
             "working_capital": {
                 "high": 90,
-                "low": 90
+                "low": -10
             }
         }, {
             "balance": {
@@ -367,7 +367,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 18),
             "working_capital": {
                 "high": 100,
-                "low": 100
+                "low": 0
             }
         }, {
             "balance": {
@@ -437,7 +437,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 25),
             "working_capital": {
                 "high": 200,
-                "low": 200
+                "low": 100
             }
         }]
 
@@ -468,7 +468,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 18),
             "working_capital": {
                 "high": 300,
-                "low": 300
+                "low": 0
             }
         }, {
             "balance": {
@@ -478,7 +478,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 19),
             "working_capital": {
                 "high": 600,
-                "low": 600
+                "low": 300
             }
         }, {
             "balance": {
@@ -488,7 +488,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 20),
             "working_capital": {
                 "high": 900,
-                "low": 900
+                "low": 600
             }
         }, {
             "balance": {
@@ -498,7 +498,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 21),
             "working_capital": {
                 "high": 1200,
-                "low": 1200
+                "low": 900
             }
         }]
 
@@ -640,7 +640,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 7, 1),
             "working_capital": {
                 "high": 100,
-                "low": 100
+                "low": 0
             }
         }, 
 		{
