@@ -61,8 +61,6 @@ export const ModifyForm = ({
         ruleByMonth = 1;
     }
 
-    console.log(rruleObject);
-
     if (rruleObject.origOptions.wkst != undefined) {
         ruleWeekDays = [rruleObject.origOptions.wkst.toString()];
     }
