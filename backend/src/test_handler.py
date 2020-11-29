@@ -3,7 +3,8 @@ from django.test import TestCase
 from datetime import datetime, date
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY, DAILY, MO
 from .exe_context import ExecutionParameters, ExecutionRules, ExecutionContext
-from .generate_instances import get_transactions_up_to, get_daybydays_up_to
+from .generate_instances import get_transactions_up_to
+from .daybydays import generate_daybydays
 
 DATE_FORMAT = "%Y-%m-%d"
 
@@ -14,7 +15,7 @@ def get_transactions(parameters, rules):
     return list(map(lambda i: i.serialize(), transactions))
 
 def get_daybyday(parameters, rules):
-    daybydays = get_daybydays_up_to(ExecutionContext(parameters, rules))
+    daybydays = generate_daybydays(ExecutionContext(parameters, rules))
     return daybydays
 
 
@@ -281,7 +282,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 21),
             "working_capital": {
                 "high": 100,
-                "low": 100
+                "low": 0
             }
         }, {
             "balance": {
@@ -320,13 +321,13 @@ class HandlerTests(TestCase):
 
         expected = [{
             "balance": {
-                "high": 100,
-                "low": 0
+                "high": 90,
+                "low": -10
             },
             "date": date(2018, 6, 18),
             "working_capital": {
                 "high": 90,
-                "low": 90
+                "low": -10
             }
         }, {
             "balance": {
@@ -366,7 +367,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 18),
             "working_capital": {
                 "high": 100,
-                "low": 100
+                "low": 0
             }
         }, {
             "balance": {
@@ -436,7 +437,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 25),
             "working_capital": {
                 "high": 200,
-                "low": 200
+                "low": 100
             }
         }]
 
@@ -467,7 +468,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 18),
             "working_capital": {
                 "high": 300,
-                "low": 300
+                "low": 0
             }
         }, {
             "balance": {
@@ -477,7 +478,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 19),
             "working_capital": {
                 "high": 600,
-                "low": 600
+                "low": 300
             }
         }, {
             "balance": {
@@ -487,7 +488,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 20),
             "working_capital": {
                 "high": 900,
-                "low": 900
+                "low": 600
             }
         }, {
             "balance": {
@@ -497,7 +498,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 6, 21),
             "working_capital": {
                 "high": 1200,
-                "low": 1200
+                "low": 900
             }
         }]
 
@@ -639,7 +640,7 @@ class HandlerTests(TestCase):
             "date": date(2018, 7, 1),
             "working_capital": {
                 "high": 100,
-                "low": 100
+                "low": 0
             }
         }, 
 		{
