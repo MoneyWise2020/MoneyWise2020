@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Frequency, RRule, rrulestr } from 'rrule';
+import { RRule, rrulestr } from 'rrule';
 import { IApiRule, IApiRuleMutate } from './IRule';
 import './ModalForm.css';
 

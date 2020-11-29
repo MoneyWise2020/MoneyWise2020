@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {CreateForm} from './CreateRuleForm';
 import FocusTrap from 'focus-trap-react';
-import { IApiRule, IApiRuleMutate } from './IRule';
+import { IApiRuleMutate } from './IRule';
 import { ModifyForm } from './ModifyRuleForm';
 
 export const Modal = ({

@@ -13,10 +13,7 @@ const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 const userid = 'test'
 // Modal Interactions
 let isShown = false;
-let modal;
-let closeButton;
 let modalRule: IApiRuleMutate;
-let modalRuleId;
 
 export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => void }) => {
     const [{ data, loading, error }, refetch] = useAxios(
@@ -46,24 +43,10 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
                 triggerRefresh();
             })
     }, [triggerRefresh]);
-
-    const updateExistingRule = useCallback((id: string, rule: IApiRuleMutate) => {
-        axios.put(`${baseUrl}/api/rules/${id}?userid=${userid}`, rule)
-        .then((response) => {
-            console.log('Updated rule', response.data);
-            closeModal();
-            triggerRefresh();
-        })
-        .catch((e) => {
-            // TODO: toast an error
-            console.error('UHOH', e);
-        })
-    }, [triggerRefresh])
     
     const showModal = useCallback((id: string, rule: IApiRuleMutate) => {
         isShown = true;
         modalRule = rule;
-        modalRuleId = id;
         triggerRefresh();
         toggleScrollLock();
     }, [triggerRefresh]);
@@ -93,6 +76,19 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
         toggleScrollLock();
         triggerRefresh();
     }, [triggerRefresh]);
+
+    const updateExistingRule = useCallback((id: string, rule: IApiRuleMutate) => {
+        axios.put(`${baseUrl}/api/rules/${id}?userid=${userid}`, rule)
+        .then((response) => {
+            console.log('Updated rule', response.data);
+            closeModal();
+            triggerRefresh();
+        })
+        .catch((e) => {
+            // TODO: toast an error
+            console.error('UHOH', e);
+        })
+    }, [triggerRefresh, closeModal])
 
 
     const onFailedValidation = useCallback((message: string) => console.log('Bad input', message), []);
@@ -127,8 +123,8 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
                 <Modal
                     rule={modalRule} 
                     onSubmit={updateExistingRule}
-                    modalRef={(n: any) => (modal = n)}
-                    buttonRef={(n: any) => (closeButton = n)} 
+                    modalRef={(n: any) => {}}
+                    buttonRef={(n: any) => {}} 
                     closeModal={closeModal}
                     onKeyDown={onKeyDown}
                     onClickOutside={onClickOutside}
