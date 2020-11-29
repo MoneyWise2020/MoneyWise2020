@@ -266,34 +266,49 @@ class HandlerTests(TestCase):
 
         expected = [{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 20),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
+                "close": 0,
+            },
+            "volume": 0,
         }, {
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 100,
-                "low": 0
+                "close": 100,
             },
             "date": date(2018, 6, 21),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 100,
-                "low": 0
-            }
+                "close": 100,
+            },
+            "volume": 1,
         }, {
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 6, 22),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }]
 
         self.assertEqual(expected, actual)

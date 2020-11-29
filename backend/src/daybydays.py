@@ -67,6 +67,11 @@ def generate_daybydays(context) -> List[Instance]:
 
         current_working_capital = working_capital_close
 
+        # number of transactions which occurred today
+        volume = len(todays_transactions)
+        if current_day == context.parameters.start:
+            # we add a dummy transaction on day 1, should not count toward volume
+            volume -= 1
 
         daybydays.append({
             'date': current_day,
@@ -82,7 +87,7 @@ def generate_daybydays(context) -> List[Instance]:
                 'high': round(working_capital_high, 2),
                 'close': round(working_capital_close, 2),
             },
-            'volume': len(todays_transactions),
+            'volume': volume,
         })
         current_day += timedelta(days=1)
 
