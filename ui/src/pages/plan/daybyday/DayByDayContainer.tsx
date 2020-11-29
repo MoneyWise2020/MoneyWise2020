@@ -6,9 +6,7 @@ import useAxios from 'axios-hooks'
 // TODO: get from login
 const userid = 'test'
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
-const now = new Date();
-const start = now;
-let showEnd = new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)); // add 90 days
+
 interface IDayByDayApi {
     daybydays: {
         date: string;
@@ -101,11 +99,14 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
 export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
     
     const [chartType, setChartType] = useState<'SteppedAreaChart' | 'CandlestickChart'>('SteppedAreaChart');
-    const [queryEnd, setQueryEnd] = useState(new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)));
-    
 
+    const [queryRangeDays, setQueryRangeDays] = useState(90);
+
+    const start = new Date(currentTime);
+    const end = new Date(currentTime + (queryRangeDays * 24 * 60 * 60 * 1000))
+    
     const [{ data, loading, error }] = useAxios(
-        `${baseUrl}/api/daybydays?userid=${userid}&startDate=${start.toISOString()}&endDate=${queryEnd.toISOString()}`
+        `${baseUrl}/api/daybydays?userid=${userid}&startDate=${start.toISOString()}&endDate=${end.toISOString()}`
     )
 
     if (loading) {
@@ -121,9 +122,10 @@ export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
     return <>
         <button className="btn btn-outline-primary btn-sm" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button>
         <DayByDayChart chartType={chartType} daybyday={daybyday} />
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)))}}>3 Months</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (365 * 24 * 60 * 60 * 1000)))}}>1 Year</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (730 * 24 * 60 * 60 * 1000)))}}>2 Years</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(30)}}>1 Month</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3 Months</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365)}}>1 Year</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(730)}}>2 Years</button>&nbsp;
         <br />
     </>
 }
