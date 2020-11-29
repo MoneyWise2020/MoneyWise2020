@@ -42,7 +42,10 @@ Our Daily Scrums were conducted asynchronously over Slack. Please see https://ag
 
 Our burndown chart updates automatically. We manually update our tasks and stories. Here are some screenshots that show changes:
 
-`TODO`: Provide screenshots of changes
+`TODO`: Provide screenshots of Burndown
+
+![Tasks beginning of sprint](https://drive.google.com/uc?export=download&id=1FQ0xY1LWycS0dj3eTlxI6378LqifYbuT)
+![Tasks end of sprint](https://drive.google.com/uc?export=download&id=1vILflfoqxgWcoz9eHepBPleNmImn03dd)
 
 ### Pair / Mob Programming [Criteria 13]
 
