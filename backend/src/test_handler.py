@@ -266,34 +266,49 @@ class HandlerTests(TestCase):
 
         expected = [{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 20),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
+                "close": 0,
+            },
+            "volume": 0,
         }, {
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 100,
-                "low": 0
+                "close": 100,
             },
             "date": date(2018, 6, 21),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 100,
-                "low": 0
-            }
+                "close": 100,
+            },
+            "volume": 1,
         }, {
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 6, 22),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }]
 
         self.assertEqual(expected, actual)
@@ -321,24 +336,34 @@ class HandlerTests(TestCase):
 
         expected = [{
             "balance": {
+                "open": 0,
+                "low": -10,
                 "high": 90,
-                "low": -10
+                "close": 90,
             },
             "date": date(2018, 6, 18),
             "working_capital": {
+                "open": -10,
+                "low": -10,
                 "high": 90,
-                "low": -10
-            }
+                "close": 90,
+            },
+            "volume": 2,
         }, {
             "balance": {
+                "open": 90,
+                "low": 90,
                 "high": 90,
-                "low": 90
+                "close": 90,
             },
             "date": date(2018, 6, 19),
             "working_capital": {
+                "open": 90,
+                "low": 90,
                 "high": 90,
-                "low": 90
-            }
+                "close": 90,
+            },
+            "volume": 0,
         }]
 
         self.assertEqual(expected, actual)
@@ -361,84 +386,124 @@ class HandlerTests(TestCase):
 
         expected = [{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 100,
-                "low": 0
+                "close": 100,
             },
             "date": date(2018, 6, 18),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 100,
-                "low": 0
-            }
+                "close": 100,
+            },
+            "volume": 1,
         }, {
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 6, 19),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, {
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 6, 20),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, {
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 6, 21),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, {
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 6, 22),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, {
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 6, 23),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, {
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 6, 24),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, {
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 200,
-                "low": 100
+                "close": 200,
             },
             "date": date(2018, 6, 25),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 200,
-                "low": 100
-            }
+                "close": 200,
+            },
+            "volume": 1,
         }]
 
         self.assertEqual(expected, actual)
@@ -462,44 +527,64 @@ class HandlerTests(TestCase):
 
         expected = [{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 300,
-                "low": 0
+                "close": 300,
             },
             "date": date(2018, 6, 18),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 300,
-                "low": 0
-            }
+                "close": 300,
+            },
+            "volume": 1,
         }, {
             "balance": {
+                "open": 300,
+                "low": 300,
                 "high": 600,
-                "low": 300
+                "close": 600,
             },
             "date": date(2018, 6, 19),
             "working_capital": {
+                "open": 300,
+                "low": 300,
                 "high": 600,
-                "low": 300
-            }
+                "close": 600,
+            },
+            "volume": 1,
         }, {
             "balance": {
+                "open": 600,
+                "low": 600,
                 "high": 900,
-                "low": 600
+                "close": 900,
             },
             "date": date(2018, 6, 20),
             "working_capital": {
+                "open": 600,
+                "low": 600,
                 "high": 900,
-                "low": 600
-            }
+                "close": 900,
+            },
+            "volume": 1,
         }, {
             "balance": {
+                "open": 900,
+                "low": 900,
                 "high": 1200,
-                "low": 900
+                "close": 1200,
             },
             "date": date(2018, 6, 21),
             "working_capital": {
+                "open": 900,
+                "low": 900,
                 "high": 1200,
-                "low": 900
-            }
+                "close": 1200,
+            },
+            "volume": 1,
         }]
 
         self.assertEqual(expected, actual)
@@ -524,344 +609,502 @@ class HandlerTests(TestCase):
         expected = [
 		{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 21),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
+                "close": 0,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 22),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
+                "close": 0,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 23),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
+                "close": 0,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 24),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
+                "close": 0,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 25),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
+                "close": 0,
+            },
+            "volume": 0,
         }, 		
 		{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 26),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
+                "close": 0,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 27),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
+                "close": 0,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 28),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
+                "close": 0,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 29),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
+                "close": 0,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
+                "close": 0,
             },
             "date": date(2018, 6, 30),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 0,
-                "low": 0
-            }
-        },		
+                "close": 0,
+            },
+            "volume": 0,
+        },
+        #
+        # HERE IT IS!!!
+        #
 		{
             "balance": {
+                "open": 0,
+                "low": 0,
                 "high": 100,
-                "low": 0
+                "close": 100,
             },
             "date": date(2018, 7, 1),
             "working_capital": {
+                "open": 0,
+                "low": 0,
                 "high": 100,
-                "low": 0
-            }
+                "close": 100,
+            },
+            "volume": 1,
         }, 
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 2),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 3),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 4),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 5),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 6),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 7),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 8),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 9),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 10),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 11),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 12),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 13),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 14),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 15),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 16),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 17),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }, 
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 18),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 19),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 20),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         },
 		{
             "balance": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
+                "close": 100,
             },
             "date": date(2018, 7, 21),
             "working_capital": {
+                "open": 100,
+                "low": 100,
                 "high": 100,
-                "low": 100
-            }
+                "close": 100,
+            },
+            "volume": 0,
         }]
 
         self.assertEqual(expected, actual)

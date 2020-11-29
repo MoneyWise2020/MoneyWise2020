@@ -2,7 +2,6 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react'
 
 import { DayByDayContainer } from './DayByDayContainer';
-import { IApiTransaction } from './ITransaction';
 
 jest.mock('axios-hooks');
 
@@ -37,6 +36,14 @@ describe('transactions container', () => {
         }
     }
 
+    function dayByDayEmpty() {
+        try {
+            return element.getByTestId('daybyday-empty');
+        } catch (e) {
+            return undefined;
+        }
+    }
+
     function dayByDayShowing() {
         try {
             return element.getByTestId('daybyday-showing');
@@ -51,11 +58,12 @@ describe('transactions container', () => {
     });
 
     describe('render daybydays', () => {
-        it('should show no daybydays if payload is empty', () => {
+        it('should show no daybydays and a special message if payload is empty', () => {
             setUp([]);
     
             expect(dayByDayLoading()).not.toBeDefined();
             expect(dayByDayError()).not.toBeDefined();
+            expect(dayByDayEmpty()).toBeDefined();
         });
     
         it('should show loading symbol when loading', () => {

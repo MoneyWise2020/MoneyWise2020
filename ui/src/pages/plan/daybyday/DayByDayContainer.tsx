@@ -6,19 +6,21 @@ import useAxios from 'axios-hooks'
 // TODO: get from login
 const userid = 'test'
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
-const now = new Date();
-const start = now;
-let showEnd = new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)); // add 90 days
+
 interface IDayByDayApi {
     daybydays: {
         date: string;
         balance: {
+            open: number;
             low: number;
             high: number;
+            close: number;
         };
         working_capital: {
+            open: number;
             low: number;
             high: number;
+            close: number;
         };
     }[]
 }
@@ -40,6 +42,12 @@ const options = {
 };
 
 const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartType: 'SteppedAreaChart' | 'CandlestickChart' }) => {
+    if (!daybyday.daybydays.length) {
+        return <>
+            <p data-testid="daybyday-empty">Looks like there are no transactions in the time frame selected...</p>
+        </>
+    }
+
     if (chartType === 'SteppedAreaChart') {
         const data = [
             ['Day', 'Balance', 'Working Capital'],
@@ -62,21 +70,16 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
         const data = [
             ['Day', 'Balance', 'Balance base bottom', 'Balance base top', 'Balance high', 'Working Capital', 'Working Capital base bottom', 'Working Capital base top', 'Working Capital high'],
             ...daybyday.daybydays.map(candle => {
-                const lowBalance = Number(candle.balance.low)
-                const highBalance = Number(candle.balance.high)
-                const lowWorkingCapital = Number(candle.working_capital.low)
-                const highWorkingCapital = Number(candle.working_capital.high)
-                // TODO: consider using wicks of candles? Has to do with previous candle height?
                 return [
                     candle.date,
-                    lowBalance,
-                    lowBalance,
-                    highBalance,
-                    highBalance,
-                    lowWorkingCapital,
-                    lowWorkingCapital,
-                    highWorkingCapital,
-                    highWorkingCapital,
+                    candle.balance.low,
+                    candle.balance.open,
+                    candle.balance.close,
+                    candle.balance.high,
+                    candle.working_capital.low,
+                    candle.working_capital.open,
+                    candle.working_capital.close,
+                    candle.working_capital.high,
                 ]
             })
         ]
@@ -85,7 +88,17 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
             width="100%"
             height="400px"
             data={data}
-            options={options}
+            options={{
+                bar: { groupWidth: '100%' }, // Remove space between bars.
+                candlestick: {
+                    risingColor: {
+                        fill: '#FFFFFF'
+                    },
+                    fallingColor: {
+                        fill: '#FFFFFF'
+                    },
+                }
+            }}
         />
     }
 
@@ -95,11 +108,14 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
 export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
     
     const [chartType, setChartType] = useState<'SteppedAreaChart' | 'CandlestickChart'>('SteppedAreaChart');
-    const [queryEnd, setQueryEnd] = useState(new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)));
-    
 
+    const [queryRangeDays, setQueryRangeDays] = useState(90);
+
+    const start = new Date(currentTime);
+    const end = new Date(currentTime + (queryRangeDays * 24 * 60 * 60 * 1000))
+    
     const [{ data, loading, error }] = useAxios(
-        `${baseUrl}/api/daybydays?userid=${userid}&startDate=${start.toISOString()}&endDate=${queryEnd.toISOString()}`
+        `${baseUrl}/api/daybydays?userid=${userid}&startDate=${start.toISOString()}&endDate=${end.toISOString()}`
     )
 
     if (loading) {
@@ -115,9 +131,10 @@ export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
     return <>
         <button className="btn btn-outline-primary btn-sm" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button>
         <DayByDayChart chartType={chartType} daybyday={daybyday} />
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)))}}>3 Months</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (365 * 24 * 60 * 60 * 1000)))}}>1 Year</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryEnd(new Date(now.getTime() + (730 * 24 * 60 * 60 * 1000)))}}>2 Years</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(30)}}>1 Month</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3 Months</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365)}}>1 Year</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(730)}}>2 Years</button>&nbsp;
         <br />
     </>
 }

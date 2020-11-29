@@ -27,7 +27,7 @@ export const Rule = ({
 }) => {
 
     const deleteButtonHandler = useCallback(() => onDelete(rule.id), [rule.id, onDelete]);
-    const editButtonHandler = useCallback(() => showModal(rule.id, rule), [rule.id, rule, showModal])
+    const editButtonHandler = useCallback(() => showModal(rule.id, rule), [rule, showModal])
     const rruleString = getRRuleDisplayString(rule.rrule);
     return <ListGroup.Item>
         <div className="ruledescription">
