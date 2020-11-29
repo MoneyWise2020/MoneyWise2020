@@ -40,6 +40,12 @@ const options = {
 };
 
 const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartType: 'SteppedAreaChart' | 'CandlestickChart' }) => {
+    if (!daybyday.daybydays.length) {
+        return <>
+            <p data-testid="daybyday-empty">Looks like there are no transactions in the time frame selected...</p>
+        </>
+    }
+
     if (chartType === 'SteppedAreaChart') {
         const data = [
             ['Day', 'Balance', 'Working Capital'],
