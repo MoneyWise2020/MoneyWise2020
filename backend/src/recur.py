@@ -77,6 +77,7 @@ def generate_event_transactions(context) -> List[Instance]:
         except Exception:
             assert False, f"Rule `{rule_id}` is an invalid rrule per RFC 5545"
  
-    transactions.sort(key=lambda x: (x.day, x.rule_id))
+    transactions.sort(key=lambda x: (x.day, x.value))  # transactions should go from least to greatest
+    # for the sake of working_capital calculations
     return transactions
 
