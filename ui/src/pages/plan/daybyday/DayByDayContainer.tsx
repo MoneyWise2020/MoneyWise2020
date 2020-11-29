@@ -11,12 +11,16 @@ interface IDayByDayApi {
     daybydays: {
         date: string;
         balance: {
+            open: number;
             low: number;
             high: number;
+            close: number;
         };
         working_capital: {
+            open: number;
             low: number;
             high: number;
+            close: number;
         };
     }[]
 }
@@ -66,21 +70,16 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
         const data = [
             ['Day', 'Balance', 'Balance base bottom', 'Balance base top', 'Balance high', 'Working Capital', 'Working Capital base bottom', 'Working Capital base top', 'Working Capital high'],
             ...daybyday.daybydays.map(candle => {
-                const lowBalance = Number(candle.balance.low)
-                const highBalance = Number(candle.balance.high)
-                const lowWorkingCapital = Number(candle.working_capital.low)
-                const highWorkingCapital = Number(candle.working_capital.high)
-                // TODO: consider using wicks of candles? Has to do with previous candle height?
                 return [
                     candle.date,
-                    lowBalance,
-                    lowBalance,
-                    highBalance,
-                    highBalance,
-                    lowWorkingCapital,
-                    lowWorkingCapital,
-                    highWorkingCapital,
-                    highWorkingCapital,
+                    candle.balance.low,
+                    candle.balance.open,
+                    candle.balance.close,
+                    candle.balance.high,
+                    candle.working_capital.low,
+                    candle.working_capital.open,
+                    candle.working_capital.close,
+                    candle.working_capital.high,
                 ]
             })
         ]
@@ -89,7 +88,17 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
             width="100%"
             height="400px"
             data={data}
-            options={options}
+            options={{
+                bar: { groupWidth: '100%' }, // Remove space between bars.
+                candlestick: {
+                    risingColor: {
+                        fill: '#FFFFFF'
+                    },
+                    fallingColor: {
+                        fill: '#FFFFFF'
+                    },
+                }
+            }}
         />
     }
 
