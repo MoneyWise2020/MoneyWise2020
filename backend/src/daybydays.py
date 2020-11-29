@@ -12,8 +12,7 @@ def generate_daybydays(context) -> List[Instance]:
     daybydays = []
 
     transactions = get_transactions_up_to(context)
-    transactions_len = len(transactions)
-    if transactions_len == 0:
+    if len(transactions) == 0:
         return []
 
     current_day = context.parameters.start
@@ -30,6 +29,7 @@ def generate_daybydays(context) -> List[Instance]:
     current_working_capital = transactions[0].get_calculation('working_capital')
 
     end = context.parameters.end
+    transactions_len = len(transactions)
     while current_day <= end:
         # Get all transactions for this day
         todays_transactions = []
