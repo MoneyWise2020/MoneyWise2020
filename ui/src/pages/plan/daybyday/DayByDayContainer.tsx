@@ -45,7 +45,7 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
             ['Day', 'Balance', 'Working Capital'],
             ...daybyday.daybydays.map(candle => [
                 candle.date,
-                Number(candle.balance.high),
+                Number(candle.balance.low),
                 Number(candle.working_capital.low),
             ])
         ]
