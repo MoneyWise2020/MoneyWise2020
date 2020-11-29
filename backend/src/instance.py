@@ -1,9 +1,11 @@
+from datetime import date
+
 class Instance():
     def __init__(self, rule_id, instance_id, value, day):
         self.rule_id = rule_id
         self.id = instance_id
         self.value = value
-        self.day = day
+        self.day: date = day
         self.calculations = {}
     
     def set_calculation(self, key: str, value):
