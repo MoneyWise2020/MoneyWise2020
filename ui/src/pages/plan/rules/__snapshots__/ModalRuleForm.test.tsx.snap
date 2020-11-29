@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Modify rule form biweekly should submit 1`] = `
+"DTSTART:20201010T000000Z
+RRULE:FREQ=WEEKLY;INTERVAL=2;UNTIL=20201224T000000Z"
+`;
+
+exports[`Modify rule form monthly should submit 1`] = `
+"DTSTART:20201122T000000Z
+RRULE:FREQ=MONTHLY;BYMONTHDAY=15;UNTIL=20201224T000000Z"
+`;
+
+exports[`Modify rule form weekly should submit for multiple days 1`] = `
+"DTSTART:20201122T000000Z
+RRULE:FREQ=WEEKLY;BYDAY=MO,TU;UNTIL=20201224T000000Z"
+`;
+
+exports[`Modify rule form yearly should submit 1`] = `
+"DTSTART:20201122T000000Z
+RRULE:FREQ=YEARLY;BYMONTH=10;BYMONTHDAY=1;UNTIL=20201224T000000Z"
+`;
