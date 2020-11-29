@@ -3,7 +3,8 @@ from django.test import TestCase
 from datetime import datetime, date
 from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY, DAILY, MO
 from .exe_context import ExecutionParameters, ExecutionRules, ExecutionContext
-from .generate_instances import get_transactions_up_to, get_daybydays_up_to
+from .generate_instances import get_transactions_up_to
+from .daybydays import generate_daybydays
 
 DATE_FORMAT = "%Y-%m-%d"
 
@@ -14,7 +15,7 @@ def get_transactions(parameters, rules):
     return list(map(lambda i: i.serialize(), transactions))
 
 def get_daybyday(parameters, rules):
-    daybydays = get_daybydays_up_to(ExecutionContext(parameters, rules))
+    daybydays = generate_daybydays(ExecutionContext(parameters, rules))
     return daybydays
 
 

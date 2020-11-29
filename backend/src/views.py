@@ -10,7 +10,8 @@ import json
 from .models import Rule
 from .serializers import RuleSerializer
 from .exe_context import ExecutionParameters, ExecutionRules, ExecutionContext
-from .generate_instances import get_transactions_up_to, get_daybydays_up_to
+from .generate_instances import get_transactions_up_to
+from .daybydays import generate_daybydays
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -226,6 +227,6 @@ def process_daybydays(request):
         return Response({ "message": "Internal Server Error" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # Calculate daybydays
-    daybydays = get_daybydays_up_to(ExecutionContext(parameters, rules))
+    daybydays = generate_daybydays(ExecutionContext(parameters, rules))
 
     return Response({ "daybydays": daybydays })
