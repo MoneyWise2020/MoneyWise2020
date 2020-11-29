@@ -1,8 +1,8 @@
 from typing import List
+from datetime import timedelta
 
 from .instance import Instance
 from .generate_instances import get_transactions_up_to
-from .recur import get_dates
 
 
 def generate_daybydays(context) -> List[Instance]:
@@ -12,64 +12,54 @@ def generate_daybydays(context) -> List[Instance]:
     daybydays = []
 
     transactions = get_transactions_up_to(context)
-    transactionCount = len(transactions)
+    transactions_len = len(transactions)
+    if transactions_len == 0:
+        return []
 
-    rule = {
-        'rule': 'FREQ=DAILY;INTERVAL=1'
-    }
-    dates = get_dates(rule, context.parameters)
-    dateCount = len(dates)
-    if (dateCount == 0):
-        return daybydays    
+    current_day = context.parameters.start
+    i = 0  # for traversing transactions
 
-    balEnd = context.parameters.current
-    balLow = balEnd
-    balHigh = balEnd
+    # So our initial balance and working_capital calculations are accurate,
+    # inserting a dummy first transaction on the start day
+    first_transaction = Instance('fake-starting-transaction', 'starting-transaction-1', 0, context.parameters.start)
+    first_transaction.set_calculation("balance", context.parameters.current)
+    first_transaction.set_calculation("working_capital", transactions[0].get_calculation("working_capital"))
+    transactions.insert(0, first_transaction)
 
-    wcEnd = context.parameters.current
-    wcLow = wcEnd
-    wcHigh = wcEnd
+    current_balance = transactions[0].get_calculation('balance')
+    current_working_capital = transactions[0].get_calculation('working_capital')
 
-    i = 0
-    j = 0
+    end = context.parameters.end
+    while current_day <= end:
+        # Get all transactions for this day
+        todays_transactions = []
+        while i < transactions_len and transactions[i].day == current_day:
+            todays_transactions.append(transactions[i])
+            i += 1
 
-    while (i < dateCount):    
+        balances = list(map(lambda x: x.get_calculation("balance"), todays_transactions))
+        balances.insert(0, current_balance)
+        balance_low = min(balances)
+        balance_high = max(balances)
+        current_balance = balances[-1]
 
-        if (j < transactionCount and dates[i] == transactions[j].day):
+        working_capitals = list(map(lambda x: x.get_calculation("working_capital"), todays_transactions))
+        working_capitals.insert(0, current_working_capital)
+        working_capital_low = min(working_capitals)
+        working_capital_high = max(working_capitals)
+        current_working_capital = working_capitals[-1]
 
-            wcLow = transactions[j].calculations["working_capital"]
-            wcHigh = transactions[j].calculations["working_capital"]
-
-            while (j < transactionCount and dates[i] == transactions[j].day):
-
-                balEnd += transactions[j].value
-                if (balEnd > balHigh):
-                    balHigh = balEnd
-                elif (balEnd < balLow):
-                    balLow = balEnd
-
-                wcEnd = transactions[j].calculations["working_capital"]
-                if (wcEnd > wcHigh):
-                    wcHigh = wcEnd
-                elif (wcEnd < wcLow):
-                    wcLow = wcEnd                
-
-                j += 1
-
-        daybyday = {
-            'date': dates[i],
-            'balance': 
-                {'low': balLow, 'high': balHigh},                
-            'working_capital':
-                {'low': wcLow, 'high': wcHigh},                
-        }
-
-        balLow = balEnd
-        balHigh = balEnd
-        wcLow = wcEnd
-        wcHigh = wcEnd           
-
-        daybydays.append(daybyday)
-        i += 1
+        daybydays.append({
+            'date': current_day,
+            'balance': {
+                'low': round(balance_low, 2),
+                'high': round(balance_high, 2)
+            },
+            'working_capital': {
+                'low': round(working_capital_low, 2),
+                'high': round(working_capital_high, 2)
+            },
+        })
+        current_day += timedelta(days=1)
 
     return daybydays
