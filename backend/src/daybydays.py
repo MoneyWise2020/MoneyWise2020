@@ -45,28 +45,44 @@ def generate_daybydays(context) -> List[Instance]:
             todays_transactions.append(transactions[i])
             i += 1
 
+        # Balance
         balances = list(map(lambda x: x.get_calculation("balance"), todays_transactions))
         balances.insert(0, current_balance)
+
+        balance_open = balances[0]
         balance_low = min(balances)
         balance_high = max(balances)
-        current_balance = balances[-1]
+        balance_close = balances[-1]
 
+        current_balance = balance_close
+
+        # Working capital
         working_capitals = list(map(lambda x: x.get_calculation("working_capital"), todays_transactions))
         working_capitals.insert(0, current_working_capital)
+
+        working_capital_open = working_capitals[0]
         working_capital_low = min(working_capitals)
         working_capital_high = max(working_capitals)
-        current_working_capital = working_capitals[-1]
+        working_capital_close = working_capitals[-1]
+
+        current_working_capital = working_capital_close
+
 
         daybydays.append({
             'date': current_day,
             'balance': {
+                'open': round(balance_open, 2),
                 'low': round(balance_low, 2),
-                'high': round(balance_high, 2)
+                'high': round(balance_high, 2),
+                'close': round(balance_close, 2),
             },
             'working_capital': {
+                'open': round(working_capital_open, 2),
                 'low': round(working_capital_low, 2),
-                'high': round(working_capital_high, 2)
+                'high': round(working_capital_high, 2),
+                'close': round(working_capital_close, 2),
             },
+            'volume': len(todays_transactions),
         })
         current_day += timedelta(days=1)
 
