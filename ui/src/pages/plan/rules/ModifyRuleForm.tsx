@@ -39,6 +39,9 @@ export const ModifyForm = ({
 
     if (rruleObject.origOptions.freq != undefined) {
         strFrequency = frequencies[rruleObject.origOptions.freq];
+        if (strFrequency == 'WEEKLY' && rruleObject.origOptions.interval == 2) {
+            strFrequency = 'BIWEEKLY'
+        }
     }
 
     if (rruleObject.origOptions.bymonthday != undefined) {

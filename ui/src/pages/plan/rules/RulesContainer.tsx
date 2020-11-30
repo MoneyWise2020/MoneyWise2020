@@ -135,6 +135,5 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
         <ListGroup>
             {rules.map(rule => <Rule rule={rule} onDelete={deleteHandler} onUpdate={updateExistingRule} showModal={showModal} key={rule.id}/>)}
         </ListGroup>
-        <p>{isShown ? "true" : "false"} </p>
     </>;
 }

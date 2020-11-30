@@ -10,7 +10,8 @@ Last sprint we forecasted to complete 20 story points and realized it was quite 
 
 We pulled stories from the top of our product backlog into the sprint backlog. We pulled in 15 points worth of stories, which is underneath our forecast of 16. Since we are all part of the dev team (and hence some of us wear multiple hats), we all participated. We will provide a link to our sprint planning session.
 
-`TODO`
+Sprint 2 Planning: 
+https://harvard.zoom.us/rec/play/S1NIMDWyHbLMCTFnGre3T-cDKiOzfL1h_PhEDcbOiIAHZUo2ec9VOHmncOGYvnSmoTduN9EWlx4wauU.Ub2Zh2JpFu9Y4UPV
 
 In our retro, we found that last sprint our stories were too large. We spent time splitting our stories. This sprint, all 5 stories are 3 points. 3 points is less that 16 / 2 = 8.
 
@@ -42,19 +43,40 @@ Our Daily Scrums were conducted asynchronously over Slack. Please see https://ag
 
 Our burndown chart updates automatically. We manually update our tasks and stories. Here are some screenshots that show changes:
 
-`TODO`: Provide screenshots of changes
+Burndown
+https://github.com/MoneyWise2020/MoneyWise2020#workspaces/moneywise2020-5f984e412accf2001e9acc9c/reports/burndown?milestoneId=6108069
+
+![Tasks beginning of sprint](https://drive.google.com/uc?export=download&id=1FQ0xY1LWycS0dj3eTlxI6378LqifYbuT)
+![Tasks end of sprint](https://drive.google.com/uc?export=download&id=1vILflfoqxgWcoz9eHepBPleNmImn03dd)
 
 ### Pair / Mob Programming [Criteria 13]
 
 We did pair/mob programming. See links to recordings of these sessions.
 
-`TODO`: Provide links to recordings.
+Nov 19 - James Sarab Ralph MOB programming converted to James and Sarab Pair Programming
+https://harvard.zoom.us/rec/play/5t8PtgPu5AG2ICgOxFS4FZyVPHWfec1fznwLq9yWys_0bpJfQjgu7LM1kv1zufYbT3S75sYkq3Dkpp40.O3d7GgcVirrtJC02
+
+Nov 28 - MOB programming with Alex Ralph and Sarab
+https://harvard.zoom.us/rec/play/wGjtVoGaALKnyHxT_LjODfyPz_K9UHMLnd2Ug9Nrj36-3wyXp34FGIFB6TmXTYC6TINWuWkcuvIfNTkL.-kiRgeP_AC6v3kPX
+
+Nov 28 - MOB programming with Alex Ralph and Sarab
+https://harvard.zoom.us/rec/play/mKrKQ0Te2aPezaHiEVwaNXjm9HdlyS5iO9FULIoS-8iiW9tJB4jal44l9GF30Xl6TK03I18ZYpenWmlk.gtRZZkAz3ae3M9pg
+
+Nov 29 - MOB Programming with Everyone!
+https://harvard.zoom.us/rec/share/h8mJO0SxTeG8cuI5ySwySpcweOhGTk2XJ12JM-MgAZJUkjD99c9liF9FjsGQUGy6.CSbPOsKT4kDysvOn
+
+Photos of Paring and Mobbing
+https://drive.google.com/drive/folders/1ZSjRYSRtsE92ZcmVKFg2VDBkSRoW6fdn
 
 ### Test Driven Development [Criteria 14]
 
 We try to build our product test-first. Evidence that we build test-first can be found in these links:
 
-`TODO`: provide recordings of TDD
+Nov 22 - MOB Programming Backend logic and Unit Test
+https://harvard.zoom.us/rec/play/DWYqwHtJjE1V1WS7Q1oaSQ6Aa4JYDR3EwzLwMY78_mYfMcuFL0iu1aNZTXp8c-H5q5KapAX1w16HK6Zb.5nOguptXvKff0xoa
+
+Nov 22 - James and Sarab Pair Programming UI for transactions
+https://harvard.zoom.us/rec/play/FXFvc8eJKH8EgrdevXjY83OJEmxudKY7C0DI8BP-lnbMY_7WNXIW3Gs0JkJLSCBM4f3KzId0TC6_ta4s.9uVadmdUj10ZjFbO
 
 Our latest unit test counts can be seen on our CI/CD Jenkins server: 
 
@@ -64,11 +86,12 @@ http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/MoneyWiseCICD/l
 
 ### Sprint Review [Criteria 15, 17]
 
-`TODO`: Javier or other stakeholder should attend
+You can find the sprint review video link in this document. It is titled 
+Nov 29 - Sprint Review & Nov 29 - Sprint Retro respectively
+https://docs.google.com/document/d/1YBYvbtzQM9F6hqz737ofrRtsPcP2D6QY708qJeZ_BDg/edit
 
-`TODO`: provide link to recording
 
-`TODO`: outline what changes we made to our backlog as a result of feedback
+Given the feedback of our stakeholder we may prioritize some variable transactions features a little higher. 
 
 ### Delivery [Criteria 16]
 
@@ -110,3 +133,7 @@ http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/Moneywise%20202
 ###### Complete Pipeline 
 
 http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/view/Moneywise%202020%20-%20Pipeline/
+
+###### Start at 1:26:00 for Red and Green Pipeline Behavior Demostration
+Nov 28 - MOB programming with Alex Ralph and Sarab_Video1
+https://harvard.zoom.us/rec/play/wGjtVoGaALKnyHxT_LjODfyPz_K9UHMLnd2Ug9Nrj36-3wyXp34FGIFB6TmXTYC6TINWuWkcuvIfNTkL.-kiRgeP_AC6v3kPX
