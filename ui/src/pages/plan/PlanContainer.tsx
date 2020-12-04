@@ -20,7 +20,7 @@ export const PlanContainer = () => {
     const { isAuthenticated, isLoading, loginWithRedirect, user } = useAuth0();
     const token = useToken();
     
-    if (isLoading || !token) {
+    if (isLoading || null === token) {
         return null;
     }
 
