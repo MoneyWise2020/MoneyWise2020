@@ -7,15 +7,14 @@ import useAxios from 'axios-hooks'
 import { Modal } from './RuleModal'
 import axios from 'axios';
 
+
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 
-// TODO: get from login
-const userid = 'test'
 // Modal Interactions
 let isShown = false;
 let modalRule: IApiRuleMutate;
 
-export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => void }) => {
+export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: string, onRefresh?: () => void }) => {
     const [{ data, loading, error }, refetch] = useAxios(
         `${baseUrl}/api/rules?userid=${userid}`
     )

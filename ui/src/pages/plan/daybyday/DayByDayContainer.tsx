@@ -3,8 +3,6 @@ import Chart from "react-google-charts";
 import useAxios from 'axios-hooks'
 
 
-// TODO: get from login
-const userid = 'test'
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 
 interface IDayByDayApi {
@@ -105,7 +103,7 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
     return null
 }
 
-export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
+export const DayByDayContainer = ({ userid, currentTime }: { userid: string, currentTime: number }) => {
     
     const [chartType, setChartType] = useState<'SteppedAreaChart' | 'CandlestickChart'>('SteppedAreaChart');
 
