@@ -22,12 +22,13 @@ const LoginSection = () => {
 
     if (isAuthenticated) {
         return <>
-            <span>Hello, {user.given_name}</span>
-            <Button onClick={() => logout()}>Logout</Button> 
+            <span className="ml-auto">Hello, {user.given_name}</span>
+            <button className="btn btn-outline-primary ml-3" onClick={() => logout()}>Logout</button> 
         </>
     }
 
     return <>
-        <Button onClick={() => loginWithRedirect()}>Login</Button>
+        <button className="btn btn-outline-primary ml-auto" onClick={() => loginWithRedirect()}>Login</button>
+        <button className="btn btn-primary ml-3" onClick={() => loginWithRedirect()}>Sign Up</button>
     </>
 }
