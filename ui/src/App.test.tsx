@@ -14,8 +14,8 @@ describe('navigation', () => {
       user: { given_name: 'James', sub: 'userid' },
       isLoading: false,
       isAuthenticated: true,
-    })
-  })
+    });
+  });
 
   it('should render homepage', () => {
     const { getByText } = render(<App />, { wrapper: MemoryRouter });
