@@ -15,6 +15,7 @@ ReactDOM.render(
       domain={domain}
       clientId={clientId}
       redirectUri={window.location.origin}
+      returnTo={window.location.origin}
       cacheLocation="localstorage"
       useRefreshTokens
     >
