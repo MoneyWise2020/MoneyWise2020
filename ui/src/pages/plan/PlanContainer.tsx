@@ -20,14 +20,14 @@ export const PlanContainer = () => {
     const { isAuthenticated, isLoading, loginWithRedirect, user } = useAuth0();
     const token = useToken();
     
-    if (isLoading || null === token) {
-        return null;
-    }
-
-    if (!isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
         return <Container className="justify-content-middle">
             You need to be logged in! <br /><Button onClick={() => loginWithRedirect()}>Login</Button>
         </Container>
+    }
+
+    if (isLoading || !token) {
+        return null;
     }
 
     const userid = user.sub;
