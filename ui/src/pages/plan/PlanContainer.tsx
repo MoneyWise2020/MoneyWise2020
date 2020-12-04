@@ -35,13 +35,13 @@ export const PlanContainer = () => {
         })();
       }, [getIdTokenClaims, setToken, isAuthenticated]);
 
-    if (isLoading || !token) {
+    if (isLoading || null === token) {
         return null;
     }
 
     if (!isAuthenticated) {
         return <Container className="justify-content-middle">
-            You need to be logged in! <Button onClick={() => loginWithRedirect()}>Login</Button>
+            You need to be logged in! <br /><Button onClick={() => loginWithRedirect()}>Login</Button>
         </Container>
     }
 
