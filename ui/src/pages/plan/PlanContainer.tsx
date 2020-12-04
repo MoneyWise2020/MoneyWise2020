@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import { RulesContainer } from './rules/RulesContainer';
 import { TransactionsContainer } from './transactions/TransactionsContainer';
@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 import { DayByDayContainer } from './daybyday/DayByDayContainer';
 import { useAuth0 } from '@auth0/auth0-react';
 import Button from 'react-bootstrap/Button';
-import axios from 'axios';
+import { useToken } from './getTokenHook';
 
 
 export const PlanContainer = () => {
@@ -17,25 +17,10 @@ export const PlanContainer = () => {
         setCurrentTime(Date.now());
     }, [])
 
-    const { isAuthenticated, isLoading, loginWithRedirect, user, getIdTokenClaims } = useAuth0();
-
-    const [token, setToken] = useState('');
-    useEffect(() => {
-        if (!isAuthenticated) {
-            return;
-        }
-        (async () => {
-          try {
-            const token = (await getIdTokenClaims()).__raw;
-            setToken(token);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          } catch (e) {
-            console.error(e);
-          }
-        })();
-      }, [getIdTokenClaims, setToken, isAuthenticated]);
-
-    if (isLoading || null === token) {
+    const { isAuthenticated, isLoading, loginWithRedirect, user } = useAuth0();
+    const token = useToken();
+    
+    if (isLoading || !token) {
         return null;
     }
 

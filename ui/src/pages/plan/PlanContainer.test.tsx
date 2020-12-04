@@ -2,8 +2,10 @@ import React from 'react';
 import { render } from '@testing-library/react'
 
 jest.mock("@auth0/auth0-react")
+jest.mock('./getTokenHook')
 
 import { useAuth0 } from '@auth0/auth0-react';
+import { useToken } from './getTokenHook';
 import { PlanContainer } from './PlanContainer';
 
 describe('plan container', () => {
@@ -13,6 +15,7 @@ describe('plan container', () => {
             isLoading: loading,
             isAuthenticated,
         });
+        (useToken as jest.MockedFunction<() => any>).mockReturnValue('token');
     }
 
     it('should render if authenticated', () => {
