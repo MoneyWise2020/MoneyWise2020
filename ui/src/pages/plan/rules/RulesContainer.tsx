@@ -33,7 +33,7 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
                 // TODO: toast an error
                 console.error('UHOH', e);
             })
-    }, [triggerRefresh]);
+    }, [triggerRefresh, userid]);
 
     const createNewRule = useCallback((rule: IApiRuleMutate) => {
         axios.post(`${baseUrl}/api/rules?userid=${userid}`, rule)
@@ -41,7 +41,7 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
                 console.log('Created rule', response.data);
                 triggerRefresh();
             })
-    }, [triggerRefresh]);
+    }, [triggerRefresh, userid]);
     
     const showModal = useCallback((id: string, rule: IApiRuleMutate) => {
         isShown = true;
@@ -87,7 +87,7 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
             // TODO: toast an error
             console.error('UHOH', e);
         })
-    }, [triggerRefresh, closeModal])
+    }, [triggerRefresh, closeModal, userid])
 
 
     const onFailedValidation = useCallback((message: string) => console.log('Bad input', message), []);
