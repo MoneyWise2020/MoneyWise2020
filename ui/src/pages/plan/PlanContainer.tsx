@@ -17,22 +17,19 @@ export const PlanContainer = () => {
         setCurrentTime(Date.now());
     }, [])
 
-    return <Container>
-        
-        
-       
+    return <Container fluid>
         <Row>
             <Col>
                 <h2>Create a New rule</h2>
                 <RulesContainer onRefresh={onRefresh} />
             </Col>
-            <Col>
+            <Col lg={8}>
+                <h2>Visualize Transactions</h2>
+                <DayByDayContainer currentTime={currentTime} /> <br /><br /><br />
                 <h2>Upcoming Transactions</h2>
-                <DayByDayContainer currentTime={currentTime} />
                 <TransactionsContainer currentTime={currentTime} />
                 
             </Col>
-           
         </Row>
     </Container>
 }
