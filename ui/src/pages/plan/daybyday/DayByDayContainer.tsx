@@ -51,7 +51,7 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
 
     if (chartType === 'SteppedAreaChart') {
         const data = [
-            ['Day', 'Balance', 'Working Capital'],
+            ['Day', 'Balance', 'Disposable Income'],
             ...daybyday.daybydays.map(candle => [
                 candle.date,
                 Number(candle.balance.low),
