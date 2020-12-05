@@ -18,20 +18,21 @@ export const PlanContainer = () => {
     }, [])
 
     return <Container>
-        <Row>
-            <DayByDayContainer currentTime={currentTime} />
-        </Row>
         
-        <hr />
+        
+       
         <Row>
             <Col>
+                <h2>Create a New rule</h2>
                 <RulesContainer onRefresh={onRefresh} />
             </Col>
             <Col>
                 <h2>Upcoming Transactions</h2>
+                <DayByDayContainer currentTime={currentTime} />
                 <TransactionsContainer currentTime={currentTime} />
-
+                
             </Col>
+           
         </Row>
     </Container>
 }

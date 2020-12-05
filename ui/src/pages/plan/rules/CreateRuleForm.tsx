@@ -118,7 +118,6 @@ export const CreateForm = ({
         clearForm();
     }}>
         <br />
-        <h2>Create a New Rule</h2>
         <br />
         <div className="form-group row">
             <label htmlFor="Name" className="col-sm-2 col-form-label">Name</label>
