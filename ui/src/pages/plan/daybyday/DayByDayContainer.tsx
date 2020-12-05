@@ -37,7 +37,8 @@ const options = {
     },
     vAxis: {
         title: "Funds"
-    }
+    },
+    colors: ['#4374E0', '#488214'],
 
 };
 
