@@ -129,7 +129,7 @@ export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
     const daybyday = data
 
     return <>
-        <button className="btn btn-outline-primary btn-sm" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button>
+        {/* <button className="btn btn-outline-primary btn-sm" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button> */}
         <DayByDayChart chartType={chartType} daybyday={daybyday} />
         <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(30)}}>1 Month</button>&nbsp;
         <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3 Months</button>&nbsp;

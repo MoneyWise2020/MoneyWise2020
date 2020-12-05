@@ -31,7 +31,7 @@ export const PlanContainer = () => {
                 <RulesContainer onRefresh={onRefresh} />
             </Col>
             <Col>
-                <h2>Transactions</h2>
+                <h2>Upcoming Transactions</h2>
                 <TransactionsContainer currentTime={currentTime} />
 
             </Col>
