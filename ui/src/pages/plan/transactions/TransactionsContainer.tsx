@@ -22,6 +22,8 @@ export const TransactionsContainer = ({ currentTime }: { currentTime: number }) 
     const queryEnd = new Date(now.getTime() + (120 * 24 * 60 * 60 * 1000)); // add 120 days
     const showEnd = new Date(now.getTime() + (90 * 24 * 60 * 60 * 1000)); // add 90 days
 
+    const downloadQueryEnd = new Date(now.getTime() + (400 * 24 * 60 * 60 * 1000)); // add 400 days (13 months plus some buffer)
+
     const [{ data, loading, error }] = useAxios(
         `${baseUrl}/api/transactions?userid=${userid}&startDate=${start.toISOString()}&endDate=${queryEnd.toISOString()}`
     )
@@ -41,7 +43,7 @@ export const TransactionsContainer = ({ currentTime }: { currentTime: number }) 
     }
 
     return <div data-testid="transactions-showing" className="table-responsive" style={{height:300}}>
-        <a href={`${baseUrl}/api/export_transactions?userid=${userid}&startDate=${start.toISOString()}&endDate=${queryEnd.toISOString()}`}>Download</a>
+        <a href={`${baseUrl}/api/export_transactions?userid=${userid}&startDate=${start.toISOString()}&endDate=${downloadQueryEnd.toISOString()}`}>Download</a>
         <table className="table table-sm table-hover">
             <thead>
                 <tr>
