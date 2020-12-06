@@ -31,12 +31,12 @@ const options = {
     legend: { position: "top" },
     tooltip: {},
     hAxis: {
-        title: "Time",
         minTextSpacing: 10,
         format: "short"
     },
-    vAxis: {
-        title: "Funds"
+    chartArea: {
+        left: 60,
+        width: '100%'
     },
     colors: ['#4374E0', '#488214'],
 

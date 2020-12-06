@@ -43,8 +43,8 @@ export const TransactionsContainer = ({ currentTime }: { currentTime: number }) 
     }
 
 
-    return <div data-testid="transactions-showing" className="table-responsive" style={{height:600}}>
-        <a href={`${baseUrl}/api/export_transactions?userid=${userid}&startDate=${start.toISOString()}&endDate=${downloadQueryEnd.toISOString()}`}>Download</a>
+    return <div data-testid="transactions-showing" className="table-responsive">
+        <div className="text-right mb-1"><a href={`${baseUrl}/api/export_transactions?userid=${userid}&startDate=${start.toISOString()}&endDate=${downloadQueryEnd.toISOString()}`}>Download CSV</a></div>
         <table className="table table-sm table-hover">
             <thead>
                 <tr>

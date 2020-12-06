@@ -121,14 +121,14 @@ export const CreateForm = ({
         <br />
         <div className="form-group row">
             <label htmlFor="Name" className="col-sm-2 col-form-label">Name</label>
-        <div className="col-sm-10">
+        <div className="col-sm-8">
             <input className="form-control" id="Name" placeholder="Enter rule name here..." type="text" value={name} onChange={e => setName(e.target.value)} /><br />
         </div>
         </div>
 
         <div className="form-group row">
         <label htmlFor="Value" className="col-sm-2 col-form-label">Value</label>
-        <div className="col-sm-10">
+        <div className="col-sm-8">
             <input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => setValue(Number(e.target.value))} /><br />
         </div>
         </div>
