@@ -29,6 +29,29 @@
                     "remoteRoot": "/app/"
                 }
             ]
+        },
+        {
+            "name": "Behave: Current File",
+            "type": "python",
+            "request": "launch",
+            "module": "behave",
+            "args": ["backend/features/${fileBasenameNoExtension}.feature"]
+        },
+        {
+            "name": "Behave @testThis",
+            "type": "python",
+            "request": "launch",
+            "module": "behave",
+            "args": [
+               "--tags= testThis",
+               "--no-skipped"
+            ]
+        },
+        {
+            "name": "Behave Run ALL",
+            "type": "python",
+            "request": "launch",
+            "module": "behave"
         }
     ]
 }
