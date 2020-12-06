@@ -137,6 +137,10 @@ export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
         <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3 Months</button>&nbsp;
         <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365)}}>1 Year</button>&nbsp;
         <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(730)}}>2 Years</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(1825)}}>5 Years</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(3650)}}>10 Years</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(9125)}}>25 Years</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(10950)}}>30 Years</button>&nbsp;
         <br />
         </div>
     </>
