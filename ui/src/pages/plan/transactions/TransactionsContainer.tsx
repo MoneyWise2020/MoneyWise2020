@@ -40,7 +40,7 @@ export const TransactionsContainer = ({ currentTime }: { currentTime: number }) 
         return <p data-testid="transactions-empty">Sorry, it looks like you don't have any transactions. Try setting up a new rule.</p>
     }
 
-    return <div data-testid="transactions-showing" className="table-responsive" style={{height:300}}>
+    return <div data-testid="transactions-showing" className="table-responsive" style={{height:600}}>
         <table className="table table-sm table-hover">
             <thead>
                 <tr>
