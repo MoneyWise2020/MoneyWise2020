@@ -5,6 +5,8 @@ import {CreateForm} from './CreateRuleForm';
 import useAxios from 'axios-hooks'
 import { Modal } from './RuleModal'
 import axios from 'axios';
+import sortBy from 'lodash/sortBy';
+
 
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 
@@ -115,6 +117,8 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
             <h3 data-testid="no-rules-found">Looks like nothing's here. Try creating a rule!</h3>
         </>
     }
+
+    const sortedRules = sortBy(rules, (r: IApiRule) => r.value);
     
     return <>
         <CreateForm onSubmit={createNewRule} onFailedValidation={onFailedValidation} />
@@ -134,7 +138,7 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
             }
 
         <div style={{ width: '100%', minWidth: "100%", maxWidth: "100%" }}>
-            {rules.map(rule => <Rule rule={rule} showModal={showModal} key={rule.id}/>)}
+            {sortedRules.map(rule => <Rule rule={rule} showModal={showModal} key={rule.id}/>)}
         </div>
     </>;
 }
