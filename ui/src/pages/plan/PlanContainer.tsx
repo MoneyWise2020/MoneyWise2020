@@ -26,7 +26,9 @@ export const PlanContainer = () => {
                 <Container className="text-center">
                     <h4>Upcoming Transactions</h4>
                 </Container>
-                <DayByDayContainer currentTime={currentTime} />
+                <div style={{ minHeight: 450 }}>
+                    <DayByDayContainer currentTime={currentTime} />
+                </div>
                 <hr />
                 <TransactionsContainer currentTime={currentTime} />
             </Col>

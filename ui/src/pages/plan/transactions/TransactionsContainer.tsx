@@ -13,7 +13,7 @@ export function limitShownTransactions(transactions: IApiTransaction[], showEnd:
             const d = new Date(t.day)
             return d <= showEnd;
         })
-        .slice(0, 100);
+        .slice(0, 50);
 }
 
 export const TransactionsContainer = ({ currentTime }: { currentTime: number }) => {

@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import ListGroup from 'react-bootstrap/ListGroup';
 import { IApiRule, IApiRuleMutate } from './IRule';
 import { Rule } from './Rule';
 import {CreateForm} from './CreateRuleForm';
@@ -13,7 +12,7 @@ const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 const userid = 'test'
 // Modal Interactions
 let isShown = false;
-let modalRule: IApiRuleMutate;
+let modalRule: IApiRule;
 
 export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => void }) => {
     const [{ data, loading, error }, refetch] = useAxios(
@@ -29,6 +28,7 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
         axios.delete(`${baseUrl}/api/rules/${id}?userid=${userid}`)
             .then(() => {
                 triggerRefresh();
+                closeModal();
             })
             .catch((e) => {
                 // TODO: toast an error
@@ -44,7 +44,7 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
             })
     }, [triggerRefresh]);
     
-    const showModal = useCallback((id: string, rule: IApiRuleMutate) => {
+    const showModal = useCallback((id: string, rule: IApiRule) => {
         isShown = true;
         modalRule = rule;
         triggerRefresh();
@@ -60,15 +60,15 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
     };
 
     const onKeyDown = (event: any) => {
-        if (event.keyCode === 27) {
+        if (event.keyCode === 27) { // escape
             closeModal();
           }
-         };
+    };
 
     const onClickOutside = (event: any) => {
         // if (modal && modal.contains(event.target)) return
         // closeModal();
-};
+    };
     
     const closeModal = useCallback(() => {
         isShown = false;
@@ -123,6 +123,7 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
                 <Modal
                     rule={modalRule} 
                     onSubmit={updateExistingRule}
+                    onDelete={deleteHandler}
                     modalRef={(n: any) => {}}
                     buttonRef={(n: any) => {}} 
                     closeModal={closeModal}
@@ -132,8 +133,8 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
                 ) : null
             }
 
-        <ListGroup>
-            {rules.map(rule => <Rule rule={rule} onDelete={deleteHandler} onUpdate={updateExistingRule} showModal={showModal} key={rule.id}/>)}
-        </ListGroup>
+        <div style={{ width: '100%', minWidth: "100%", maxWidth: "100%" }}>
+            {rules.map(rule => <Rule rule={rule} showModal={showModal} key={rule.id}/>)}
+        </div>
     </>;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import FocusTrap from 'focus-trap-react';
-import { IApiRuleMutate } from './IRule';
+import { IApiRuleMutate, IApiRule } from './IRule';
 import { ModifyForm } from './ModifyRuleForm';
 
 export const Modal = ({
@@ -11,16 +11,17 @@ export const Modal = ({
     modalRef = (n: any) => {},
     buttonRef = (n: any) => {},
     closeModal = () => {},
-    onSubmit
-    
+    onSubmit,
+    onDelete = () => {}
 } : {
-    rule: IApiRuleMutate,
+    rule: IApiRule,
     onClickOutside: (event: any) => void
     onKeyDown: (event: any) => void
     modalRef: (n: any) => void
     buttonRef: (n: any) => void
     closeModal: () => void
     onSubmit: (id: string, rule: IApiRuleMutate) => void
+    onDelete?: (id: string) => void
 }) => {
 return ReactDOM.createPortal(
 <FocusTrap>
@@ -49,7 +50,7 @@ return ReactDOM.createPortal(
     </svg>
     </button>
 <div className="modal-body">
-   <ModifyForm rule={rule} onSubmit={onSubmit} onFailedValidation={closeModal} />
+   <ModifyForm rule={rule} onSubmit={onSubmit} onDelete={onDelete} onFailedValidation={closeModal} />
   </div>
    </div>
    </aside>
