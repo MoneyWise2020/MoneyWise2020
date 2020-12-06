@@ -130,17 +130,16 @@ export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
     const daybyday = data
 
     return <>
-        {/* <button className="btn btn-outline-primary btn-sm" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button> */}
+        {/* <button className="btn btn-outline-primary btn-sm" title="May not be as accurate, use with caution" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button> */}
         <DayByDayChart chartType={chartType} daybyday={daybyday} />
         <div className="col-md-8 text-right">
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(30)}}>1 Month</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3 Months</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365)}}>1 Year</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(730)}}>2 Years</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(1825)}}>5 Years</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(3650)}}>10 Years</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(9125)}}>25 Years</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(10950)}}>30 Years</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3m</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365)}}>1y</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365 * 2)}}>2y</button>&nbsp;
+        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 5)}}>5y</button>&nbsp;
+        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 10)}}>10y</button>&nbsp;
+        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 20)}}>20y</button>&nbsp;
+        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 30)}}>30y</button>&nbsp;
         <br />
         </div>
     </>
