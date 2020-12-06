@@ -41,6 +41,7 @@ export const TransactionsContainer = ({ currentTime }: { currentTime: number }) 
     }
 
     return <div data-testid="transactions-showing" className="table-responsive" style={{height:300}}>
+        <a href={`${baseUrl}/api/export_transactions?userid=${userid}&startDate=${start.toISOString()}&endDate=${queryEnd.toISOString()}`}>Download</a>
         <table className="table table-sm table-hover">
             <thead>
                 <tr>
