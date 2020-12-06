@@ -42,7 +42,8 @@ export const TransactionsContainer = ({ currentTime }: { currentTime: number }) 
         return <p data-testid="transactions-empty">Sorry, it looks like you don't have any transactions. Try setting up a new rule.</p>
     }
 
-    return <div data-testid="transactions-showing" className="table-responsive" style={{height:300}}>
+
+    return <div data-testid="transactions-showing" className="table-responsive" style={{height:600}}>
         <a href={`${baseUrl}/api/export_transactions?userid=${userid}&startDate=${start.toISOString()}&endDate=${downloadQueryEnd.toISOString()}`}>Download</a>
         <table className="table table-sm table-hover">
             <thead>
@@ -51,7 +52,7 @@ export const TransactionsContainer = ({ currentTime }: { currentTime: number }) 
                     <th>Name</th>
                     <th>Value</th>
                     <th>Balance</th>
-                    <th>Working Capital</th>
+                    <th>Disposable Income</th>
                 </tr>
             </thead>
             <tbody>

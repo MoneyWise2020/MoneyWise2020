@@ -17,23 +17,18 @@ export const PlanContainer = () => {
         setCurrentTime(Date.now());
     }, [])
 
-    return <Container>
-        <Row>
-            <DayByDayContainer currentTime={currentTime} />
-        </Row>
-        <div>
-            <p></p>
-            <h5>Working Capital</h5> <p>This value represents the money you have to work with taking into account your future expenses.</p>
-        </div>
-        <hr />
+    return <Container fluid>
         <Row>
             <Col>
+                <h2>Create a New rule</h2>
                 <RulesContainer onRefresh={onRefresh} />
             </Col>
-            <Col>
-                <h2>Transactions</h2>
+            <Col lg={8}>
+                <h2>Visualize Transactions</h2>
+                <DayByDayContainer currentTime={currentTime} /> <br /><br /><br />
+                <h2>Upcoming Transactions</h2>
                 <TransactionsContainer currentTime={currentTime} />
-
+                
             </Col>
         </Row>
     </Container>

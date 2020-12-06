@@ -5,7 +5,7 @@ import { IApiTransaction } from './ITransaction';
 export const Transaction = ({
     transaction
 }: { transaction: IApiTransaction }) => {
-    return <tr className={transaction.calculations.balance > 0 ? 'table-success' : 'table-danger'}>
+    return <tr>
         <td><span className="text-nowrap">{transaction.day}</span></td>
         <td>{transaction.rule_id}</td>
         <td><Currency value={transaction.value} /></td>

@@ -26,7 +26,7 @@ function App() {
           </Route>
         </Switch>
       </Container>
-      <Container fluid style={{ background: 'lightgrey' }}>
+      <Container fluid style={{ background: '#f8f9fa' }}>
         <Container>
           <Row>
           &nbsp;&nbsp;MoneyWise &nbsp; &#169; &nbsp; 2020
