@@ -22,6 +22,10 @@ from rest_framework.exceptions import APIException
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 
+from django.shortcuts import render
+from django.http import HttpResponse
+import csv
+
 def _get_userid(request):
     # TODO: get from auth, not from query param
     userid = request.query_params.get('userid')
@@ -230,3 +234,51 @@ def process_daybydays(request):
     daybydays = generate_daybydays(ExecutionContext(parameters, rules))
 
     return Response({ "daybydays": daybydays })
+
+
+@api_view(['GET'])
+def export_transactions(request):
+    userid = _get_userid(request)
+    if not userid:
+        return Response({ "message": "`userid` query param is required" }, status=status.HTTP_400_BAD_REQUEST)
+
+    # Pull out parameters
+    parameters = None
+    try:
+        parameters = make_execution_parameters(request)
+    except ValueError as e:
+        return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
+    except AssertionError as e:
+        return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        print(e)
+
+    rules = None
+    try:
+        rules = get_rules_from_database(userid)
+    except Exception as e:
+        logging.error(f"Error while getting rules from database", e)
+        return Response({ "message": "Internal Server Error" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    transactions = get_transactions_up_to(ExecutionContext(parameters, rules))
+    results = list(map(lambda i: i.serialize(), transactions))
+
+    response = HttpResponse(content_type='text/csv')
+    fileName = "MoneyWiseTransactions." + parameters.start.strftime('%Y-%-m-%-d') + "." + parameters.end.strftime('%Y-%-m-%-d') + ".csv" 
+    response['Content-Disposition'] = 'attachment; filename="' + fileName + '"'
+
+    fieldnames = ['rule_id', 'value', 'day', 'balance', 'disposable_income']
+    writer = csv.DictWriter(response, fieldnames=fieldnames)
+    writer.writeheader()
+
+    # Flatten transactions for csv file
+    for result in results:
+        transaction_dict_flat = { "rule_id": result["rule_id"], 
+            "value":  result["value"],
+            "day":  result["day"],    
+            "balance": result["calculations"]["balance"],
+            "disposable_income":  result["calculations"]["working_capital"],            
+        }
+        writer.writerow(transaction_dict_flat)
+
+    return response
