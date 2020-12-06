@@ -264,7 +264,7 @@ def export_transactions(request):
     results = list(map(lambda i: i.serialize(), transactions))
 
     response = HttpResponse(content_type='text/csv')
-    fileName = "MoneyWiseTransactions." + parameters.start.strftime('%m%d%Y') + "." + parameters.end.strftime('%m%d%Y') + ".csv" 
+    fileName = "MoneyWiseTransactions." + parameters.start.strftime('%Y-%-m-%-d') + "." + parameters.end.strftime('%Y-%-m-%-d') + ".csv" 
     response['Content-Disposition'] = 'attachment; filename="' + fileName + '"'
 
     fieldnames = ['rule_id', 'value', 'day', 'balance', 'disposable_income']
