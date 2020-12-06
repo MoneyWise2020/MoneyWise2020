@@ -120,7 +120,7 @@ DEBUG=True docker-compose -f docker-compose.yml -f docker-compose.override.dev.y
 DEBUG= docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml run -p 3001:3001 --rm moneywise-backend python manage.py test
 
 # Run BDD behave tests
-DEBUG= docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml exec -it moneywise-backend python -m behave
+docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml exec -it moneywise-backend python -m behave
 
 # Apply migrations
 docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml exec moneywise-backend python manage.py migrate
