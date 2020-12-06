@@ -26,18 +26,6 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
         onRefresh()
     }, [refetch, onRefresh])
 
-    const deleteHandler = useCallback((id: string) => {
-        axios.delete(`${baseUrl}/api/rules/${id}?userid=${userid}`)
-            .then(() => {
-                triggerRefresh();
-                closeModal();
-            })
-            .catch((e) => {
-                // TODO: toast an error
-                console.error('UHOH', e);
-            })
-    }, [triggerRefresh]);
-
     const createNewRule = useCallback((rule: IApiRuleMutate) => {
         axios.post(`${baseUrl}/api/rules?userid=${userid}`, rule)
             .then((response) => {
@@ -78,6 +66,18 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
         toggleScrollLock();
         triggerRefresh();
     }, [triggerRefresh]);
+
+    const deleteHandler = useCallback((id: string) => {
+        axios.delete(`${baseUrl}/api/rules/${id}?userid=${userid}`)
+            .then(() => {
+                triggerRefresh();
+                closeModal();
+            })
+            .catch((e) => {
+                // TODO: toast an error
+                console.error('UHOH', e);
+            })
+    }, [triggerRefresh, closeModal]);
 
     const updateExistingRule = useCallback((id: string, rule: IApiRuleMutate) => {
         axios.put(`${baseUrl}/api/rules/${id}?userid=${userid}`, rule)

@@ -13,8 +13,7 @@ export const CreateForm = ({
     const [value, setValue] = useState<number | undefined>(undefined);
     const [frequency, setFrequency] = useState<string>("MONTHLY");
 
-    const [bymonthday, setbymonthday] = useState(1); 
-    const [bymonth, setbymonth] = useState(1); 
+    const [bymonthday, setbymonthday] = useState(1);
     const [weekdays, setWeekdays] = useState<string[]>([]);
 
     const [startDate, setStartDate] = useState<string>('');
@@ -121,17 +120,17 @@ export const CreateForm = ({
     }}>
         <br />
         <br />
-        <div className="form-group row">
-            <label htmlFor="Name" className="col-sm-2 col-form-label">Name</label>
-        <div className="col-sm-8">
-            <input className="form-control" id="Name" placeholder="Enter rule name here..." type="text" value={name} onChange={e => setName(e.target.value)} /><br />
-        </div>
+        <div className="row">
+            <label htmlFor="Name" className="col-sm-2 col-form-label form-control-sm">Name</label>
+            <div className="col-sm-8">
+                <input className="form-control form-control-sm" id="Name" placeholder="Enter rule name here..." type="text" value={name} onChange={e => setName(e.target.value)} /><br />
+            </div>
         </div>
 
-        <div className="form-group row">
-        <label htmlFor="Value" className="col-sm-2 col-form-label">Value</label>
+        <div className="row">
+        <label htmlFor="Value" className="col-sm-2 col-form-label form-control-sm">Value</label>
         <div className="col-sm-8">
-            <input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => {
+            <input className="form-control form-control-sm" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => {
                 const newValue = Number(e.target.value);
                 if (newValue) { // not 0, not undefined
                     setValue(newValue)
