@@ -48,7 +48,7 @@ export const TransactionsContainer = ({ currentTime }: { currentTime: number }) 
                     <th>Name</th>
                     <th>Value</th>
                     <th>Balance</th>
-                    <th>Working Capital</th>
+                    <th>Disposable Income</th>
                 </tr>
             </thead>
             <tbody>

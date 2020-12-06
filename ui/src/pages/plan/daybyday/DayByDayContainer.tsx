@@ -108,7 +108,7 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
 
 export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
     
-    const [chartType, setChartType] = useState<'SteppedAreaChart' | 'CandlestickChart'>('SteppedAreaChart');
+    const chartType = 'SteppedAreaChart'
 
     const [queryRangeDays, setQueryRangeDays] = useState(90);
 
@@ -130,7 +130,6 @@ export const DayByDayContainer = ({ currentTime }: { currentTime: number }) => {
     const daybyday = data
 
     return <>
-        {/* <button className="btn btn-outline-primary btn-sm" title="May not be as accurate, use with caution" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button> */}
         <DayByDayChart chartType={chartType} daybyday={daybyday} />
         <div className="col-md-8 text-right">
         <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3m</button>&nbsp;
