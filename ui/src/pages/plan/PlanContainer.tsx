@@ -22,7 +22,7 @@ export const PlanContainer = () => {
     
     if (!isLoading && !isAuthenticated) {
         return <Container className="justify-content-middle">
-            You need to be logged in! <br /><Button onClick={() => loginWithRedirect()}>Login</Button>
+            <div className="px-2 py-4"><p className="lead">You must be logged in to do that!</p><br /><Button onClick={() => loginWithRedirect()}>Login</Button></div>
         </Container>
     }
 
