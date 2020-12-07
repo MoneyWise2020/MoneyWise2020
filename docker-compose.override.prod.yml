@@ -15,7 +15,7 @@ services:
     depends_on:
       - moneywise-backend
     ports:
-      - 8080:80
+      - 443:443
     env_file:
       - backend-variables.env # This file is NOT committed to the REPO. This should only exist on the corresponding environments defined by the users.
     
