@@ -22,6 +22,18 @@ interface IDayByDayApi {
             high: number;
             close: number;
         };
+        high_prediction: {
+            open: number;
+            low: number;
+            high: number;
+            close: number;
+        };
+        low_prediction: {
+            open: number;
+            low: number;
+            high: number;
+            close: number;
+        };
     }[]
 }
 
@@ -38,7 +50,7 @@ const options = {
     vAxis: {
         title: "Funds"
     },
-    colors: ['#4374E0', '#488214'],
+    colors: ['#4374E0', '#488214', '#ffcc66', '#ff6666'],
 
 };
 
@@ -51,11 +63,19 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
 
     if (chartType === 'SteppedAreaChart') {
         const data = [
-            ['Day', 'Balance', 'Disposable Income'],
+            [
+                'Day', 
+                'Balance', 
+                'Disposable Income',
+                'High',
+                'Low',
+            ],
             ...daybyday.daybydays.map(candle => [
                 candle.date,
                 Number(candle.balance.low),
                 Number(candle.working_capital.low),
+                Number(candle.high_prediction.low),
+                Number(candle.low_prediction.low),
             ])
         ]
         return <Chart
