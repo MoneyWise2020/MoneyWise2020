@@ -49,3 +49,71 @@ def calculate_working_capital(context, instances):
             lowest = min(lowest, es[0].get_calculation("working_capital"))
             for e in es:
                 e.set_calculation("working_capital", lowest)
+
+#
+# High and Low
+#
+
+def get_branches(transaction):
+    if transaction.rule_id == "Paycheck":
+        return [
+            (.25, transaction.value - 300),
+            (.5, transaction.value),
+            (.25, transaction.value + 100),
+        ]
+
+    # TODO: trim branches if not used
+    return [(1, transaction.value)]
+    
+
+
+def calculate_high_and_low(context, transactions):
+    """
+    Computes the 10th and 90th percentile balances based on optional high and low values
+    for each transaction
+    """
+    # TODO: shop for a better datastructure
+    # that supports hash-like speed and consistency
+    # plus fast sorting
+
+    states = {}
+    states[str(int(context.parameters.current))] = 1
+    # maps balance (rounded to nearest int, to improve collision likelihood) to probability
+
+    for t in transactions:
+
+        new_states = {}
+        # for each possible state,
+        for state_hash, state_probability in states.items():
+            state_value = int(state_hash)
+            # branching
+            branches = get_branches(t)
+
+            for prob, value in branches:
+                branch_state_hash = str(int(state_value + value))
+                branch_state_probability = state_probability * prob
+
+                # if multiple branches end at the same state,
+                # can accumulate together
+                destination_total_probability = new_states.get(branch_state_hash, 0) + branch_state_probability
+                new_states[branch_state_hash] = destination_total_probability		
+
+        is_over_10 = False
+
+        cumulative_probability = 0
+        for state, probability in sorted(new_states.items(), key=lambda t: int(t[0])):
+            cumulative_probability += probability
+
+            if cumulative_probability > .1:
+
+                if not is_over_10:
+                    is_over_10 = True
+                    t.set_calculation("low_prediction", float(state))
+
+            if cumulative_probability > .9:
+                t.set_calculation("high_prediction", float(state))
+                break
+        
+
+
+        states = new_states

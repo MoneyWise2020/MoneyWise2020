@@ -22,6 +22,8 @@ def generate_daybydays(context) -> List[Instance]:
     # inserting a dummy first transaction on the start day
     first_transaction = Instance('fake-starting-transaction', 'starting-transaction-1', 0, context.parameters.start)
     first_transaction.set_calculation("balance", context.parameters.current)
+    first_transaction.set_calculation("low_prediction", context.parameters.current) # starts at current
+    first_transaction.set_calculation("high_prediction", context.parameters.current) # starts at current
 
     # initial_working_capital is before the first transaction
     # it will be the working_capital of the first transaction or the current value, whichever is lower.
@@ -35,6 +37,8 @@ def generate_daybydays(context) -> List[Instance]:
     # Tracking state
     current_balance = transactions[0].get_calculation('balance')
     current_working_capital = transactions[0].get_calculation('working_capital')
+    current_low_prediction = transactions[0].get_calculation('low_prediction')
+    current_high_prediction = transactions[0].get_calculation('high_prediction')
 
     end = context.parameters.end
     transactions_len = len(transactions)
@@ -67,6 +71,28 @@ def generate_daybydays(context) -> List[Instance]:
 
         current_working_capital = working_capital_close
 
+        # Low prediction
+        low_predictions = list(map(lambda x: x.get_calculation("low_prediction"), todays_transactions))
+        low_predictions.insert(0, current_low_prediction)
+
+        low_prediction_open = low_predictions[0]
+        low_prediction_low = min(low_predictions)
+        low_prediction_high = max(low_predictions)
+        low_prediction_close = low_predictions[-1]
+
+        current_low_prediction = low_prediction_close
+
+        # High prediction
+        high_predictions = list(map(lambda x: x.get_calculation("high_prediction"), todays_transactions))
+        high_predictions.insert(0, current_high_prediction)
+
+        high_prediction_open = high_predictions[0]
+        high_prediction_low = min(high_predictions)
+        high_prediction_high = max(high_predictions)
+        high_prediction_close = high_predictions[-1]
+
+        current_high_prediction = high_prediction_close
+
         # number of transactions which occurred today
         volume = len(todays_transactions)
         if current_day == context.parameters.start:
@@ -86,6 +112,18 @@ def generate_daybydays(context) -> List[Instance]:
                 'low': round(working_capital_low, 2),
                 'high': round(working_capital_high, 2),
                 'close': round(working_capital_close, 2),
+            },
+            'low_prediction': {
+                'open': round(low_prediction_open, 2),
+                'low': round(low_prediction_low, 2),
+                'high': round(low_prediction_high, 2),
+                'close': round(low_prediction_close, 2),
+            },
+            'high_prediction': {
+                'open': round(high_prediction_open, 2),
+                'low': round(high_prediction_low, 2),
+                'high': round(high_prediction_high, 2),
+                'close': round(high_prediction_close, 2),
             },
             'volume': volume,
         })
