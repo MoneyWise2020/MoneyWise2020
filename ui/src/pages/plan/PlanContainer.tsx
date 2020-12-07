@@ -41,7 +41,7 @@ export const PlanContainer = () => {
             <Col lg={8}>
                 <h2>Visualize Transactions</h2>
                 <DayByDayContainer userid={userid} currentTime={currentTime} /> <br /><br /><br />
-                <h2>Upcoming Transactions</h2>
+                <h2 data-testid="transactions">Upcoming Transactions</h2>
                 <TransactionsContainer userid={userid} currentTime={currentTime} />
                 
             </Col>
