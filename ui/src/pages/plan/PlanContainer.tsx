@@ -32,18 +32,18 @@ export const PlanContainer = () => {
 
     const userid = user.sub;
 
-    return <Container>
-        <Row>
-            <DayByDayContainer userid={userid} currentTime={currentTime} />
-        </Row>
-        <hr />
+    return <Container fluid>
         <Row>
             <Col>
+                <h2>Create a New rule</h2>
                 <RulesContainer userid={userid} onRefresh={onRefresh} />
             </Col>
-            <Col>
-                <h2>Transactions</h2>
+            <Col lg={8}>
+                <h2>Visualize Transactions</h2>
+                <DayByDayContainer userid={userid} currentTime={currentTime} /> <br /><br /><br />
+                <h2>Upcoming Transactions</h2>
                 <TransactionsContainer userid={userid} currentTime={currentTime} />
+                
             </Col>
         </Row>
     </Container>

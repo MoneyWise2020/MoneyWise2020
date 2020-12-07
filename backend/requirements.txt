@@ -11,3 +11,5 @@ djangorestframework==3.12.2
 django-cors-headers==3.3.0
 requests==2.25.0
 unittest-xml-reporting==3.0.4
+behave==1.2.6
+requests==2.25.0

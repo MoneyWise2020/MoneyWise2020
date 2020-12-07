@@ -9,6 +9,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 const domain: string = process.env.REACT_APP_AUTH0_DOMAIN as string;
 const clientId: string = process.env.REACT_APP_AUTH0_CLIENT_ID as string;
 
+
 ReactDOM.render(
   <React.StrictMode>
     <Auth0Provider

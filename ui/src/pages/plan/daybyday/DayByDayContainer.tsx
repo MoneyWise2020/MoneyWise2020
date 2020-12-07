@@ -35,7 +35,8 @@ const options = {
     },
     vAxis: {
         title: "Funds"
-    }
+    },
+    colors: ['#4374E0', '#488214'],
 
 };
 
@@ -48,7 +49,7 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
 
     if (chartType === 'SteppedAreaChart') {
         const data = [
-            ['Day', 'Balance', 'Working Capital'],
+            ['Day', 'Balance', 'Disposable Income'],
             ...daybyday.daybydays.map(candle => [
                 candle.date,
                 Number(candle.balance.low),
@@ -105,7 +106,7 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
 
 export const DayByDayContainer = ({ userid, currentTime }: { userid: string, currentTime: number }) => {
     
-    const [chartType, setChartType] = useState<'SteppedAreaChart' | 'CandlestickChart'>('SteppedAreaChart');
+    const chartType = 'SteppedAreaChart'
 
     const [queryRangeDays, setQueryRangeDays] = useState(90);
 
@@ -127,12 +128,16 @@ export const DayByDayContainer = ({ userid, currentTime }: { userid: string, cur
     const daybyday = data
 
     return <>
-        <button className="btn btn-outline-primary btn-sm" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button>
         <DayByDayChart chartType={chartType} daybyday={daybyday} />
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(30)}}>1 Month</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3 Months</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365)}}>1 Year</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(730)}}>2 Years</button>&nbsp;
+        <div className="col-md-8 text-right">
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3m</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365)}}>1y</button>&nbsp;
+        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365 * 2)}}>2y</button>&nbsp;
+        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 5)}}>5y</button>&nbsp;
+        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 10)}}>10y</button>&nbsp;
+        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 20)}}>20y</button>&nbsp;
+        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 30)}}>30y</button>&nbsp;
         <br />
+        </div>
     </>
 }
