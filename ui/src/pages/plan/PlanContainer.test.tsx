@@ -20,8 +20,8 @@ describe('plan container', () => {
 
     it('should render if authenticated', () => {
         setAuth({})
-        const { getByText } = render(<PlanContainer />);
-        const transactionsHeader = getByText(/Transactions/i);
+        const { getByTestId } = render(<PlanContainer />);
+        const transactionsHeader = getByTestId("transactions");
         expect(transactionsHeader).toBeInTheDocument();
     });
 
