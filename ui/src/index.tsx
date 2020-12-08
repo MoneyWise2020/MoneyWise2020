@@ -6,9 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
 
-const domain: string = process.env.REACT_APP_AUTH0_DOMAIN as string;
-const clientId: string = process.env.REACT_APP_AUTH0_CLIENT_ID as string;
-
+const domain = "dev-jix9d7st-actual-money.auth0.com";
+const clientId = "mY5g2Zggemb1yMk9JTXaPutF67IJwyOA";
 
 ReactDOM.render(
   <React.StrictMode>
