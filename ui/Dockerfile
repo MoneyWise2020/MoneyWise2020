@@ -10,6 +10,8 @@ COPY ./public ./public
 
 ARG REACT_APP_MONEYWISE_BASE_URL
 ENV REACT_APP_MONEYWISE_BASE_URL $REACT_APP_MONEYWISE_BASE_URL
+ARG HTTPS
+ENV HTTPS $HTTPS
 RUN yarn build
 # Build Stage 2
 # This build takes the production build from staging build
