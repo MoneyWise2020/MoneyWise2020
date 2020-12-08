@@ -12,6 +12,7 @@ services:
       context: ./ui
       args:
         - REACT_APP_MONEYWISE_BASE_URL=${API_BASE_URL}
+        - HTTPS=true
     depends_on:
       - moneywise-backend
     ports:
