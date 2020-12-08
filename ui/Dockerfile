@@ -7,10 +7,6 @@ COPY package.json yarn.lock ./
 RUN yarn --frozen-lockfile
 COPY ./src ./src
 COPY ./public ./public
-COPY ./nginx-selfsigned.crt /etc/ssl/certs/nginx-selfsigned.crt
-COPY ./nginx-selfsigned.key /etc/ssl/private/nginx-selfsigned.key
-COPY ./self-signed.conf /etc/nginx/snippets/self-signed.conf
-COPY ./ssl-params.conf /etc/nginx/snippets/ssl-params.conf
 
 ARG REACT_APP_MONEYWISE_BASE_URL
 ENV REACT_APP_MONEYWISE_BASE_URL $REACT_APP_MONEYWISE_BASE_URL
@@ -23,5 +19,9 @@ RUN yarn build
 FROM nginx:stable-alpine
 COPY --from=appbuild /usr/src/app/build /usr/share/nginx/html
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx-selfsigned.crt /etc/ssl/certs/nginx-selfsigned.crt
+COPY ./nginx-selfsigned.key /etc/ssl/private/nginx-selfsigned.key
+COPY ./self-signed.conf /etc/nginx/snippets/self-signed.conf
+COPY ./ssl-params.conf /etc/nginx/snippets/ssl-params.conf
 EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]
