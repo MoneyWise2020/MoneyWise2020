@@ -10,6 +10,8 @@ COPY ./public ./public
 
 ARG REACT_APP_MONEYWISE_BASE_URL
 ENV REACT_APP_MONEYWISE_BASE_URL $REACT_APP_MONEYWISE_BASE_URL
+ARG HTTPS
+ENV HTTPS $HTTPS
 RUN yarn build
 # Build Stage 2
 # This build takes the production build from staging build
@@ -17,5 +19,10 @@ RUN yarn build
 FROM nginx:stable-alpine
 COPY --from=appbuild /usr/src/app/build /usr/share/nginx/html
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+COPY ./nginx-selfsigned.crt /etc/ssl/certs/nginx-selfsigned.crt
+COPY ./nginx-selfsigned.key /etc/ssl/private/nginx-selfsigned.key
+COPY ./self-signed.conf /etc/nginx/snippets/self-signed.conf
+COPY ./ssl-params.conf /etc/nginx/snippets/ssl-params.conf
+COPY ./dhparam.pem /etc/nginx/dhparam.pem
+EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]

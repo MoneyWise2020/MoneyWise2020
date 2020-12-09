@@ -103,6 +103,9 @@ Since all members of the scrum team are developers (with some hybrid scrum/PO), 
 # Readme for sprint 2 is in README_Sprint_2.md
 [Sprint 2 README](README_Sprint_2.md)
 
+# Readme for sprint 3 is in README_Sprint_3.md
+[Sprint 3 README](README_Sprint_3.md)
+
 
 ### Requirements
 - Docker

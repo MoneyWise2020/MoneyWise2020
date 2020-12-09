@@ -6,28 +6,43 @@ import { TransactionsContainer } from './transactions/TransactionsContainer';
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row';
 import { DayByDayContainer } from './daybyday/DayByDayContainer';
-
+import { useAuth0 } from '@auth0/auth0-react';
+import Button from 'react-bootstrap/Button';
+import { useToken } from './getTokenHook';
 
 
 export const PlanContainer = () => {
-
-
     const [currentTime, setCurrentTime] = useState(Date.now());
     const onRefresh = useCallback(() => {
         setCurrentTime(Date.now());
     }, [])
 
+    const { isAuthenticated, isLoading, loginWithRedirect, user } = useAuth0();
+    const token = useToken();
+    
+    if (!isLoading && !isAuthenticated) {
+        return <Container className="justify-content-middle">
+            <div className="px-2 py-4"><p className="lead">You must be logged in to do that!</p><br /><Button onClick={() => loginWithRedirect()}>Login</Button></div>
+        </Container>
+    }
+
+    if (isLoading || !token) {
+        return null;
+    }
+
+    const userid = user.sub;
+
     return <Container fluid>
         <Row>
             <Col>
                 <h2>Create a New rule</h2>
-                <RulesContainer onRefresh={onRefresh} />
+                <RulesContainer userid={userid} onRefresh={onRefresh} />
             </Col>
             <Col lg={8}>
                 <h2>Visualize Transactions</h2>
-                <DayByDayContainer currentTime={currentTime} /> <br /><br /><br />
-                <h2>Upcoming Transactions</h2>
-                <TransactionsContainer currentTime={currentTime} />
+                <DayByDayContainer userid={userid} currentTime={currentTime} /> <br /><br /><br />
+                <h2 data-testid="transactions">Upcoming Transactions</h2>
+                <TransactionsContainer userid={userid} currentTime={currentTime} />
                 
             </Col>
         </Row>

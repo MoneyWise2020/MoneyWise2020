@@ -174,13 +174,13 @@ class RuleTestCase(APITestCase):
     def test_max_span(self):
         now = date.today()
         startDate = now
-        endDate = now + relativedelta(years=3, days=1)        
+        endDate = now + relativedelta(years=30, days=2)        
         response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": startDate.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
         self.assertEqual(response.status_code, 400)
 
     def test_up_to_max_span(self):
         now = date.today()
-        endDate = now + relativedelta(years=3)
+        endDate = now + relativedelta(years=30, days=1)
         response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
         self.assertEqual(response.status_code, 200)
 
@@ -207,3 +207,4 @@ class RuleTestCase(APITestCase):
         response = self.client.get("http://testserver/api/transactions", params={"userid": "testuser", "currentBalance": "0", "startDate": now.strftime("%Y-%m-%d"), "endDate": endDate.strftime("%Y-%m-%d")})
         self.assertEqual(response.status_code, 200)
         self.assertGreater(len(response.json()["transactions"]), 0)
+00
