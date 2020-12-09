@@ -6,8 +6,11 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 
 from .views import rules_handler, rules_by_id_handler
+from .models import Rule, USERID_MAX_LENGTH, NAME_MAX_LENGTH, VALUE_MAX_DIGITS, VALUE_MAX_DECIMAL_DIGITS
 
 import os
+import random
+import string
 
 if os.environ.get("DEBUG", ""):
     import ptvsd
@@ -138,6 +141,17 @@ class RuleTestCase(APITestCase):
             "name": "Paycheck",
             "rrule": str(rrule(freq=WEEKLY, byweekday=1)),
             "value": 99999999999999999999999999999999999
+        }
+        response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
+        self.assertEqual(response.status_code, 400)
+
+    def test_400_when_ridiculously_large_name_is_used(self):
+        letters  = string.ascii_lowercase
+        name = ''.join(random.choice(letters) for i in range(NAME_MAX_LENGTH + 1))
+        body = {
+            "name": name,
+            "rrule": str(rrule(freq=WEEKLY, byweekday=1)),
+            "value": 100
         }
         response = self.client.post("http://testserver/api/rules", params={"userid": "testuser"}, json=body)
         self.assertEqual(response.status_code, 400)
