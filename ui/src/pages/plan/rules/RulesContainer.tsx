@@ -8,15 +8,14 @@ import axios from 'axios';
 import sortBy from 'lodash/sortBy';
 
 
+
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 
-// TODO: get from login
-const userid = 'test'
 // Modal Interactions
 let isShown = false;
 let modalRule: IApiRule;
 
-export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => void }) => {
+export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: string, onRefresh?: () => void }) => {
     const [{ data, loading, error }, refetch] = useAxios(
         `${baseUrl}/api/rules?userid=${userid}`
     )
@@ -32,7 +31,7 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
                 console.log('Created rule', response.data);
                 triggerRefresh();
             })
-    }, [triggerRefresh]);
+    }, [triggerRefresh, userid]);
     
     const showModal = useCallback((id: string, rule: IApiRule) => {
         isShown = true;
@@ -90,7 +89,7 @@ export const RulesContainer = ({ onRefresh = () => {} }: { onRefresh?: () => voi
             // TODO: toast an error
             console.error('UHOH', e);
         })
-    }, [triggerRefresh, closeModal])
+    }, [triggerRefresh, closeModal, userid])
 
 
     const onFailedValidation = useCallback((message: string) => console.log('Bad input', message), []);

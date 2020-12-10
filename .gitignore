@@ -130,7 +130,6 @@ dmypy.json
 .pyre/
 .idea/
 
-.dockerignore
 docker-compose.debug.yml
 .DS_Store
 

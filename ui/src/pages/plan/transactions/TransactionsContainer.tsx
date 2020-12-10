@@ -3,8 +3,7 @@ import { IApiTransaction} from './ITransaction';
 import { Transaction } from './Transaction'
 import useAxios from 'axios-hooks'
 
-// TODO: get from login
-const userid = 'test'
+
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 
 export function limitShownTransactions(transactions: IApiTransaction[], showEnd: Date): IApiTransaction[] {
@@ -16,7 +15,7 @@ export function limitShownTransactions(transactions: IApiTransaction[], showEnd:
         .slice(0, 50);
 }
 
-export const TransactionsContainer = ({ currentTime }: { currentTime: number }) => {
+export const TransactionsContainer = ({ userid, currentTime }: { userid: string, currentTime: number }) => {
     const now = new Date(currentTime)
     const start = now;
     const queryEnd = new Date(now.getTime() + (120 * 24 * 60 * 60 * 1000)); // add 120 days
