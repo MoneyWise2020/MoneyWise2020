@@ -65,15 +65,11 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
                 'Day', 
                 'Balance', 
                 'Disposable Income',
-                'High',
-                'Low',
             ],
             ...daybyday.daybydays.map(candle => [
                 candle.date,
                 Number(candle.balance.low),
                 Number(candle.working_capital.low),
-                Number(candle.high_prediction.low),
-                Number(candle.low_prediction.low),
             ])
         ]
         return <Chart
@@ -87,18 +83,14 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
 
     if (chartType === 'CandlestickChart') {
         const data = [
-            ['Day', 'Balance', 'Balance base bottom', 'Balance base top', 'Balance high', 'Working Capital', 'Working Capital base bottom', 'Working Capital base top', 'Working Capital high'],
+            ['Day', 'Uncertainty Prediction', 'Low Prediction', 'Med High Prediction', 'Upper Limit Prediction'],
             ...daybyday.daybydays.map(candle => {
                 return [
                     candle.date,
-                    candle.balance.low,
-                    candle.balance.open,
-                    candle.balance.close,
-                    candle.balance.high,
-                    candle.working_capital.low,
-                    candle.working_capital.open,
-                    candle.working_capital.close,
-                    candle.working_capital.high,
+                    candle.low_prediction.low,
+                    candle.high_prediction.low,
+                    candle.low_prediction.high,
+                    candle.high_prediction.high
                 ]
             })
         ]
@@ -120,14 +112,14 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
             }}
         />
     }
+    
 
     return null
 }
 
 export const DayByDayContainer = ({ userid, currentTime }: { userid: string, currentTime: number }) => {
     
-    const chartType = 'SteppedAreaChart'
-
+    const [chartType, setChartType] = useState<'SteppedAreaChart' | 'CandlestickChart'>('SteppedAreaChart');
     const [queryRangeDays, setQueryRangeDays] = useState(90);
 
     const start = new Date(currentTime);
@@ -148,6 +140,7 @@ export const DayByDayContainer = ({ userid, currentTime }: { userid: string, cur
     const daybyday = data
 
     return <>
+        <button className="btn btn-outline-primary btn-sm" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button>
         <DayByDayChart chartType={chartType} daybyday={daybyday} />
         <div className="col-md-8 text-right">
         <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3m</button>&nbsp;

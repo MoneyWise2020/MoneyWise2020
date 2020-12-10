@@ -159,7 +159,8 @@ def make_execution_rules(rules) -> ExecutionRules:
         #TODO Switch to 'id' instead of 'name' when the UI is ready for it
         rule_map[rule['name']] = {
             "rule": rule['rrule'],
-            "value": float(rule['value'])
+            "value": float(rule['value']),
+            "labels": rule['labels']
         }
     
     rules = ExecutionRules(rule_map)

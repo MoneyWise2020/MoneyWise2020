@@ -68,7 +68,8 @@ def generate_event_transactions(context) -> List[Instance]:
                     rule_id=rule_id,
                     instance_id="{}::{}".format(rule_id, d.isoformat()),
                     value=rule["value"],
-                    day=d
+                    day=d,
+                    labels=rule['labels']
                 )
                 for d in dates
             ]

@@ -19,10 +19,16 @@ export const CreateForm = ({
 
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
+    const [uncertainty, setUncertainty] = useState(false);
+    const [highUncertainty, setHighUncertainty] = useState(value);
+    const [lowUncertainty, setLowUncertainty] = useState(value);
 
     function clearForm() {
         setName('');
         setValue(0);
+        setUncertainty(false);
+        setHighUncertainty(0);
+        setLowUncertainty(0);
     }
     
     return <form onSubmit={e => {
@@ -113,6 +119,10 @@ export const CreateForm = ({
             name: name,
             value: value,
             rrule: rruleString,
+            'labels': { 'uncertainty': uncertainty,
+                        'highUncertainty': highUncertainty,
+                        'lowUncertainty': lowUncertainty
+                    },
         });
 
         clearForm();
@@ -188,6 +198,21 @@ export const CreateForm = ({
                 <option value="SATURDAY">Saturday</option>
             </select></div>
         </>}
+
+        <div className="col-md-4 mb-3">
+        <label htmlFor="Uncertainty">Uncertainty:</label>
+        <input className="form-control" type="checkbox" name="Uncertainty" id="Uncertainty" checked={uncertainty} onChange={e => setUncertainty(e.target.checked)} />
+        </div>
+
+        {(uncertainty) && <>
+            <div className="col-md-4 mb-4">
+                <label htmlFor="High">High Uncertainty:</label>
+                <input className="form-control" type="number" name="High" id="High" value={highUncertainty} onChange={e => setHighUncertainty(Number(e.target.value))} />
+                <label htmlFor="Low">Low Uncertainty:</label>
+                <input className="form-control" type="number" name="Low" id="Low" value={lowUncertainty} onChange={e => setLowUncertainty(Number(e.target.value))} />
+            </div>
+        </>}
+
         </div>
        <button className="btn btn-primary mb-2">Submit</button><br /><br />
     </form>

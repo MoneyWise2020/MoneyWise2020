@@ -24,6 +24,15 @@ export const ModifyForm = ({
     let ruleEndDate = '';
     let currentStartDate = new Date();
     let currentEndDate = new Date();
+    let currentHighUncertainty = 0;
+    let currentLowUncertainty = 0;
+    let currentUncertainty = false;
+
+    if (apiRule['labels']) {
+        currentHighUncertainty = apiRule['labels']['highUncertainty'];
+        currentLowUncertainty = apiRule['labels']['lowUncertainty'];
+        currentUncertainty = apiRule['labels']['uncertainty']
+    }
 
     // Frequency {
     //     YEARLY = 0,
@@ -88,6 +97,9 @@ export const ModifyForm = ({
 
     const [startDate, setStartDate] = useState<string>(ruleStartDate);
     const [endDate, setEndDate] = useState<string>(ruleEndDate);
+    const [uncertainty, setUncertainty] = useState(currentUncertainty);
+    const [highUncertainty, setHighUncertainty] = useState(currentHighUncertainty);
+    const [lowUncertainty, setLowUncertainty] = useState(currentLowUncertainty);
     
     return <form id="modifyRule" onSubmit={e => {
         e.preventDefault();
@@ -173,11 +185,17 @@ export const ModifyForm = ({
 
         const rruleString = new RRule(options).toString()
 
-        onSubmit(ruleId, {
-            name: name,
-            value: value,
-            rrule: rruleString,
-        });
+        onSubmit(ruleId, 
+            {
+                name: name,
+                value: value,
+                rrule: rruleString,
+                'labels': { 'uncertainty': uncertainty,
+                            'highUncertainty': highUncertainty,
+                            'lowUncertainty': lowUncertainty
+                        }
+            }    
+            );
     }}>
         <br />
         <h2>Modify {rule.name}</h2>
@@ -251,6 +269,21 @@ export const ModifyForm = ({
                 <option value="SATURDAY">Saturday</option>
             </select></div>
         </>}
+
+        <div className="col-md-4 mb-3">
+        <label htmlFor="Uncertainty">Uncertainty:</label>
+        <input className="form-control" type="checkbox" name="Uncertainty" id="Uncertainty" checked={uncertainty} onChange={e => setUncertainty(e.target.checked)} />
+        </div>
+
+        {(uncertainty) && <>
+            <div className="col-md-4 mb-4">
+                <label htmlFor="High">High Uncertainty:</label>
+                <input className="form-control" type="number" name="High" id="High" value={highUncertainty} onChange={e => setHighUncertainty(Number(e.target.value))} />
+                <label htmlFor="Low">Low Uncertainty:</label>
+                <input className="form-control" type="number" name="Low" id="Low" value={lowUncertainty} onChange={e => setLowUncertainty(Number(e.target.value))} />
+            </div>
+        </>}
+
         </div>
        <button className="btn btn-primary mb-2">Update</button><br /><br />
     </form>

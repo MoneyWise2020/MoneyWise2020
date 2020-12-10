@@ -55,11 +55,11 @@ def calculate_working_capital(context, instances):
 #
 
 def get_branches(transaction):
-    if transaction.rule_id == "Paycheck":
+    if transaction.labels.get("uncertainty"):
         return [
-            (.25, transaction.value - 300),
+            (.25, transaction.labels.get("lowUncertainty")),
             (.5, transaction.value),
-            (.25, transaction.value + 100),
+            (.25, transaction.labels.get("highUncertainty")),
         ]
 
     # TODO: trim branches if not used
