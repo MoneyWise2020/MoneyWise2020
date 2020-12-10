@@ -125,25 +125,33 @@ describe('rules container', () => {
                 id: 'test-id-rent',
                 name: 'Rent',
                 userid: 'test',
-                rrule: 'adsf',
+                rrule: 'FREQ=DAILY;INTERVAL=2;COUNT=4',
                 value: -1000
             }]);
             // https://jestjs.io/docs/en/mock-function-api
     
             const promise = Promise.resolve();
             axiosDelete.mockReturnValue(promise);
+
+            // Delete button is on modal
+            const listItem = element.getByText(/Rent/i);
+            fireEvent.click(listItem);
+
+            element = render(rulesContainer);
+            
+            waitForDomChange({ element });
     
+            // Clicking the del
             const deleteButton = element.getByText(/Delete/i);
             expect(deleteButton).toBeInTheDocument();
             fireEvent.click(deleteButton);
     
             expect(axiosDelete).toHaveBeenCalledTimes(1);
     
-            expect(mockRefetch).toHaveBeenCalledTimes(0);
-            expect(onRefreshProp).toHaveBeenCalledTimes(0);
             await promise; // let delete call finish and trigger all the `.then`s
-            expect(mockRefetch).toHaveBeenCalledTimes(1);
-            expect(onRefreshProp).toHaveBeenCalledTimes(1);
+
+            expect(mockRefetch).toHaveBeenCalledTimes(3); // Once for the initial render, Once for the opening of the modal, Once for the closing and update of the modal (Notice I call render in the method)
+            expect(onRefreshProp).toHaveBeenCalledTimes(3); // Once for the initial render, Once for the opening of the modal, Once for the closing and update of the modal (Notice I call render in the method)
         });
     });
 
@@ -183,7 +191,6 @@ describe('rules container', () => {
         });
     });
 
-    // TODO: Get this green!
     describe('modify existing rule', () => {
 
         let axiosPut: jest.MockedFunction<() => Promise<{ data: any }>>;
@@ -201,8 +208,8 @@ describe('rules container', () => {
                 value: -1000
             }]);
 
-            const editButton = element.getByText(/Edit/i);
-            fireEvent.click(editButton);
+            const listItem = element.getByText(/Rent/i);
+            fireEvent.click(listItem);
 
             element = render(rulesContainer);
             

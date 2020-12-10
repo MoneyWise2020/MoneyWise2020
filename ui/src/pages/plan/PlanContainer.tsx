@@ -32,18 +32,20 @@ export const PlanContainer = () => {
 
     const userid = user.sub;
 
-    return <Container fluid>
+    return <Container fluid style={{ paddingLeft: '10%', paddingRight: "10%" }}>
         <Row>
             <Col>
-                <h2>Create a New rule</h2>
                 <RulesContainer userid={userid} onRefresh={onRefresh} />
             </Col>
             <Col lg={8}>
-                <h2>Visualize Transactions</h2>
-                <DayByDayContainer userid={userid} currentTime={currentTime} /> <br /><br /><br />
-                <h2 data-testid="transactions">Upcoming Transactions</h2>
+                <Container className="text-center">
+                    <h4 data-testid="transactions">Upcoming Transactions</h4>
+                </Container>
+                <div style={{ minHeight: 450 }}>
+                    <DayByDayContainer userid={userid} currentTime={currentTime} />
+                </div>
+                <hr />
                 <TransactionsContainer userid={userid} currentTime={currentTime} />
-                
             </Col>
         </Row>
     </Container>

@@ -9,4 +9,7 @@ exports[`create rule form monthly should submit 1`] = `"RRULE:FREQ=MONTHLY;BYMON
 
 exports[`create rule form weekly should submit for multiple days 1`] = `"RRULE:FREQ=WEEKLY;BYDAY=MO,TU"`;
 
-exports[`create rule form yearly should submit 1`] = `"RRULE:FREQ=YEARLY;BYMONTH=10;BYMONTHDAY=1"`;
+exports[`create rule form yearly should submit 1`] = `
+"DTSTART:20201010T000000Z
+RRULE:FREQ=YEARLY"
+`;
