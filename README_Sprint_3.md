@@ -113,6 +113,10 @@ You were there! You're asking a lot out of 10 minutes, given my "stakeholders" h
 
 https://docs.google.com/presentation/d/1o6PtNWxlEZAenlMDU1ym2CZie2kacu6Ee_cdcuCmBk4/edit?usp=sharing
 
+User Persona for our Human Stakeholder
+
+https://miro.com/app/board/o9J_lb9LhfA=/
+
 ### Prepared for Sprint Review [Criteria 28]
 
 We demoed to our usual stakeholder, Javier. We figured this would count as a rehearsal for the in-class Sprint Review.
