@@ -1,4 +1,4 @@
-## Second Sprint
+## Third Sprint
 
 ### Forecast [Criteria 1, 2]
 
@@ -93,7 +93,7 @@ http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/Moneywise%20202
 
 We deployed our changes. You can view our application here:
 
-http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8080/
+https://ec2-52-15-67-124.us-east-2.compute.amazonaws.com/
 
 Our product increment was:
 Our UI is more presentable and more trustworthy. You can also export transactions.
