@@ -2,11 +2,12 @@ import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
+import logo from './MoneyWise.svg'
 
 export const Header = () => {
     return <Navbar bg="light" expand="lg" className="mb-3">
         <Link to="/">
-            <Navbar.Brand>moneywise</Navbar.Brand>
+            <Navbar.Brand><img width={48} height={48} src={logo} />moneywise</Navbar.Brand>
         </Link>
         <Link to="/plan">Plan</Link>
         <LoginSection />

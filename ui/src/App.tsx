@@ -25,10 +25,8 @@ function App() {
           </Route>
         </Switch>
       <Container fluid style={{ background: '#f8f9fa' }} className="mt-3">
-        <Container>
-          <Row>
-          &nbsp;&nbsp;MoneyWise &nbsp; &#169; &nbsp; 2020
-          </Row>
+        <Container className="text-center">
+          MoneyWise &#169; 2020
         </Container>
       </Container>
     </>

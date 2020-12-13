@@ -69,7 +69,8 @@ http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/MoneyWise%20-%2
 
 https://github.com/MoneyWise2020/MoneyWise2020/tree/main/backend/features
 
-Console of BDD running in pipeline: http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/Moneywise%202020%20-%20BDD%20Tests/16/
+Console of BDD running in pipeline: http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/Moneywise%202020%20-%20BDD%20Tests/18/console
+
 
 ### CI [Criteria 15]
 
@@ -112,8 +113,9 @@ We conducted retro. All 4 of us were there. The recording link is available in t
 
 Video Recordings: https://docs.google.com/document/d/1YBYvbtzQM9F6hqz737ofrRtsPcP2D6QY708qJeZ_BDg/edit?usp=sharing
 
-`TODO`: finish the statement: One useful outcome was...
-`TODO`: finish the statement: We plan to do this by doing...
+PDF of retro board: https://drive.google.com/file/d/13OzHkp1jLkXxIwIwmfM6vkCKVhoRvyIx/view?usp=sharing
+
+One useful outcome was how painful our code duplication was for Create and Modify forms, and keeping those in sync. We created an improvement to fix this, and put it at the top of the backlog: https://github.com/MoneyWise2020/MoneyWise2020/issues/89
 
 ### In-class Sprint Review [Criteria 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 
