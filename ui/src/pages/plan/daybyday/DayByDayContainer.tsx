@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Chart from "react-google-charts";
 import useAxios from 'axios-hooks'
+import Container from 'react-bootstrap/Container';
 
 
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
@@ -42,9 +43,9 @@ const options = {
 
 const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartType: 'SteppedAreaChart' | 'CandlestickChart' }) => {
     if (!daybyday.daybydays.length) {
-        return <>
-            <p data-testid="daybyday-empty">Looks like there are no transactions in the time frame selected...</p>
-        </>
+        return <Container className="text-center">
+            <p data-testid="daybyday-empty">Nothing's here...</p>
+        </Container>
     }
 
     if (chartType === 'SteppedAreaChart') {

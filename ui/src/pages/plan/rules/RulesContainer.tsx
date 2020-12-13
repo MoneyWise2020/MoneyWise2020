@@ -6,7 +6,7 @@ import useAxios from 'axios-hooks'
 import { Modal } from './RuleModal'
 import axios from 'axios';
 import sortBy from 'lodash/sortBy';
-
+import Container from 'react-bootstrap/Container';
 
 
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
@@ -115,7 +115,9 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
     if (!rules?.length) { // empty
         return <>
             <CreateForm onSubmit={createNewRule} onFailedValidation={onFailedValidation} />
-            <h3 data-testid="no-rules-found">Looks like nothing's here. Try creating a rule!</h3>
+            <Container className="text-center">
+                <p data-testid="no-rules-found">You have no rules.</p>
+            </Container>
         </>
     }
 
