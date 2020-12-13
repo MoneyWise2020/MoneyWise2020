@@ -85,7 +85,7 @@ export const ModifyForm = ({
     const [value, setValue] = useState<number | undefined>(rule.value);
     const [frequency, setFrequency] = useState<string>(strFrequency);
 
-    const [bymonthday, setbymonthday] = useState(ruleByMonthDay); 
+    const [bymonthday, setbymonthday] = useState<number | undefined>(ruleByMonthDay);
     const [bymonth, setbymonth] = useState(ruleByMonth); 
     const [weekdays, setWeekdays] = useState<string[]>(ruleWeekDays);
 
@@ -143,6 +143,10 @@ export const ModifyForm = ({
                 };
                 break;
             case "MONTHLY":
+                if (!bymonthday) {
+                    onFailedValidation("You must select a day of month for 'monthly' rules");
+                    return;
+                }
                 options = {
                     freq: RRule.MONTHLY,
                     bymonthday: bymonthday,
@@ -182,86 +186,91 @@ export const ModifyForm = ({
             rrule: rruleString,
         });
     }}>
-        <br />
-        <h2>Modify {rule.name}</h2>
-        <br />
-        <div className="form-group row">
-            <label htmlFor="Name" className="col-sm-2 col-form-label">Name</label>
-        <div className="col-sm-10">
-            <input className="form-control" id="Name" placeholder="Enter rule name here..." type="text" value={name} onChange={e => setName(e.target.value)} /><br />
-        </div>
-        </div>
+        <h2 className="mb-4">Modify Rule</h2>
+        <div className="form-inline">
+            <label htmlFor="Name" className="sr-only">Rule name</label>
+            <input className="form-control form-control-sm" id="Name" placeholder="Rule name" type="text" value={name} onChange={e => setName(e.target.value)} />
 
-        <div className="form-group row">
-        <label htmlFor="Value" className="col-sm-2 col-form-label">Value</label>
-        <div className="col-sm-10">
-            <input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => {
+            <label htmlFor="Value" className="sr-only">Value</label>
+            <input className="form-control form-control-sm" id="Value" type="number" placeholder="Value $" step="0.01" value={value} onChange={e => {
                 const newValue = Number(e.target.value);
                 if (newValue) { // not 0, not undefined
                     setValue(newValue)
                 } else {
                     setValue(undefined)
                 }
-            }} /><br />
-        </div>
+            }} />
         </div>
 
-        <div className="form-row">
-        <div className="col-md-4 mb-3">
-        <label htmlFor="Frequency">Frequency</label>   
-            <select className="form-control" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)} value={frequency} >
+        {/* Recurrence-rule specific logics */}
+        <div className="form-inline">
+            {/* Frequency selector */}
+            <label htmlFor="Frequency" className="sr-only">Frequency</label>   
+            <select className="form-control form-control-sm mr-2" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)} value={frequency} >
                 <option value="WEEKLY">Weekly</option>
                 <option value="BIWEEKLY">Biweekly</option>
                 <option value="MONTHLY">Monthly</option>
                 <option value="YEARLY">Yearly</option>
                 <option value="ONCE">Once</option>
             </select>
-        </div>
-
-        <div className="col-md-4 mb-3">
-        <label htmlFor="Start">Start:</label>
-        <input className="form-control" type="date" name="Start" id="Start" value={startDate} onChange={e => setStartDate(e.target.value)} />
-        </div>
-
-        {frequency !== "ONCE" && <>
-        <div className="col-md-4 mb-3">
-            <label htmlFor="End">End:</label>
-            <input className="form-control" type="date" name="End" id="End" value={endDate} onChange={e => setEndDate(e.target.value)} />
-        </div>
-        </>}
         
-        {(frequency === "MONTHLY" || frequency === "YEARLY") && <>
-        <div className="col-md-4 mb-4">
-            <label htmlFor="bymonthday">Day of month</label>
-            <input className="form-control" id="bymonthday" type="number" min="1" max="31" placeholder="Day of month" value={bymonthday} onChange={e => setbymonthday(Number(e.target.value))} />
+            {/* Monthly day-of-month selector */}
+            {(frequency === "MONTHLY") && <>
+                <label htmlFor="bymonthday" className="sr-only">Day of month</label>
+                <input className="form-control form-control-sm" id="bymonthday" type="number" min="1" max="31" placeholder="Day" style={{ width: 64 }}
+                    value={bymonthday} required onChange={e => {
+                        const newMonthDay = Number(e.target.value);
+                        if (newMonthDay) { // not 0, not undefined
+                            setbymonthday(newMonthDay)
+                        } else {
+                            setbymonthday(undefined)
+                        }
+                    }} />
+            </>}
+        
+            {(frequency === "WEEKLY") && <div role="group" className="btn-group" aria-label="Days of Week" data-testid="dayofweekcontrol">
+                {[
+                    "SUNDAY",
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY",
+                    "SATURDAY",
+                ].map(day => <button 
+                    className={"btn btn-sm " + (weekdays.includes(day) ? 'btn-primary' : 'btn-outline-primary')}
+                    data-dayofweek={day}
+                    key={day}
+                    onClick={e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setWeekdays(weekdays => {
+                            if (weekdays.includes(day)) {
+                                // Remove from list
+                                return [...weekdays.filter(d => d !== day)]
+                            }
+                            // Add to list
+                            return [...weekdays, day]
+                        })
+                    }}>
+                    {day[0]}
+                </button>)}
+            </div>}
         </div>
-        </>}
-        {(frequency === "YEARLY") && <>
-        <div className="col-md-4 mb-4">
-            <label htmlFor="bymonth">Month of Year</label>
-            <input className="form-control" type="number" id="bymonth" min="1" max="12" placeholder="Month of year" value={bymonth} onChange={e => setbymonth(Number(e.target.value))} />
-        </div>
-        </>}
-        {(frequency === "WEEKLY") && <>
-        <div className="col-md-4 mb-4">
-            <label htmlFor="Weekdays">Days of Week</label>
-            <select className="custom-select" id="Weekdays" name="Weekdays" multiple value={weekdays} onChange={e => {
-                const selectedValues = Array.from(e.target.options)
-                    .filter((x) => x.selected)
-                    .map((x)=>x.value);
 
-                setWeekdays(selectedValues);
-            }}>
-                <option value="SUNDAY">Sunday</option>
-                <option value="MONDAY">Monday</option>
-                <option value="TUESDAY">Tuesday</option>
-                <option value="WEDNESDAY">Wednesday</option>
-                <option value="THURSDAY">Thursday</option>
-                <option value="FRIDAY">Friday</option>
-                <option value="SATURDAY">Saturday</option>
-            </select></div>
-        </>}
+        <div className="form-inline">
+            {/* Start Date */}
+            <label htmlFor="Start" className="sr-only">Start:</label>
+            <input className="form-control form-control-sm" placeholder="Start Date" type="date" name="Start" id="Start" required={["BIWEEKLY", "YEARLY", "ONCE"].includes(frequency)} value={startDate} onChange={e => setStartDate(e.target.value)} />
+
+            {/* End Date */}
+            {frequency !== "ONCE" && <>
+                <label htmlFor="End" className="sr-only">End:</label>
+                <input className="form-control form-control-sm" placeholder="End Date" type="date" name="End" id="End" value={endDate} onChange={e => setEndDate(e.target.value)} />
+            </>}
         </div>
+
+        <br />
         <div className="d-flex justify-content-between">
             <button onClick={e => {
                 e.stopPropagation()
@@ -271,6 +280,5 @@ export const ModifyForm = ({
             }} className="btn btn-danger mb-2">Delete</button>
             <button className="btn btn-primary mb-2">Update</button>
         </div>
-        <br /><br />
     </form>
 }
