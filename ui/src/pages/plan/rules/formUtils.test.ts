@@ -32,9 +32,13 @@ export function setMonthOfYear(formElement: any, month: number) {
 }
 
 export function setDaysOfWeek(formElement: any, daysOfWeek: string[]) {
-    const dayOfWeekSelect = formElement.getByLabelText(/Days of Week/i);
-    expect(dayOfWeekSelect).toBeInTheDocument();
-    userEvent.selectOptions(dayOfWeekSelect, daysOfWeek);
+    const buttons: HTMLButtonElement[] = Array.from(formElement.container.querySelectorAll("[data-testid=dayofweekcontrol] > button"));
+    daysOfWeek.forEach(d => {
+        const buttonForDay = buttons.find(b => {
+            return b.getAttribute("data-dayofweek") === d
+        });
+        fireEvent.click(buttonForDay);
+    });
 }
 
 export function setStartDate(formElement: any, year: number, month: number, day: number) {
