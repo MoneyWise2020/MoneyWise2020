@@ -119,7 +119,9 @@ export const DayByDayContainer = ({ userid, currentTime }: { userid: string, cur
 
     if (loading) {
         return <div style={{ minHeight: '100%', width: '100%' }} className="text-center">
-            <h5 data-testid="daybyday-loading">Loading...</h5>
+            <div className="spinner-border" role="status">
+                <span data-testid="daybyday-loading" className="visually-hidden"></span>
+            </div>
         </div>
     }
 

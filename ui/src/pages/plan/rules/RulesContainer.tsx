@@ -97,7 +97,9 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
     if (loading) {
         return <>
             <CreateForm onSubmit={createNewRule} onFailedValidation={onFailedValidation} />
-            <p data-testid="rules-loading">Loading...</p>
+            <div className="spinner-border" role="status">
+                <span data-testid="rules-loading" className="visually-hidden"></span>
+            </div>
         </>
     }
     
