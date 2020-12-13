@@ -6,4 +6,18 @@
     color: black;
 }
 
-.ruledescription {}
+.ruledescription {
+    max-width: 400px;
+    border: 1px solid #ddd;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.ruledescription:hover {
+    background-color: #f8f9fa;
+}
+
+.rulename {
+    max-width: 300px;
+    overflow: hidden;
+}

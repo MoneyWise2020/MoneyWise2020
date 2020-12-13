@@ -144,8 +144,7 @@ describe('create rule form', () => {
             setValue(element, -42);
     
             selectFrequency(element, "YEARLY");
-            setMonthOfYear(element, 10);
-            setDayOfMonth(element, 1);
+            setStartDate(element, 2020, 10, 10);
     
             submit(element);
     

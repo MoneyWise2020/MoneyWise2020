@@ -16,7 +16,6 @@ function App() {
   return (
     <>
       <Header />
-      <Container>
         <Switch>
           <Route path="/plan">
             <PlanContainer />
@@ -25,8 +24,7 @@ function App() {
             <Home />
           </Route>
         </Switch>
-      </Container>
-      <Container fluid style={{ background: '#f8f9fa' }}>
+      <Container fluid style={{ background: '#f8f9fa' }} className="mt-3">
         <Container>
           <Row>
           &nbsp;&nbsp;MoneyWise &nbsp; &#169; &nbsp; 2020

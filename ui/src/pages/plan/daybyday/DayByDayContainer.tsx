@@ -41,12 +41,12 @@ const options = {
     legend: { position: "top" },
     tooltip: {},
     hAxis: {
-        title: "Time",
         minTextSpacing: 10,
         format: "short"
     },
-    vAxis: {
-        title: "Funds"
+    chartArea: {
+        left: 60,
+        width: '100%'
     },
     colors: ['#4374E0', '#488214', '#ffcc66', '#ff6666'],
 
@@ -130,27 +130,31 @@ export const DayByDayContainer = ({ userid, currentTime }: { userid: string, cur
     )
 
     if (loading) {
-        return <p data-testid="daybyday-loading">Loading...</p>
+        return <div style={{ minHeight: '100%', width: '100%' }} className="text-center">
+            <h5 data-testid="daybyday-loading">Loading...</h5>
+        </div>
     }
 
     if (error) {
-        return <p data-testid="daybyday-error">Error occurred while fetching daybydays! Try refreshing the page.</p>
+        return <div style={{ minHeight: '100%', width: '100%' }} className="text-center">
+            <h5 data-testid="daybyday-error">Error occurred while fetching the future! Try refreshing the page.</h5>
+        </div>
     }
 
     const daybyday = data
 
     return <>
         <button className="btn btn-outline-primary btn-sm" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button>
-        <DayByDayChart chartType={chartType} daybyday={daybyday} />
-        <div className="col-md-8 text-right">
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3m</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365)}}>1y</button>&nbsp;
-        <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365 * 2)}}>2y</button>&nbsp;
-        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 5)}}>5y</button>&nbsp;
-        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 10)}}>10y</button>&nbsp;
-        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 20)}}>20y</button>&nbsp;
-        <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 30)}}>30y</button>&nbsp;
-        <br />
+        <DayByDayChart chartType={chartType} daybyday={daybyday} /> 
+        <div className="text-center">
+            <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3m</button>&nbsp;
+            <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365)}}>1y</button>&nbsp;
+            <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(365 * 2)}}>2y</button>&nbsp;
+            <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 5)}}>5y</button>&nbsp;
+            <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 10)}}>10y</button>&nbsp;
+            <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 20)}}>20y</button>&nbsp;
+            <button className="btn btn-outline-danger btn-sm" title="May not be as accurate, use with caution" onClick={() => {setQueryRangeDays(365 * 30)}}>30y</button>&nbsp;
+            <br />
         </div>
     </>
 }

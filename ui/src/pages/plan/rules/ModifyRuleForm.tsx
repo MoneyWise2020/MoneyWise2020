@@ -6,15 +6,18 @@ import './ModalForm.css';
 export const ModifyForm = ({
     rule,
     onSubmit,
+    onDelete = () => {},
     onFailedValidation = () => {}
 }: {
-    rule: IApiRuleMutate,
+    rule: IApiRule,
     onSubmit: (id: string, rule: IApiRuleMutate) => void,
+    onDelete?: (id: string) => void,
     onFailedValidation: (message: string) => void,
 }) => {
     // Parse an RRule Object
     let apiRule = rule as IApiRule;
     let ruleId = apiRule.id
+    // TODO: handle invalid rules safely
     let rruleObject = rrulestr(rule.rrule);
     let strFrequency = "MONTHLY";
     let ruleByMonthDay;
@@ -88,7 +91,7 @@ export const ModifyForm = ({
     }
 
     const [name, setName] = useState(rule.name);
-    const [value, setValue] = useState(rule.value);
+    const [value, setValue] = useState<number | undefined>(rule.value);
     const [frequency, setFrequency] = useState<string>(strFrequency);
 
     const [bymonthday, setbymonthday] = useState(ruleByMonthDay); 
@@ -105,7 +108,7 @@ export const ModifyForm = ({
         e.preventDefault();
         e.stopPropagation();
 
-        if (value === 0) {
+        if (!value) {
             onFailedValidation(`Please enter a non zero value`);
             return;
         }
@@ -210,7 +213,14 @@ export const ModifyForm = ({
         <div className="form-group row">
         <label htmlFor="Value" className="col-sm-2 col-form-label">Value</label>
         <div className="col-sm-10">
-            <input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => setValue(Number(e.target.value))} /><br />
+            <input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => {
+                const newValue = Number(e.target.value);
+                if (newValue) { // not 0, not undefined
+                    setValue(newValue)
+                } else {
+                    setValue(undefined)
+                }
+            }} /><br />
         </div>
         </div>
 
@@ -285,6 +295,15 @@ export const ModifyForm = ({
         </>}
 
         </div>
-       <button className="btn btn-primary mb-2">Update</button><br /><br />
+        <div className="d-flex justify-content-between">
+            <button onClick={e => {
+                e.stopPropagation()
+                e.preventDefault()
+                onDelete(rule.id)
+
+            }} className="btn btn-danger mb-2">Delete</button>
+            <button className="btn btn-primary mb-2">Update</button>
+        </div>
+        <br /><br />
     </form>
 }

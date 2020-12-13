@@ -1,0 +1,12 @@
+version: '2.0'
+
+services:
+  moneywise-backend-stage:
+    image: moneywise-backend
+    build:
+      context: ./backend
+    ports:
+      - 8001:8000
+    env_file:
+      - backend-variables.env # This file is NOT committed to the REPO. This should only exist on the corresponding environments defined by the users.
+      

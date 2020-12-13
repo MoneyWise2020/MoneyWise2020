@@ -1,18 +1,19 @@
 import React, { useCallback } from 'react'
-import ListGroup from 'react-bootstrap/ListGroup';
 import { IApiRule, IApiRuleMutate } from './IRule';
 import { Rule } from './Rule';
 import {CreateForm} from './CreateRuleForm';
 import useAxios from 'axios-hooks'
 import { Modal } from './RuleModal'
 import axios from 'axios';
+import sortBy from 'lodash/sortBy';
+
 
 
 const baseUrl = process.env.REACT_APP_MONEYWISE_BASE_URL;
 
 // Modal Interactions
 let isShown = false;
-let modalRule: IApiRuleMutate;
+let modalRule: IApiRule;
 
 export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: string, onRefresh?: () => void }) => {
     const [{ data, loading, error }, refetch] = useAxios(
@@ -24,17 +25,6 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
         onRefresh()
     }, [refetch, onRefresh])
 
-    const deleteHandler = useCallback((id: string) => {
-        axios.delete(`${baseUrl}/api/rules/${id}?userid=${userid}`)
-            .then(() => {
-                triggerRefresh();
-            })
-            .catch((e) => {
-                // TODO: toast an error
-                console.error('UHOH', e);
-            })
-    }, [triggerRefresh, userid]);
-
     const createNewRule = useCallback((rule: IApiRuleMutate) => {
         axios.post(`${baseUrl}/api/rules?userid=${userid}`, rule)
             .then((response) => {
@@ -43,7 +33,7 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
             })
     }, [triggerRefresh, userid]);
     
-    const showModal = useCallback((id: string, rule: IApiRuleMutate) => {
+    const showModal = useCallback((id: string, rule: IApiRule) => {
         isShown = true;
         modalRule = rule;
         triggerRefresh();
@@ -59,15 +49,15 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
     };
 
     const onKeyDown = (event: any) => {
-        if (event.keyCode === 27) {
+        if (event.keyCode === 27) { // escape
             closeModal();
           }
-         };
+    };
 
     const onClickOutside = (event: any) => {
         // if (modal && modal.contains(event.target)) return
         // closeModal();
-};
+    };
     
     const closeModal = useCallback(() => {
         isShown = false;
@@ -75,6 +65,18 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
         toggleScrollLock();
         triggerRefresh();
     }, [triggerRefresh]);
+
+    const deleteHandler = useCallback((id: string) => {
+        axios.delete(`${baseUrl}/api/rules/${id}?userid=${userid}`)
+            .then(() => {
+                triggerRefresh();
+                closeModal();
+            })
+            .catch((e) => {
+                // TODO: toast an error
+                console.error('UHOH', e);
+            })
+    }, [triggerRefresh, closeModal]);
 
     const updateExistingRule = useCallback((id: string, rule: IApiRuleMutate) => {
         axios.put(`${baseUrl}/api/rules/${id}?userid=${userid}`, rule)
@@ -114,6 +116,8 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
             <h3 data-testid="no-rules-found">Looks like nothing's here. Try creating a rule!</h3>
         </>
     }
+
+    const sortedRules = sortBy(rules, (r: IApiRule) => r.value);
     
     return <>
         <CreateForm onSubmit={createNewRule} onFailedValidation={onFailedValidation} />
@@ -122,6 +126,7 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
                 <Modal
                     rule={modalRule} 
                     onSubmit={updateExistingRule}
+                    onDelete={deleteHandler}
                     modalRef={(n: any) => {}}
                     buttonRef={(n: any) => {}} 
                     closeModal={closeModal}
@@ -131,8 +136,8 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
                 ) : null
             }
 
-        <ListGroup>
-            {rules.map(rule => <Rule rule={rule} onDelete={deleteHandler} onUpdate={updateExistingRule} showModal={showModal} key={rule.id}/>)}
-        </ListGroup>
+        <div style={{ width: '100%', minWidth: "100%", maxWidth: "100%" }}>
+            {sortedRules.map(rule => <Rule rule={rule} showModal={showModal} key={rule.id}/>)}
+        </div>
     </>;
 }

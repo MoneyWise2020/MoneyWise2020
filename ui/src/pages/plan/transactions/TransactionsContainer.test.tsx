@@ -137,9 +137,9 @@ describe('transactions container', () => {
             expect(transactionsError()).not.toBeDefined();
         });
 
-        it('should not list over 100 transactions at once', () => {
-            // Create 120 transactions (more than 100)
-            const transactions: IApiTransaction[] = Array.from([ ...Array(120) ]).map((_, i) => i)
+        it('should not list over 50 transactions at once', () => {
+            // Create 60 transactions (more than 50)
+            const transactions: IApiTransaction[] = Array.from([ ...Array(60) ]).map((_, i) => i)
                 .map(i => ({
                     rule_id: `Rule #${i}`,
                     id: `Rule id #${i}`,
@@ -156,7 +156,7 @@ describe('transactions container', () => {
             expect(transactionsLoading()).not.toBeDefined();
             expect(transactionsError()).not.toBeDefined();
             const transactionElements: any[] = Array.from(element.container.querySelectorAll('tbody > tr'));
-            expect(transactionElements).toHaveLength(100); // not 120, 100.
+            expect(transactionElements).toHaveLength(50); // not 60, 50.
         });
     });
 });

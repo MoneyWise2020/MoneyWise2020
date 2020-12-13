@@ -10,11 +10,10 @@ export const CreateForm = ({
     onFailedValidation: (message: string) => void,
 }) => {
     const [name, setName] = useState('');
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState<number | undefined>(undefined);
     const [frequency, setFrequency] = useState<string>("MONTHLY");
 
-    const [bymonthday, setbymonthday] = useState(1); 
-    const [bymonth, setbymonth] = useState(1); 
+    const [bymonthday, setbymonthday] = useState(1);
     const [weekdays, setWeekdays] = useState<string[]>([]);
 
     const [startDate, setStartDate] = useState<string>('');
@@ -25,7 +24,7 @@ export const CreateForm = ({
 
     function clearForm() {
         setName('');
-        setValue(0);
+        setValue(undefined);
         setUncertainty(false);
         setHighUncertainty(0);
         setLowUncertainty(0);
@@ -35,7 +34,7 @@ export const CreateForm = ({
         e.preventDefault();
         e.stopPropagation();
 
-        if (value === 0) {
+        if (!value) {
             onFailedValidation(`Please enter a non zero value`);
             return;
         }
@@ -90,10 +89,12 @@ export const CreateForm = ({
                 }
                 break;
             case "YEARLY":
+                if (!dtstart) {
+                    onFailedValidation("You must select a start date for 'Yearly' rules");
+                    return;
+                }
                 options = {
                     freq: RRule.YEARLY,
-                    bymonth: bymonth,
-                    bymonthday: bymonthday,
                     dtstart,
                     until,
                 }
@@ -129,17 +130,24 @@ export const CreateForm = ({
     }}>
         <br />
         <br />
-        <div className="form-group row">
-            <label htmlFor="Name" className="col-sm-2 col-form-label">Name</label>
-        <div className="col-sm-10">
-            <input className="form-control" id="Name" placeholder="Enter rule name here..." type="text" value={name} onChange={e => setName(e.target.value)} /><br />
-        </div>
+        <div className="row">
+            <label htmlFor="Name" className="col-sm-2 col-form-label form-control-sm">Name</label>
+            <div className="col-sm-8">
+                <input className="form-control form-control-sm" id="Name" placeholder="Enter rule name here..." type="text" value={name} onChange={e => setName(e.target.value)} /><br />
+            </div>
         </div>
 
-        <div className="form-group row">
-        <label htmlFor="Value" className="col-sm-2 col-form-label">Value</label>
-        <div className="col-sm-10">
-            <input className="form-control" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => setValue(Number(e.target.value))} /><br />
+        <div className="row">
+        <label htmlFor="Value" className="col-sm-2 col-form-label form-control-sm">Value</label>
+        <div className="col-sm-8">
+            <input className="form-control form-control-sm" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => {
+                const newValue = Number(e.target.value);
+                if (newValue) { // not 0, not undefined
+                    setValue(newValue)
+                } else {
+                    setValue(undefined)
+                }
+            }} /><br />
         </div>
         </div>
 
@@ -167,18 +175,13 @@ export const CreateForm = ({
         </div>
         </>}
         
-        {(frequency === "MONTHLY" || frequency === "YEARLY") && <>
+        {(frequency === "MONTHLY") && <>
         <div className="col-md-4 mb-4">
             <label htmlFor="bymonthday">Day of month</label>
             <input className="form-control" id="bymonthday" type="number" min="1" max="31" placeholder="Day of month" value={bymonthday} onChange={e => setbymonthday(Number(e.target.value))} />
         </div>
         </>}
-        {(frequency === "YEARLY") && <>
-        <div className="col-md-4 mb-4">
-            <label htmlFor="bymonth">Month of Year</label>
-            <input className="form-control" type="number" id="bymonth" min="1" max="12" placeholder="Month of year" value={bymonth} onChange={e => setbymonth(Number(e.target.value))} />
-        </div>
-        </>}
+        
         {(frequency === "WEEKLY") && <>
         <div className="col-md-4 mb-4">
             <label htmlFor="Weekdays">Days of Week</label>
