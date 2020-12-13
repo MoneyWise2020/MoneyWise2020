@@ -73,12 +73,12 @@ export const ModifyForm = ({
 
     if (rruleObject.origOptions.dtstart != undefined){
         currentStartDate = rruleObject.origOptions.dtstart;
-        ruleStartDate = (currentStartDate.getFullYear().toString() + "-" + ((currentStartDate.getMonth() > 8) ? (currentStartDate.getMonth() + 1) : ('0' + (currentStartDate.getMonth() + 1)))).toString() + '-' + (((currentStartDate.getDate() > 9) ? currentStartDate.getDate() : ('0' + currentStartDate.getDate()))).toString();
+        ruleStartDate = (currentStartDate.getUTCFullYear().toString() + "-" + ((currentStartDate.getUTCMonth() > 8) ? (currentStartDate.getUTCMonth() + 1) : ('0' + (currentStartDate.getUTCMonth() + 1)))).toString() + '-' + (((currentStartDate.getUTCDate() > 9) ? currentStartDate.getUTCDate() : ('0' + currentStartDate.getUTCDate()))).toString();
     }
 
     if (rruleObject.origOptions.until != undefined) {
         currentEndDate = rruleObject.origOptions.until;
-        ruleEndDate = (currentEndDate.getFullYear().toString() + "-" + ((currentEndDate.getMonth() > 8) ? (currentEndDate.getMonth() + 1) : ('0' + (currentEndDate.getMonth() + 1)))).toString() + '-' + (((currentEndDate.getDate() > 9) ? currentEndDate.getDate() : ('0' + currentEndDate.getDate()))).toString();
+        ruleEndDate = (currentEndDate.getUTCFullYear().toString() + "-" + ((currentEndDate.getUTCMonth() > 8) ? (currentEndDate.getUTCMonth() + 1) : ('0' + (currentEndDate.getUTCMonth() + 1)))).toString() + '-' + (((currentEndDate.getUTCDate() > 9) ? currentEndDate.getUTCDate() : ('0' + currentEndDate.getUTCDate()))).toString();
     }
 
     const [name, setName] = useState(rule.name);
