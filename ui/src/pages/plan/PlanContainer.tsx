@@ -35,6 +35,9 @@ export const PlanContainer = () => {
     return <Container fluid style={{ paddingLeft: '10%', paddingRight: "10%" }}>
         <Row>
             <Col>
+                <Container className="text-center">
+                    <h4>Rules</h4>
+                </Container>
                 <RulesContainer userid={userid} onRefresh={onRefresh} />
             </Col>
             <Col lg={8}>
