@@ -242,7 +242,7 @@ export const ModifyForm = ({
                     "THURSDAY",
                     "FRIDAY",
                     "SATURDAY",
-                ].map(day => <button 
+                ].map(day => <a 
                     className={"btn btn-sm " + (weekdays.includes(day) ? 'btn-primary' : 'btn-outline-primary')}
                     aria-checked={weekdays.includes(day)}
                     role="checkbox"
@@ -261,7 +261,7 @@ export const ModifyForm = ({
                         })
                     }}>
                     {day[0]}
-                </button>)}
+                </a>)}
             </div>}
         </div>
 

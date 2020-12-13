@@ -174,7 +174,7 @@ export const CreateForm = ({
                     "THURSDAY",
                     "FRIDAY",
                     "SATURDAY",
-                ].map(day => <button 
+                ].map(day => <a 
                     className={"btn btn-sm " + (weekdays.includes(day) ? 'btn-primary' : 'btn-outline-primary')}
                     data-dayofweek={day}
                     key={day}
@@ -191,7 +191,7 @@ export const CreateForm = ({
                         })
                     }}>
                     {day[0]}
-                </button>)}
+                </a>)}
             </div>}
         </div>
 
