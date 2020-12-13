@@ -21,7 +21,6 @@ export const ModifyForm = ({
     let rruleObject = rrulestr(rule.rrule);
     let strFrequency = "MONTHLY";
     let ruleByMonthDay;
-    let ruleByMonth;
     let ruleWeekDays: string[] | (() => string[]) = [];
     let ruleStartDate = '';
     let ruleEndDate = '';
@@ -56,19 +55,23 @@ export const ModifyForm = ({
     } else {
         ruleByMonthDay = 1;
     }
-
-    if (rruleObject.origOptions.bymonth != undefined) {
-        if (Array.isArray(rruleObject.origOptions.bymonth)) {
-            ruleByMonth = rruleObject.origOptions.bymonth[0];
+    
+    if (rruleObject.origOptions.byweekday != undefined) {
+        if (Array.isArray(rruleObject.origOptions.byweekday)) {
+            ruleWeekDays = rruleObject.origOptions.byweekday.map(wd => wd.toString());
         } else {
-            ruleByMonth = rruleObject.origOptions.bymonth;
+            ruleWeekDays = [rruleObject.origOptions.byweekday.toString()]
         }
-    } else {
-        ruleByMonth = 1;
-    }
-
-    if (rruleObject.origOptions.wkst != undefined) {
-        ruleWeekDays = [rruleObject.origOptions.wkst.toString()];
+        const rRuleWeekdayToWeekdayMapping: { [key: string]: string } = {
+            "SU": "SUNDAY",
+            "MO": "MONDAY",
+            "TU": "TUESDAY",
+            "WE": "WEDNESDAY",
+            "TH": "THURSDAY",
+            "FR": "FRIDAY",
+            "SA": "SATURDAY",
+        }
+        ruleWeekDays = ruleWeekDays.map(rruleWeekday => rRuleWeekdayToWeekdayMapping[rruleWeekday]);   
     }
 
     if (rruleObject.origOptions.dtstart != undefined){
@@ -86,7 +89,6 @@ export const ModifyForm = ({
     const [frequency, setFrequency] = useState<string>(strFrequency);
 
     const [bymonthday, setbymonthday] = useState<number | undefined>(ruleByMonthDay);
-    const [bymonth, setbymonth] = useState(ruleByMonth); 
     const [weekdays, setWeekdays] = useState<string[]>(ruleWeekDays);
 
     const [startDate, setStartDate] = useState<string>(ruleStartDate);
@@ -105,6 +107,7 @@ export const ModifyForm = ({
             onFailedValidation(`Please enter more than 3 characters, you entered '${name}'`);
             return;
         }
+
 
         const dtstart = startDate ? new Date(startDate) : undefined;
         const until = endDate ? new Date(endDate) : undefined;
@@ -155,10 +158,12 @@ export const ModifyForm = ({
                 }
                 break;
             case "YEARLY":
+                if (!dtstart) {
+                    onFailedValidation("You must select a start date for 'Yearly' rules");
+                    return;
+                }
                 options = {
                     freq: RRule.YEARLY,
-                    bymonth: bymonth,
-                    bymonthday: bymonthday,
                     dtstart,
                     until,
                 }
@@ -239,6 +244,8 @@ export const ModifyForm = ({
                     "SATURDAY",
                 ].map(day => <button 
                     className={"btn btn-sm " + (weekdays.includes(day) ? 'btn-primary' : 'btn-outline-primary')}
+                    aria-checked={weekdays.includes(day)}
+                    role="checkbox"
                     data-dayofweek={day}
                     key={day}
                     onClick={e => {
@@ -271,14 +278,14 @@ export const ModifyForm = ({
         </div>
 
         <br />
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between flex-row-reverse">
+            <button className="btn btn-primary mb-2" data-testid="submitupdate">Update</button>
             <button onClick={e => {
                 e.stopPropagation()
                 e.preventDefault()
                 onDelete(rule.id)
 
             }} className="btn btn-danger mb-2">Delete</button>
-            <button className="btn btn-primary mb-2">Update</button>
         </div>
     </form>
 }

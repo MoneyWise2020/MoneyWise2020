@@ -25,12 +25,6 @@ export function setDayOfMonth(formElement: any, day: number) {
     fireEvent.change(dayOfMonthInput, { target: { value: String(day) }});
 }
 
-export function setMonthOfYear(formElement: any, month: number) {
-    const dayOfMonthInput = formElement.getByLabelText(/Month of Year/i);
-    expect(dayOfMonthInput).toBeInTheDocument();
-    fireEvent.change(dayOfMonthInput, { target: { value: String(month) }});
-}
-
 export function setDaysOfWeek(formElement: any, daysOfWeek: string[]) {
     const buttons: HTMLButtonElement[] = Array.from(formElement.container.querySelectorAll("[data-testid=dayofweekcontrol] > button"));
     daysOfWeek.forEach(d => {
@@ -60,7 +54,7 @@ export function submit(formElement: any) {
 }
 
 export function update(formElement: any) {
-    const updateButton = formElement.getByRole("button", { name: /Update/i });
+    const updateButton = formElement.getAllByRole("button", { name: /Update/i })[0];
     expect(updateButton).toBeInTheDocument();
     fireEvent.click(updateButton);
 }
