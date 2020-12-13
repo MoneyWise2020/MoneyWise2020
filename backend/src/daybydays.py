@@ -5,6 +5,18 @@ from .instance import Instance
 from .generate_instances import get_transactions_up_to
 
 
+def _create_candle(values):
+    opening = values[0]
+    low = min(values)
+    high = max(values)
+    close = values[-1]
+    return {
+        'open': round(opening, 2),
+        'low': round(low, 2),
+        'high': round(high, 2),
+        'close': round(close, 2),
+    }
+
 def generate_daybydays(context) -> List[Instance]:
     """
     Returns all projected daybydays, sorted by date, with aggregations calculated and set.
@@ -48,85 +60,48 @@ def generate_daybydays(context) -> List[Instance]:
         while i < transactions_len and transactions[i].day == current_day:
             todays_transactions.append(transactions[i])
             i += 1
-
-        # Balance
-        balances = list(map(lambda x: x.get_calculation("balance"), todays_transactions))
-        balances.insert(0, current_balance)
-
-        balance_open = balances[0]
-        balance_low = min(balances)
-        balance_high = max(balances)
-        balance_close = balances[-1]
-
-        current_balance = balance_close
-
-        # Working capital
-        working_capitals = list(map(lambda x: x.get_calculation("working_capital"), todays_transactions))
-        working_capitals.insert(0, current_working_capital)
-
-        working_capital_open = working_capitals[0]
-        working_capital_low = min(working_capitals)
-        working_capital_high = max(working_capitals)
-        working_capital_close = working_capitals[-1]
-
-        current_working_capital = working_capital_close
-
-        # Low prediction
-        low_predictions = list(map(lambda x: x.get_calculation("low_prediction"), todays_transactions))
-        low_predictions.insert(0, current_low_prediction)
-
-        low_prediction_open = low_predictions[0]
-        low_prediction_low = min(low_predictions)
-        low_prediction_high = max(low_predictions)
-        low_prediction_close = low_predictions[-1]
-
-        current_low_prediction = low_prediction_close
-
-        # High prediction
-        high_predictions = list(map(lambda x: x.get_calculation("high_prediction"), todays_transactions))
-        high_predictions.insert(0, current_high_prediction)
-
-        high_prediction_open = high_predictions[0]
-        high_prediction_low = min(high_predictions)
-        high_prediction_high = max(high_predictions)
-        high_prediction_close = high_predictions[-1]
-
-        current_high_prediction = high_prediction_close
-
+        
         # number of transactions which occurred today
         volume = len(todays_transactions)
         if current_day == context.parameters.start:
             # we add a dummy transaction on day 1, should not count toward volume
             volume -= 1
-
-        daybydays.append({
+        
+        todays_candle = {
             'date': current_day,
-            'balance': {
-                'open': round(balance_open, 2),
-                'low': round(balance_low, 2),
-                'high': round(balance_high, 2),
-                'close': round(balance_close, 2),
-            },
-            'working_capital': {
-                'open': round(working_capital_open, 2),
-                'low': round(working_capital_low, 2),
-                'high': round(working_capital_high, 2),
-                'close': round(working_capital_close, 2),
-            },
-            'low_prediction': {
-                'open': round(low_prediction_open, 2),
-                'low': round(low_prediction_low, 2),
-                'high': round(low_prediction_high, 2),
-                'close': round(low_prediction_close, 2),
-            },
-            'high_prediction': {
-                'open': round(high_prediction_open, 2),
-                'low': round(high_prediction_low, 2),
-                'high': round(high_prediction_high, 2),
-                'close': round(high_prediction_close, 2),
-            },
             'volume': volume,
-        })
+        }
+
+        # Balance
+        balances = list(map(lambda x: x.get_calculation("balance"), todays_transactions))
+        balances.insert(0, current_balance)
+
+        todays_candle["balance"] = _create_candle(balances)
+        current_balance = todays_candle["balance"]["close"]
+
+        # Working capital
+        working_capitals = list(map(lambda x: x.get_calculation("working_capital"), todays_transactions))
+        working_capitals.insert(0, current_working_capital)
+
+        todays_candle["working_capital"] = _create_candle(working_capitals)
+        current_working_capital = todays_candle["working_capital"]["close"]
+
+        if context.parameters.should_calculate_high_low:
+            # Low prediction
+            low_predictions = list(map(lambda x: x.get_calculation("low_prediction"), todays_transactions))
+            low_predictions.insert(0, current_low_prediction)
+
+            todays_candle["low_prediction"] = _create_candle(low_predictions)
+            current_low_prediction = todays_candle["low_prediction"]["close"]
+
+            # High prediction
+            high_predictions = list(map(lambda x: x.get_calculation("high_prediction"), todays_transactions))
+            high_predictions.insert(0, current_high_prediction)
+
+            todays_candle["high_prediction"] = _create_candle(high_predictions)
+            current_high_prediction = todays_candle["high_prediction"]["close"]
+
+        daybydays.append(todays_candle)
         current_day += timedelta(days=1)
 
     return daybydays

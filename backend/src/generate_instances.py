@@ -13,7 +13,9 @@ def get_transactions_up_to(context: ExecutionContext) -> List[Instance]:
 
     calculate_balance(context, all_transactions)
     calculate_working_capital(context, all_transactions)
-    calculate_high_and_low(context, all_transactions)
+
+    if context.parameters.should_calculate_high_low:
+        calculate_high_and_low(context, all_transactions)
 
     return all_transactions
 

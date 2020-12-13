@@ -137,12 +137,15 @@ def make_execution_parameters(request) -> ExecutionParameters:
         set_aside = round(float(set_aside), 2)
     else:
         set_aside = 0
+    
+    should_calculate_high_low = "highLow" in request.GET
 
     parameters = ExecutionParameters(
         start,
         end,
         current,
-        set_aside
+        set_aside,
+        should_calculate_high_low,
     )
     parameters.assert_valid()
 

@@ -7,17 +7,24 @@ class ExecutionParameters():
         start: date,
         end: date,
         current: float,
-        set_aside: float
+        set_aside: float,
+        should_calculate_high_low: bool = False,
     ):
         self.start: date = start
         self.end: date = end
         self.current: float = current
         self.set_aside: float = set_aside
+        self.should_calculate_high_low: bool = should_calculate_high_low
     
     def assert_valid(self):
         assert self.start < self.end, '`startDate` comes after `endDate`, when it should come before'
         assert self.set_aside >= 0, '`setAside` is negative, when it should be 0 or positive'
-        assert self.end <= self.start + relativedelta(years=30, days=1), "We do not support projections spanning more than 30 years."
+
+        # high-low is an expensive calculation at this time, limiting to 1 year
+        if self.should_calculate_high_low:
+            assert self.end <= self.start + relativedelta(years=1, days=1), "We do not support projections with high-low spanning more than 1 year."
+        else:
+            assert self.end <= self.start + relativedelta(years=30, days=1), "We do not support projections spanning more than 30 years."
 
 
 class ExecutionRules():

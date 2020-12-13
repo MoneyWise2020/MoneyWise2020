@@ -117,8 +117,14 @@ const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartT
     }
 }
 
+function isHighLowEnabled(userid: string): boolean {
+    return [
+        'google-oauth2|113612696937596388912', // james.patrick.fulford@gmail.com
+    ].includes(userid);
+}
+
 export const DayByDayContainer = ({ userid, currentTime }: { userid: string, currentTime: number }) => {
-    
+    const highLowEnabled = isHighLowEnabled(userid);
     const [chartType, setChartType] = useState<ChartTab>(ChartTab.DISPOSABLE_INCOME);
     const [queryRangeDays, setQueryRangeDays] = useState(90);
 
@@ -126,8 +132,8 @@ export const DayByDayContainer = ({ userid, currentTime }: { userid: string, cur
     const end = new Date(currentTime + (queryRangeDays * 24 * 60 * 60 * 1000))
     
     const [{ data, loading, error }] = useAxios(
-        `${baseUrl}/api/daybydays?userid=${userid}&startDate=${start.toISOString()}&endDate=${end.toISOString()}`
-    )
+        `${baseUrl}/api/daybydays?${highLowEnabled ? 'highLow&' : ''}userid=${userid}&startDate=${start.toISOString()}&endDate=${end.toISOString()}`
+    );
 
     if (loading) {
         return <div style={{ minHeight: '100%', width: '100%' }} className="text-center">
