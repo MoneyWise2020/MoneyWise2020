@@ -194,7 +194,7 @@ export const ModifyForm = ({
         <h2 className="mb-4">Modify Rule</h2>
         <div className="form-inline">
             <label htmlFor="Name" className="sr-only">Rule name</label>
-            <input className="form-control form-control-sm" id="Name" placeholder="Rule name" type="text" value={name} onChange={e => setName(e.target.value)} />
+            <input className="form-control form-control-sm mr-2" id="Name" placeholder="Rule name" type="text" value={name} onChange={e => setName(e.target.value)} />
 
             <label htmlFor="Value" className="sr-only">Value</label>
             <input className="form-control form-control-sm" id="Value" type="number" placeholder="Value $" step="0.01" value={value} onChange={e => {
@@ -208,7 +208,7 @@ export const ModifyForm = ({
         </div>
 
         {/* Recurrence-rule specific logics */}
-        <div className="form-inline">
+        <div className="form-inline mt-2">
             {/* Frequency selector */}
             <label htmlFor="Frequency" className="sr-only">Frequency</label>   
             <select className="form-control form-control-sm mr-2" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)} value={frequency} >
@@ -265,10 +265,10 @@ export const ModifyForm = ({
             </div>}
         </div>
 
-        <div className="form-inline">
+        <div className="form-inline mt-2">
             {/* Start Date */}
             <label htmlFor="Start" className="sr-only">Start:</label>
-            <input className="form-control form-control-sm" placeholder="Start Date" type="date" name="Start" id="Start" required={["BIWEEKLY", "YEARLY", "ONCE"].includes(frequency)} value={startDate} onChange={e => setStartDate(e.target.value)} />
+            <input className="form-control form-control-sm mr-2" placeholder="Start Date" type="date" name="Start" id="Start" required={["BIWEEKLY", "YEARLY", "ONCE"].includes(frequency)} value={startDate} onChange={e => setStartDate(e.target.value)} />
 
             {/* End Date */}
             {frequency !== "ONCE" && <>
@@ -276,16 +276,14 @@ export const ModifyForm = ({
                 <input className="form-control form-control-sm" placeholder="End Date" type="date" name="End" id="End" value={endDate} onChange={e => setEndDate(e.target.value)} />
             </>}
         </div>
-
-        <br />
-        <div className="d-flex justify-content-between flex-row-reverse">
-            <button className="btn btn-primary mb-2" data-testid="submitupdate">Update</button>
+        <div className="d-flex justify-content-between flex-row-reverse mt-2">
+            <button className="btn btn-sm btn-primary mb-2" data-testid="submitupdate">Update</button>
             <button onClick={e => {
                 e.stopPropagation()
                 e.preventDefault()
                 onDelete(rule.id)
 
-            }} className="btn btn-danger mb-2">Delete</button>
+            }} className="btn btn-sm btn-danger mb-2">Delete</button>
         </div>
     </form>
 }
