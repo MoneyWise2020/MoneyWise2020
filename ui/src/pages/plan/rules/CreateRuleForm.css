@@ -1,0 +1,26 @@
+/* https://stackoverflow.com/questions/18146350/how-do-i-simulate-placeholder-functionality-on-input-date-field#:~:text=The%20HTML5%20date%20input%20field%20actually%20does%20not,any%20other%20format%20or%20text%20with%20be%20skipped. */
+
+input[type="date"] {
+    position: relative;
+}
+
+input[type="date"]:before {
+    content: attr(placeholder);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    color: rgba(0, 0, 0, 0.65);
+    pointer-events: none;
+    line-height: 1.5;
+    padding: 0 0.5rem;
+    /* this differs from StackOverflow answer */
+    padding-top: .2rem;
+}
+
+input[type="date"]:focus:before,
+input[type="date"]:not([value=""]):before {
+    display: none;
+}
