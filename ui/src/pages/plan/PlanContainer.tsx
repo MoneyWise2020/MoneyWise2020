@@ -22,7 +22,7 @@ export const PlanContainer = () => {
     
     if (!isLoading && !isAuthenticated) {
         return <Container className="justify-content-middle">
-            <div className="px-2 py-4"><p className="lead">You must be logged in to do that!</p><br /><Button onClick={() => loginWithRedirect()}>Login</Button></div>
+            <div className="px-2 py-4"><p className="lead">You must be logged in!</p><br /><Button onClick={() => loginWithRedirect()}>Login</Button></div>
         </Container>
     }
 
@@ -34,10 +34,13 @@ export const PlanContainer = () => {
 
     return <Container fluid style={{ paddingLeft: '10%', paddingRight: "10%" }}>
         <Row>
-            <Col>
+            <Col className="d-flex align-items-middle flex-column align-items-stretch">
+                <Container className="text-center">
+                    <h4>Rules</h4>
+                </Container>
                 <RulesContainer userid={userid} onRefresh={onRefresh} />
             </Col>
-            <Col lg={8}>
+            <Col lg={9}>
                 <Container className="text-center">
                     <h4 data-testid="transactions">Upcoming Transactions</h4>
                 </Container>

@@ -28,7 +28,9 @@ export const TransactionsContainer = ({ userid, currentTime }: { userid: string,
     )
     
     if (loading) {
-        return <p data-testid="transactions-loading">Loading...</p>
+        return <div className="spinner-border" role="status">
+            <span data-testid="transactions-loading" className="visually-hidden"></span>
+        </div>
     }
 
     if (error) {

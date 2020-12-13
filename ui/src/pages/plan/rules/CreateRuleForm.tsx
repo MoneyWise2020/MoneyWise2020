@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import RRule from 'rrule';
 import { IApiRuleMutate } from './IRule';
+import './CreateRuleForm.css'
 
 export const CreateForm = ({
     onSubmit,
@@ -13,7 +14,7 @@ export const CreateForm = ({
     const [value, setValue] = useState<number | undefined>(undefined);
     const [frequency, setFrequency] = useState<string>("MONTHLY");
 
-    const [bymonthday, setbymonthday] = useState(1);
+    const [bymonthday, setbymonthday] = useState<number | undefined>(undefined);
     const [weekdays, setWeekdays] = useState<string[]>([]);
 
     const [startDate, setStartDate] = useState<string>('');
@@ -24,13 +25,14 @@ export const CreateForm = ({
 
     function clearForm() {
         setName('');
-        setValue(undefined);
         setUncertainty(false);
         setHighUncertainty(0);
         setLowUncertainty(0);
     }
     
-    return <form onSubmit={e => {
+    return <form 
+        style={{ width: '100%' }}
+        onSubmit={e => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -81,6 +83,10 @@ export const CreateForm = ({
                 };
                 break;
             case "MONTHLY":
+                if (!bymonthday) {
+                    onFailedValidation("You must select a day of month for 'monthly' rules");
+                    return;
+                }
                 options = {
                     freq: RRule.MONTHLY,
                     bymonthday: bymonthday,
@@ -128,79 +134,88 @@ export const CreateForm = ({
 
         clearForm();
     }}>
-        <br />
-        <br />
-        <div className="row">
-            <label htmlFor="Name" className="col-sm-2 col-form-label form-control-sm">Name</label>
-            <div className="col-sm-8">
-                <input className="form-control form-control-sm" id="Name" placeholder="Enter rule name here..." type="text" value={name} onChange={e => setName(e.target.value)} /><br />
-            </div>
-        </div>
+        <div className="form-inline d-flex justify-content-between">
+            <label htmlFor="Name" className="sr-only">Rule name</label>
+            <input className="form-control form-control-sm" id="Name" placeholder="Rule name" type="text" value={name} onChange={e => setName(e.target.value)} />
 
-        <div className="row">
-        <label htmlFor="Value" className="col-sm-2 col-form-label form-control-sm">Value</label>
-        <div className="col-sm-8">
-            <input className="form-control form-control-sm" id="Value" type="number" placeholder="Value" step="0.01" value={value} onChange={e => {
+            <label htmlFor="Value" className="sr-only">Value</label>
+            <input className="form-control form-control-sm" id="Value" type="number" placeholder="Value $" step="0.01" value={value} onChange={e => {
                 const newValue = Number(e.target.value);
                 if (newValue) { // not 0, not undefined
                     setValue(newValue)
                 } else {
                     setValue(undefined)
                 }
-            }} /><br />
-        </div>
+            }} />
         </div>
 
-        <div className="form-row">
-        <div className="col-md-4 mb-3">
-        <label htmlFor="Frequency">Frequency</label>   
-            <select className="form-control" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)} value={frequency} >
+        {/* Recurrence-rule specific logics */}
+        <div className="form-inline mt-2 d-flex justify-content-between">
+            {/* Frequency selector */}
+            <label htmlFor="Frequency" className="sr-only">Frequency</label>   
+            <select className="form-control form-control-sm" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)} value={frequency} >
                 <option value="WEEKLY">Weekly</option>
                 <option value="BIWEEKLY">Biweekly</option>
                 <option value="MONTHLY">Monthly</option>
                 <option value="YEARLY">Yearly</option>
                 <option value="ONCE">Once</option>
             </select>
-        </div>
-
-        <div className="col-md-4 mb-3">
-        <label htmlFor="Start">Start:</label>
-        <input className="form-control" type="date" name="Start" id="Start" value={startDate} onChange={e => setStartDate(e.target.value)} />
-        </div>
-
-        {frequency !== "ONCE" && <>
-        <div className="col-md-4 mb-3">
-            <label htmlFor="End">End:</label>
-            <input className="form-control" type="date" name="End" id="End" value={endDate} onChange={e => setEndDate(e.target.value)} />
-        </div>
-        </>}
         
-        {(frequency === "MONTHLY") && <>
-        <div className="col-md-4 mb-4">
-            <label htmlFor="bymonthday">Day of month</label>
-            <input className="form-control" id="bymonthday" type="number" min="1" max="31" placeholder="Day of month" value={bymonthday} onChange={e => setbymonthday(Number(e.target.value))} />
-        </div>
-        </>}
+            {/* Monthly day-of-month selector */}
+            {(frequency === "MONTHLY") && <>
+                <label htmlFor="bymonthday" className="sr-only">Day of month</label>
+                <input className="form-control form-control-sm" id="bymonthday" type="number" min="1" max="31" placeholder="Day" style={{ width: 64 }}
+                    value={bymonthday} required onChange={e => {
+                        const newMonthDay = Number(e.target.value);
+                        if (newMonthDay) { // not 0, not undefined
+                            setbymonthday(newMonthDay)
+                        } else {
+                            setbymonthday(undefined)
+                        }
+                    }} />
+            </>}
         
-        {(frequency === "WEEKLY") && <>
-        <div className="col-md-4 mb-4">
-            <label htmlFor="Weekdays">Days of Week</label>
-            <select className="custom-select" id="Weekdays" name="Weekdays" multiple value={weekdays} onChange={e => {
-                const selectedValues = Array.from(e.target.options)
-                    .filter((x) => x.selected)
-                    .map((x)=>x.value);
+            {(frequency === "WEEKLY") && <div role="group" className="btn-group" aria-label="Days of Week" data-testid="dayofweekcontrol">
+                {[
+                    "SUNDAY",
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY",
+                    "SATURDAY",
+                ].map(day => <a 
+                    className={"btn btn-sm " + (weekdays.includes(day) ? 'btn-primary' : 'btn-outline-primary')}
+                    data-dayofweek={day}
+                    key={day}
+                    onClick={e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setWeekdays(weekdays => {
+                            if (weekdays.includes(day)) {
+                                // Remove from list
+                                return [...weekdays.filter(d => d !== day)]
+                            }
+                            // Add to list
+                            return [...weekdays, day]
+                        })
+                    }}>
+                    {day[0]}
+                </a>)}
+            </div>}
+        </div>
 
-                setWeekdays(selectedValues);
-            }}>
-                <option value="SUNDAY">Sunday</option>
-                <option value="MONDAY">Monday</option>
-                <option value="TUESDAY">Tuesday</option>
-                <option value="WEDNESDAY">Wednesday</option>
-                <option value="THURSDAY">Thursday</option>
-                <option value="FRIDAY">Friday</option>
-                <option value="SATURDAY">Saturday</option>
-            </select></div>
-        </>}
+        <div className="form-inline mt-2 d-flex justify-content-between">
+            {/* Start Date */}
+            <label htmlFor="Start" className="sr-only">Start:</label>
+            <input className="form-control form-control-sm mr-2" placeholder="Start Date" type="date" name="Start" id="Start" required={["BIWEEKLY", "YEARLY", "ONCE"].includes(frequency)} value={startDate} onChange={e => setStartDate(e.target.value)} />
+
+            {/* End Date */}
+            {frequency !== "ONCE" && <>
+                <label htmlFor="End" className="sr-only">End:</label>
+                <input className="form-control form-control-sm" placeholder="End Date" type="date" name="End" id="End" value={endDate} onChange={e => setEndDate(e.target.value)} />
+            </>}
+        </div>
 
         <div className="col-md-4 mb-3">
         <label htmlFor="Uncertainty">Uncertainty:</label>
@@ -216,7 +231,9 @@ export const CreateForm = ({
             </div>
         </>}
 
+    
+        <div className="d-flex flex-row-reverse">
+            <button className="btn btn-outline-primary btn-sm mb-2 mt-2">Submit</button>
         </div>
-       <button className="btn btn-primary mb-2">Submit</button><br /><br />
     </form>
 }
