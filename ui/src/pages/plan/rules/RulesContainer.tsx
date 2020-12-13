@@ -140,8 +140,6 @@ export const RulesContainer = ({ userid, onRefresh = () => {} }: { userid: strin
                 ) : null
             }
 
-        <div style={{ width: '100%', minWidth: "100%", maxWidth: "100%" }}>
-            {sortedRules.map(rule => <Rule rule={rule} showModal={showModal} key={rule.id}/>)}
-        </div>
+        {sortedRules.map(rule => <Rule rule={rule} showModal={showModal} key={rule.id}/>)}
     </>;
 }

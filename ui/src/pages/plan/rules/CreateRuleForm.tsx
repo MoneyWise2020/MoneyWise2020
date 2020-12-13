@@ -124,9 +124,9 @@ export const CreateForm = ({
 
         clearForm();
     }}>
-        <div className="form-inline">
+        <div className="form-inline d-flex justify-content-between">
             <label htmlFor="Name" className="sr-only">Rule name</label>
-            <input className="form-control form-control-sm mr-2" id="Name" placeholder="Rule name" type="text" value={name} onChange={e => setName(e.target.value)} />
+            <input className="form-control form-control-sm" id="Name" placeholder="Rule name" type="text" value={name} onChange={e => setName(e.target.value)} />
 
             <label htmlFor="Value" className="sr-only">Value</label>
             <input className="form-control form-control-sm" id="Value" type="number" placeholder="Value $" step="0.01" value={value} onChange={e => {
@@ -140,10 +140,10 @@ export const CreateForm = ({
         </div>
 
         {/* Recurrence-rule specific logics */}
-        <div className="form-inline mt-2">
+        <div className="form-inline mt-2 d-flex justify-content-between">
             {/* Frequency selector */}
             <label htmlFor="Frequency" className="sr-only">Frequency</label>   
-            <select className="form-control form-control-sm mr-2" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)} value={frequency} >
+            <select className="form-control form-control-sm" id="Frequency" name="frequency" onChange={e => setFrequency(e.target.value)} value={frequency} >
                 <option value="WEEKLY">Weekly</option>
                 <option value="BIWEEKLY">Biweekly</option>
                 <option value="MONTHLY">Monthly</option>
@@ -195,7 +195,7 @@ export const CreateForm = ({
             </div>}
         </div>
 
-        <div className="form-inline mt-2">
+        <div className="form-inline mt-2 d-flex justify-content-between">
             {/* Start Date */}
             <label htmlFor="Start" className="sr-only">Start:</label>
             <input className="form-control form-control-sm mr-2" placeholder="Start Date" type="date" name="Start" id="Start" required={["BIWEEKLY", "YEARLY", "ONCE"].includes(frequency)} value={startDate} onChange={e => setStartDate(e.target.value)} />
@@ -207,6 +207,9 @@ export const CreateForm = ({
             </>}
         </div>
 
-        <button className="btn btn-outline-primary btn-sm mb-2 mt-2">Submit</button>
+    
+        <div className="d-flex flex-row-reverse">
+            <button className="btn btn-outline-primary btn-sm mb-2 mt-2">Submit</button>
+        </div>
     </form>
 }
