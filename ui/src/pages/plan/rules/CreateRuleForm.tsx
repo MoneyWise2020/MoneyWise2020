@@ -22,7 +22,6 @@ export const CreateForm = ({
 
     function clearForm() {
         setName('');
-        setValue(undefined);
     }
     
     return <form 
