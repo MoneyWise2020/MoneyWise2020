@@ -48,78 +48,77 @@ const options = {
         left: 60,
         width: '100%'
     },
-    colors: ['#4374E0', '#488214', '#ffcc66', '#ff6666'],
-
 };
 
-const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartType: 'SteppedAreaChart' | 'CandlestickChart' }) => {
+const black = '#4374E0'
+const green = '#488214';
+const red = '#dc3545';
+
+enum ChartTab {
+    DISPOSABLE_INCOME = "Disposable Income",
+    UNCERTAINTY = "Uncertainty",
+}
+
+const DayByDayChart = ({ daybyday, chartType }: { daybyday: IDayByDayApi, chartType: ChartTab }) => {
     if (!daybyday.daybydays.length) {
         return <>
             <p data-testid="daybyday-empty">Looks like there are no transactions in the time frame selected...</p>
         </>
     }
 
-    if (chartType === 'SteppedAreaChart') {
-        const data = [
-            [
-                'Day', 
-                'Balance', 
-                'Disposable Income',
-            ],
-            ...daybyday.daybydays.map(candle => [
-                candle.date,
-                Number(candle.balance.low),
-                Number(candle.working_capital.low),
-            ])
-        ]
-        return <Chart
-          chartType="SteppedAreaChart"
-          width="100%"
-          height="400px"
-          data={data}
-          options={options}
-        />
-    }
-
-    if (chartType === 'CandlestickChart') {
-        const data = [
-            ['Day', 'Uncertainty Prediction', 'Low Prediction', 'Med High Prediction', 'Upper Limit Prediction'],
-            ...daybyday.daybydays.map(candle => {
-                return [
+    switch(chartType) {
+        case ChartTab.DISPOSABLE_INCOME:
+            const disposableIncomeData = [
+                [
+                    'Day', 
+                    'Balance', 
+                    'Disposable Income',
+                ],
+                ...daybyday.daybydays.map(candle => [
                     candle.date,
-                    candle.low_prediction.low,
+                    Number(candle.balance.low),
+                    Number(candle.working_capital.low),
+                ])
+            ]
+            return <Chart
+                chartType="SteppedAreaChart"
+                width="100%"
+                height="400px"
+                data={disposableIncomeData}
+                options={{
+                    ...options,
+                    colors: [black, green],
+                }}
+            />
+            break;
+        case ChartTab.UNCERTAINTY:
+            const uncertaintyData = [
+                ['Day', '90th Percentile', 'Expected', '10th Percentile'],
+                ...daybyday.daybydays.map(candle => [
+                    candle.date,
                     candle.high_prediction.low,
-                    candle.low_prediction.high,
-                    candle.high_prediction.high
-                ]
-            })
-        ]
-        return <Chart
-            chartType="CandlestickChart"
-            width="100%"
-            height="400px"
-            data={data}
-            options={{
-                bar: { groupWidth: '100%' }, // Remove space between bars.
-                candlestick: {
-                    risingColor: {
-                        fill: '#FFFFFF'
-                    },
-                    fallingColor: {
-                        fill: '#FFFFFF'
-                    },
-                }
-            }}
-        />
+                    candle.balance.low,
+                    candle.low_prediction.low,
+                ])
+            ];
+            
+            return <Chart
+                chartType="LineChart"
+                width="100%"
+                height="400px"
+                data={uncertaintyData}
+                options={{
+                    ...options,
+                    colors: [green, black, red],
+                }}
+            />
+            break;
     }
-    
-
-    return null
 }
 
 export const DayByDayContainer = ({ userid, currentTime }: { userid: string, currentTime: number }) => {
     
-    const [chartType, setChartType] = useState<'SteppedAreaChart' | 'CandlestickChart'>('SteppedAreaChart');
+    const [chartType, setChartType] = useState<ChartTab>(ChartTab.DISPOSABLE_INCOME);
     const [queryRangeDays, setQueryRangeDays] = useState(90);
 
     const start = new Date(currentTime);
@@ -144,7 +143,19 @@ export const DayByDayContainer = ({ userid, currentTime }: { userid: string, cur
     const daybyday = data
 
     return <>
-        <button className="btn btn-outline-primary btn-sm" onClick={() => setChartType(t => t === 'SteppedAreaChart' ? 'CandlestickChart' : 'SteppedAreaChart')}>Toggle Candlesticks</button>
+        <ul className="nav nav-tabs">
+            {[
+                ChartTab.DISPOSABLE_INCOME,
+                ChartTab.UNCERTAINTY,
+            ].map(chart => <li className="nav-item" key={chart}>
+                <a
+                    className={"nav-link " + (chart === chartType ? 'active' : '')}
+                    onClick={() => setChartType(chart as any)}
+                >
+                    {chart}
+                </a>
+            </li>)}
+        </ul>
         <DayByDayChart chartType={chartType} daybyday={daybyday} /> 
         <div className="text-center">
             <button className="btn btn-outline-primary btn-sm" onClick={() => {setQueryRangeDays(90)}}>3m</button>&nbsp;
