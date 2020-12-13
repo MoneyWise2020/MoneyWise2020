@@ -1,4 +1,4 @@
-## Second Sprint
+## Third Sprint
 
 ### Forecast [Criteria 1, 2]
 
@@ -44,19 +44,20 @@ Our Daily Scrums were conducted asynchronously over Slack. Please see https://ag
 
 Our burndown chart updates automatically. Developers manually update task status. When a story is completed and accepted by the PO, the PO moves the story to the "Done" state. You can see this update happen at the end of our "Demo" recordings.
 
-`TODO`: Link to all the recordings
+https://docs.google.com/document/d/1YBYvbtzQM9F6hqz737ofrRtsPcP2D6QY708qJeZ_BDg/edit?usp=sharing
 
 ### Pair / Mob Programming [Criteria 13]
 
 We did pair/mob programming. See links to recordings of these sessions.
 
-`TODO`: Link to all the recordings
+Video Recordings: https://docs.google.com/document/d/1YBYvbtzQM9F6hqz737ofrRtsPcP2D6QY708qJeZ_BDg/edit?usp=sharing
+Screenshots: https://drive.google.com/drive/folders/1StMb74qWFRylxCb2EP7BnhLgh-f6jX5g?usp=sharing
 
 ### Test/Behavior Driven Development [Criteria 14]
 
 We try to build our product test-first. Evidence that we build test-first can be found in these links:
 
-`TODO`: Link to all the recordings
+Video Recordings: https://docs.google.com/document/d/1YBYvbtzQM9F6hqz737ofrRtsPcP2D6QY708qJeZ_BDg/edit?usp=sharing
 
 Our latest unit test counts can be seen on our CI/CD Jenkins server:
 
@@ -66,8 +67,10 @@ http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/MoneyWise%20-%2
 
 #### BDD
 
-`TODO`: Provide link to Gherkin file in repo
-`TODO`: Add screenshot of console logs in Jenkins of BDD
+https://github.com/MoneyWise2020/MoneyWise2020/tree/main/backend/features
+
+Console of BDD running in pipeline: http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/Moneywise%202020%20-%20BDD%20Tests/18/console
+
 
 ### CI [Criteria 15]
 
@@ -83,7 +86,13 @@ It is triggered on merge to "main" branch, here is our configuration:
 
 The pipeline runs tests, stores a test report (see our "Test Driven Development" section for a link), and if the tests pass, triggers a deploy of our backend and our UI, and runs database migrations against our "prod" environment. Our evidence that this works properly is that the application is updated, see "Delivery" section for a link.
 
-`TODO`: Demonstrate Green vs Red behavior (jobs were renamed, old links broke)
+###### Passing "Green" Build deploys
+
+http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/MoneyWise%20-%20Unit%20Test%20(Previously%20responsible%20of%20all%20MoneyWiseCICD)/40/
+
+###### Failing "Red" build does not deploy
+
+http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/MoneyWise%20-%20Unit%20Test%20(Previously%20responsible%20of%20all%20MoneyWiseCICD)/41 (UI tests fail, never goes on to deploy)
 
 ###### Health Check on Prod
 
@@ -93,7 +102,7 @@ http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8085/job/Moneywise%20202
 
 We deployed our changes. You can view our application here:
 
-http://ec2-52-15-67-124.us-east-2.compute.amazonaws.com:8080/
+https://ec2-52-15-67-124.us-east-2.compute.amazonaws.com/
 
 Our product increment was:
 Our UI is more presentable and more trustworthy. You can also export transactions.
@@ -102,10 +111,11 @@ Our UI is more presentable and more trustworthy. You can also export transaction
 
 We conducted retro. All 4 of us were there. The recording link is available in the recordings doc:
 
-`TODO`: Link to all the recordings
+Video Recordings: https://docs.google.com/document/d/1YBYvbtzQM9F6hqz737ofrRtsPcP2D6QY708qJeZ_BDg/edit?usp=sharing
 
-`TODO`: finish the statement: One useful outcome was...
-`TODO`: finish the statement: We plan to do this by doing...
+PDF of retro board: https://drive.google.com/file/d/13OzHkp1jLkXxIwIwmfM6vkCKVhoRvyIx/view?usp=sharing
+
+One useful outcome was how painful our code duplication was for Create and Modify forms, and keeping those in sync. We created an improvement to fix this, and put it at the top of the backlog: https://github.com/MoneyWise2020/MoneyWise2020/issues/89
 
 ### In-class Sprint Review [Criteria 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 
@@ -113,8 +123,12 @@ You were there! You're asking a lot out of 10 minutes, given my "stakeholders" h
 
 https://docs.google.com/presentation/d/1o6PtNWxlEZAenlMDU1ym2CZie2kacu6Ee_cdcuCmBk4/edit?usp=sharing
 
+User Persona for our Human Stakeholder
+
+https://miro.com/app/board/o9J_lb9LhfA=/
+
 ### Prepared for Sprint Review [Criteria 28]
 
 We demoed to our usual stakeholder, Javier. We figured this would count as a rehearsal for the in-class Sprint Review.
 
-`TODO`: Link to all the recordings
+Video Recordings: https://docs.google.com/document/d/1YBYvbtzQM9F6hqz737ofrRtsPcP2D6QY708qJeZ_BDg/edit?usp=sharing

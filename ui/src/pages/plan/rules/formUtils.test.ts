@@ -26,7 +26,7 @@ export function setDayOfMonth(formElement: any, day: number) {
 }
 
 export function setDaysOfWeek(formElement: any, daysOfWeek: string[]) {
-    const buttons: HTMLButtonElement[] = Array.from(formElement.container.querySelectorAll("[data-testid=dayofweekcontrol] > button"));
+    const buttons: HTMLButtonElement[] = Array.from(formElement.container.querySelectorAll("[data-testid=dayofweekcontrol] > a"));
     daysOfWeek.forEach(d => {
         const buttonForDay = buttons.find(b => {
             return b.getAttribute("data-dayofweek") === d
